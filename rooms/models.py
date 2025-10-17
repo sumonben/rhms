@@ -16,3 +16,5 @@ class Room(models.Model):
     status=models.CharField(max_length=100,blank=True,null=True)
     price=models.CharField(max_length=10,blank=True,null=True)
     person_occupancy=models.CharField(max_length=10,blank=True,null=True)
+    main_image=models.FileField(upload_to='media/room_images',blank=True,null=True,)
+    second_image=models.FileField(upload_to='media/room_images',blank=True,null=True,)

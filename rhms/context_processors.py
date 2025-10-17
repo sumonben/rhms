@@ -8,7 +8,6 @@ def site_info(request):
             'SITE_NAME_ENG': hotel_details.title_en,
             'SLOGAN': hotel_details.slogan,
             'SLOGAN_ENG': hotel_details.slogan_en,
-            'EIIN_NO':hotel_details.eiin_no,
             'UPAZILLA':hotel_details.upazilla,
             'DISTRICT':hotel_details.district,
             'LOGO': hotel_details.logo,
