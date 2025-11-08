@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department, Designation, Guest, Staff
+from .models import Department, Designation, Guest, Staff,Comment
 from import_export.admin import ExportActionMixin,ImportExportMixin
 
 # Register your models here.
@@ -24,4 +24,9 @@ class StaffAdmin(ImportExportMixin, admin.ModelAdmin):
 class GuestAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display=[ 'id','name','name_eng','phone','email']
     search_fields=[   'name','name_eng','phone']
+    list_display_links = ['id','name']
+@admin.register(Comment)
+class CommentAdmin(ImportExportMixin, admin.ModelAdmin):
+    list_display=[ 'id','name','email','guest','content','date_posted']
+    search_fields=[   'name','email',]
     list_display_links = ['id','name']

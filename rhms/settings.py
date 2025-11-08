@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'rangefilter',
+    'ckeditor',
     'sslcommerz_lib',
     'accounts',
     'region',
     'rhms',
+    'cart',
     'rooms',
     'payment',
 ]
@@ -99,6 +101,53 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            [ 'Format','Font', 'FontSize','Table','Undo', 'Redo',
+             '-', 'Bold', 'Italic', 'Underline',
+             '-', 'RemoveFormat','Cut', 'Copy', 'Paste', '-', 'SelectAll',
+             
+             '-', 'Maximize',
+             
+            ],
+        ],
+        
+        'height':'100%',
+        'width': 'full',
+        'toolbarCanCollapse': True,
+
+    },
+    
+    'awesome_ckeditor': {
+        'toolbar': [
+            [ 'Format','Undo', 'Redo',
+             
+             '-', 'Maximize',
+             
+            ],
+        ],  
+        'width': 'auto',
+        'toolbarCanCollapse': True,
+    },
+     'body_ckeditor': {
+        'toolbar': [
+            ['Undo', 'Redo',
+             '-', 'Bold', 'Italic', 'Underline',
+             '-', 'Link', 'Unlink', 'Anchor',
+             '-', 'Format',
+             
+             '-', 'Maximize',
+             
+            ],
+        ],  
+        'width': '95%',
+        'toolbarCanCollapse': True,
+        'height': '50%',
+    }
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

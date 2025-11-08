@@ -1,5 +1,7 @@
 from django.db import models
 from region.models import Address
+from ckeditor.fields import RichTextField
+
 class Department(models.Model):
     serial=models.IntegerField(default=0)
     name=models.CharField(max_length=254)
@@ -36,15 +38,15 @@ class Staff(models.Model):
     def __str__(self):
         return self.name+'('+self.name_eng+')'
 
-# class CommentGuest(models.Model):
-#     name = models.CharField(max_length=50)
-#     email = models.EmailField(max_length=100)
-#     content = RichTextField()
-#     post = models.ForeignKey(Post, related_name='commentsguest', on_delete=models.CASCADE)
-#     date_posted = models.DateTimeField(auto_now_add=True)
+class Comment(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=100)
+    guest=models.ForeignKey(Guest,blank=True, null=True, on_delete=models.SET_NULL)
+    content = RichTextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
 
-#     class Meta:
-#         ordering = ('-date_posted',)
+    class Meta:
+        ordering = ('-date_posted',)
 
-#     def __str__(self):
-#         return 'Comment by {}-{}'.format(self.name,self.email)
+    def __str__(self):
+        return 'Comment by {}-{}'.format(self.name,self.email)

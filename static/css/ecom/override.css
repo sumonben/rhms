@@ -1,0 +1,34 @@
+.override .splide__arrow{
+    height: 100% !important;
+    border-radius: 0 !important;
+    transform: unset !important;
+    top: 0 !important;
+    opacity: 0.7 !important;
+}
+.override .splide__arrow--prev{
+    left: 0 !important;
+}
+
+.override .splide__arrow--next{
+    right: 0 !important;
+}
+
+.override .splide__list .splide__slide:first-child {
+    padding-left: 30px;
+}
+
+.override .splide__list .splide__slide:last-child {
+    padding-right: 30px;
+}
+.override:hover .splide__arrow{
+    opacity: 1 !important;
+}
+
+.noticebar-override .overlay::before,.noticebar-override .overlay::after{
+    background: none;
+    height: 100%;
+    position: absolute;
+    width: unset;
+    z-index: 2;
+}
+
