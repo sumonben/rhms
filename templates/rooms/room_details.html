@@ -29,7 +29,7 @@
                                         <i class="icon_star"></i>
                                         <i class="icon_star-half_alt"></i>
                                     </div>
-                                    <a href="#">Booking Now</a>
+                                    <button class="btn btn-primary" onclick="addToCart( this.id )">Add To Book</button>
                                 </div>
                             </div>
                             <h2>{{ room.price }}&#x09F3;<span>/Pernight</span></h2>
@@ -61,6 +61,9 @@
                                 {% endif %}
                                     
                             </p>
+                            <form>
+                                {% csrf_token %}
+                            </form>
                         </div>
                     </div>
                     <div class="rd-reviews">
@@ -166,5 +169,5 @@
         </div>
     </section>
     <!-- Room Details Section End -->
-
+    
     {% endblock content %}

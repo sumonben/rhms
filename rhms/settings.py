@@ -30,8 +30,8 @@ STATIC_URL = 'static/'
 SECRET_KEY = 'django-insecure-mjfqn-@3@9p-m*(n_v24zht!-5ts12*7jkk#6-8u94-v*u205z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
+DEBUG = True
+CART_SESSION_ID = 'cart'
 ALLOWED_HOSTS = ['hotelredrock.com','www.hotelredrock.com']
 
 

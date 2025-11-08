@@ -1,162 +1,322 @@
-<!DOCTYPE html>
-<html lang="zxx">
-{% load static  %}
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta name="publisher" content="Hotel Red Rock, Joypurhat">
-    <meta name="copyright" content="Hotel Red Rock, Joypurhat">
-    <meta name="author" content="Design/Developed by: Tarique Sumon :: Hotel Red Rock, Joypurhat">
-    <meta name="robots" content="index, follow">
-    <meta name="description" content="Hotel Red Rock,joypurhat,Bangladesh, হোটেল রেডরক, জয়পুরহাট,বাংলাদেশ, আবাসিক হোটেল, জয়পুরহাট">
-    <meta name="keywords" content="Hotel Red Rock, hotel in Joypurhat, Hotel in Jaypurhat, হোটেল রেডরক, জয়পুরহাট, আবাসিক হোটেল ,জয়পুরহাট">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hotel Red Rock </title>
-    <link rel="icon" href="{{ LOGO.url }}" type="image/x-icon">
+    <!DOCTYPE html>
+    <html lang="zxx">
+    {% load static  %}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta name="publisher" content="Hotel Red Rock, Joypurhat">
+        <meta name="copyright" content="Hotel Red Rock, Joypurhat">
+        <meta name="author" content="Design/Developed by: Tarique Sumon :: Hotel Red Rock, Joypurhat">
+        <meta name="robots" content="index, follow">
+        <meta name="description" content="Hotel Red Rock,joypurhat,Bangladesh, হোটেল রেডরক, জয়পুরহাট,বাংলাদেশ, আবাসিক হোটেল, জয়পুরহাট">
+        <meta name="keywords" content="Hotel Red Rock, hotel in Joypurhat, Hotel in Jaypurhat, হোটেল রেডরক, জয়পুরহাট, আবাসিক হোটেল ,জয়পুরহাট">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Hotel Red Rock </title>
+        <link rel="icon" href="{{ LOGO.url }}" type="image/x-icon">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/ecom/index.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/ecom/index2.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/ecom/main.3ffe20f2.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/ecom/monami.css' %}" type="text/css">
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/ecom/index.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/ecom/index2.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/ecom/main.3ffe20f2.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/ecom/monami.css' %}" type="text/css">
 
 
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
-    <!-- <link rel="stylesheet" href="{% static 'css/application.css' %}" type="text/css"> -->
-     <style>
-        .cart-box{
-            background-color: brown;
-        }
-     </style>
-</head>
+        <!-- Css Styles -->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+        <!-- <link rel="stylesheet" href="{% static 'css/application.css' %}" type="text/css"> -->
+        <style>
+            .cart-box{
+                background-color: brown;
+            }
+        </style>
+    </head>
 
-<body>
-    <!-- Page Preloder -->
-    <!-- <div id="preloder">
-        <div class="loader"></div>
-    </div> -->
-{% include 'components/navbarfront.html' %}
+    <body>
+        <!-- Page Preloder -->
+        <!-- <div id="preloder">
+            <div class="loader"></div>
+        </div> -->
+    {% include 'components/navbarfront.html' %}
 
-{% block content %}
-    
-{% endblock content %}
-    
-    <!-- Blog Section End -->
+    {% block content %}
+        
+    {% endblock content %}
+        
+        <!-- Blog Section End -->
 
-    <!-- Footer Section Begin -->
-    <footer class="footer-section">
-        <div class="container">
-            <div class="footer-text">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="ft-about">
-                            <div class="logo">
-                                <a href="#">
-                                    <img src="{{ LOGO.url }}" alt="">
-                                </a>
+        <!-- Footer Section Begin -->
+        <footer class="footer-section">
+            <div class="container">
+                <div class="footer-text">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="ft-about">
+                                <div class="logo">
+                                    <a href="#">
+                                        <img src="{{ LOGO.url }}" alt="">
+                                    </a>
+                                </div>
+                                <p>{{ SLOGAN_ENG}}<br /> </p>
+                                <div class="fa-social">
+                                    <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-facebook"></i></a>
+                                    <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank" ><i class="fa fa-twitter"></i></a>
+                                    <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-tripadvisor"></i></a>
+                                    <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-instagram"></i></a>
+                                    <a href="https://www.facebook.com/watch/?v=929621535616302" target="_blank"><i class="fa fa-youtube-play"></i></a>
+                                </div>
                             </div>
-                            <p>{{ SLOGAN_ENG}}<br /> </p>
-                            <div class="fa-social">
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-facebook"></i></a>
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank" ><i class="fa fa-twitter"></i></a>
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-tripadvisor"></i></a>
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-instagram"></i></a>
-                                <a href="https://www.facebook.com/watch/?v=929621535616302" target="_blank"><i class="fa fa-youtube-play"></i></a>
+                        </div>
+                        <div class="col-lg-3 offset-lg-1">
+                            <div class="ft-contact">
+                                <h6>Contact Us</h6>
+                                <ul>
+                                    <li>01786272762</li>
+                                    <li>hotelredrock3@gmail.com</li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 offset-lg-1">
+                            <div class="ft-newslatter">
+                                <h6>New latest</h6>
+                                <p>Get the latest updates and offers.</p>
+                                <form action="#" class="fn-form">
+                                    <input type="text" placeholder="Email">
+                                    <button type="submit"><i class="fa fa-send"></i></button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 offset-lg-1">
-                        <div class="ft-contact">
-                            <h6>Contact Us</h6>
+                </div>
+            </div>
+            <div class="copyright-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
                             <ul>
-                                <li>01786272762</li>
-                                <li>hotelredrock3@gmail.com</li>
-                                <li></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">Terms and Conditions</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Our Policy</a></li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="col-lg-3 offset-lg-1">
-                        <div class="ft-newslatter">
-                            <h6>New latest</h6>
-                            <p>Get the latest updates and offers.</p>
-                            <form action="#" class="fn-form">
-                                <input type="text" placeholder="Email">
-                                <button type="submit"><i class="fa fa-send"></i></button>
-                            </form>
+                        <div class="col-lg-5">
+                            <div class="co-text"><p><!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. -->
+    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved {{ SITE_NAME_ENG }} <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://ictparkbd.com" target="_blank">ictparkbangladesh,</a>
+    <!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. --><i class="fa fa-heart" aria-hidden="true"></i></p></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="copyright-option">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <ul>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Terms and Conditions</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Our Policy</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="co-text"><p><!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved {{ SITE_NAME_ENG }} <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://ictparkbd.com" target="_blank">ictparkbangladesh,</a>
-  <!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. --><i class="fa fa-heart" aria-hidden="true"></i></p></div>
-                    </div>
-                </div>
+        </footer>
+        <!-- Footer Section End -->
+
+        <!-- Search model Begin -->
+        <div class="search-model">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="search-close-switch"><i class="icon_close"></i></div>
+                <form class="search-model-form">
+                    <input type="text" id="search-input" placeholder="Search here.....">
+                </form>
             </div>
         </div>
-    </footer>
-    <!-- Footer Section End -->
+        <!-- Search model end -->
+        <div id="minicart" onclick="showShopingCart(this.id)" class="cart_box_container cart_info"><div class="cart-box"><div class="cart-items text-center text-white"><span id="number_of_item_mini" class="cart-count" style="color: white;">0</span><span style="color: white;">&nbsp;Items</span></div><div class="cart-bag text-center"><img src="/Contents/assets/image/cartLogo.png" alt="img"></div><div class="cart-amount"><span>৳ </span><span class="cart-amount-span">0.00</span></div></div></div>
 
-    <!-- Search model Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
+        <div id="max_shoppnig_cart" class="cart-box-view"><div class="cart-box-inner-view"><div class="flex justify-between align-center background-secondary p-4"><div class="flex flex-center gap-4"><img class="header-bag" src="/Contents/assets/image/add-cart.png" alt="img"><strong class="car-box-title SearchFont m-0"><span id="number_of_item" class="text-white"></span><span class="text-white"> Item</span></strong></div><div id="shoping_cart_close" onclick="showMiniCart( this.id )" class="text-bold text-white cursor-pointer px-4 py-2 border-radius-4 hover-background-warn">✖</div></div><div class="cart-body text-center"><div class="cart-table-wrap"><span>Happy Shopping!! </span>
+            <table id="cart_body" class="cart-table" style="width: 100%; font-size: 11px;">
+                <tbody >
+                    <tr>
+                        <td>
+                            <img src="https://www.lazzpharma.com/Content/ImageData/Product/Icons/f41927d2-0876-4ebe-ac02-2dfe02be2c0c/AB GOLD BAR.webp" alt="img">
+                        </td>
+                            <td class="card-title-product">
+                                <a href="/Product/Details/AB-GOLD-BAR-SOAP-100GM-SOAP-48A0175D-736D-4DC6-AA63-C8AC33A9A672"><span class="SearchProductName SearchFont">AB GOLD BAR 100GM SOAP</span>
+                                </a>
+                                <br><strong class="SearchPrice" style="font-size: 15px;">৳ 575.00</strong></td>
+                                <td class="cart-inc-dsc" style="font-size: 13px; vertical-align: middle; padding: 8px 0px;">
+                                    <div class="attributes input-group bootstrap-touchspin">
+                                        <div class="qty-holder" style="width: 90px;">
+                                            <a class="qty-dec-btn" title="Dec" style="width: 22px;">-</a><input type="text" name="product_qty" id="product_qty" class="qty-input" value="1">
+                                            <a class="qty-inc-btn" title="Inc" style="width: 22px;">+</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <span class="SearchFont SearchPrice">575.00</span>
+                                </td>
+                                <td>
+                                    <a class="cross_time">
+                                        
+                                        <i class="fa fa-times text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="product_items__count__container">
+                <div class="cmn-class-items-calc total__items">
+                    <p>Total Items</p><span>0</span>
+                </div>
+                <div class="cmn-class-items-calc total__ammount">
+                    <p>Total Ammount</p><span>0.00tk</span>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <button class="Button_button__Poz4v false false flex-1" type="button">
+                    Order Now
+                </button>
+                <button class="Button_button__Poz4v false Button_warn__MR8nH flex-1" type="button">
+                    Clear Cart
+                </button>
+            </div>
         </div>
-    </div>
-    <!-- Search model end -->
-<div id="minicart" onclick="showShopingCart(this.id)" class="cart_box_container cart_info"><div class="cart-box"><div class="cart-items text-center text-white"><span class="cart-count" style="color: white;">0</span><span style="color: white;">&nbsp;Items</span></div><div class="cart-bag text-center"><img src="/Contents/assets/image/cartLogo.png" alt="img"></div><div class="cart-amount"><span>৳ </span><span class="cart-amount-span">0.00</span></div></div></div>
+    </div> 
+       <!-- Footer Section Begin -->
+        <script>
+        function showShopingCart(id){
+                max_cart=document.getElementById('max_shoppnig_cart');
+                max_cart.style.display='block';
+        }
+        function showMiniCart(id){
+                max_cart=document.getElementById('minicart');
+                max_cart.style.display='block';
+                max_cart=document.getElementById('max_shoppnig_cart');
+                max_cart.style.display='none';
+        }
+    </script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-<div id="max_shoppnig_cart" class="cart-box-view"><div class="cart-box-inner-view"><div class="flex justify-between align-center background-secondary p-4"><div class="flex flex-center gap-4"><img class="header-bag" src="/Contents/assets/image/add-cart.png" alt="img"><strong class="car-box-title SearchFont m-0"><span class="text-white">0</span><span class="text-white"> Item</span></strong></div><div id="shoping_cart_close" onclick="showMiniCart( this.id )" class="text-bold text-white cursor-pointer px-4 py-2 border-radius-4 hover-background-warn">✖</div></div><div class="cart-body text-center"><div class="cart-table-wrap"><span>Happy Shopping!! </span><table class="cart-table" style="width: 100%; font-size: 11px;"><tbody><tr><td><img src="https://www.lazzpharma.com/Content/ImageData/Product/Icons/f41927d2-0876-4ebe-ac02-2dfe02be2c0c/AB GOLD BAR.webp" alt="img"></td><td class="card-title-product"><a href="/Product/Details/AB-GOLD-BAR-SOAP-100GM-SOAP-48A0175D-736D-4DC6-AA63-C8AC33A9A672"><span class="SearchProductName SearchFont">AB GOLD BAR 100GM SOAP</span></a><br><strong class="SearchPrice" style="font-size: 15px;">৳ 575.00</strong></td><td class="cart-inc-dsc" style="font-size: 13px; vertical-align: middle; padding: 8px 0px;"><div class="attributes input-group bootstrap-touchspin"><div class="qty-holder" style="width: 90px;"><a class="qty-dec-btn" title="Dec" style="width: 22px;">-</a><input type="text" name="product_qty" id="product_qty" class="qty-input" value="1"><a class="qty-inc-btn" title="Inc" style="width: 22px;">+</a></div></div></td><td style="vertical-align: middle;"><span class="SearchFont SearchPrice">575.00</span></td><td><a class="cross_time"><i class="fa fa-times text-danger"></i></a></td></tr></tbody></table></div></div><div class="product_items__count__container"><div class="cmn-class-items-calc total__items"><p>Total Items</p><span>0</span></div><div class="cmn-class-items-calc total__ammount"><p>Total Ammount</p><span>0.00tk</span></div></div><div class="cart-footer"><button class="Button_button__Poz4v false false flex-1" type="button">Order Now</button><button class="Button_button__Poz4v false Button_warn__MR8nH flex-1" type="button">Clear Cart</button></div></div></div>    Footer Section Begin
-<script>
-    function showShopingCart(id){
-            max_cart=document.getElementById('max_shoppnig_cart');
-            max_cart.style.display='block';
-    }
-    function showMiniCart(id){
-            max_cart=document.getElementById('minicart');
-            max_cart.style.display='block';
-            max_cart=document.getElementById('max_shoppnig_cart');
-            max_cart.style.display='none';
-    }
-</script>
-    <!-- Js Plugins -->
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
-    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-</body>
+    <script>
+    function addToCart(id){
+      var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+      
+      //alert(division);
+      var $j = jQuery.noConflict();
+      url="{% url 'cart_add_room' %}";
+      //alert(url);
+      
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_add_room' %}",  // Adjust the URL as per your project structure
+        data: {"id": 2 },
+        headers: {
+               'X-CSRFToken': csrfToken
+           },
+       
+        success: function (response) {
+         
+             //document.getElementById("student_form").reset();
+            if (response.status === 'success') {
+                alert("sumon");
+                alert(response.rooms.length);
+                number_of_item_mini=document.getElementById('number_of_item_mini');
+                number_of_item_mini.innerHTML=response.rooms.length;
+                number_of_item=document.getElementById('number_of_item');
+                number_of_item.innerHTML=response.rooms.length;
+                // cart_body=document.getElementById('cart_body');
+                // cart_body=cart_body.innerHTML;
+                const table = document.getElementById('cart_body');
 
-</html>
+                    // Assuming the table has a tbody, get a reference to it
+                    const tbody = table.querySelector('tbody');
+                for(var i=0; i<response.rooms.length;i++){
+                    
+
+                    // Create a new table row (tr)
+                    const newRow = document.createElement('tr');
+
+                    // Create a new table data cell (td)
+                    const newCell = document.createElement('td');
+
+                    // Define the string you want to add
+
+                    // Add the string to the td's textContent
+                    newCell.innerHTML = '<img src="https://www.lazzpharma.com/Content/ImageData/Product/Icons/f41927d2-0876-4ebe-ac02-2dfe02be2c0c/AB GOLD BAR.webp" alt="img">';
+                    
+                    // Append the td to the tr
+                    newRow.appendChild(newCell);
+                    newCell2 = document.createElement('td');
+                    newCell2.classList.add('card-title-product');
+                    newCell2.innerText=response.rooms[i].name_eng;
+                    newRow.appendChild(newCell2);
+
+                    // Append the tr to the tbody (or table if no tbody)
+                    tbody.appendChild(newRow);
+                }
+            //   if(id === 'id_form-0-division'){
+            //   $("#id_form-0-district option").remove();
+            //   $("#id_form-0-district").append('<option '+'value="">'+ '-----------' +'</option>');
+            //         for (var i = response.district.length - 1; i >= 0; i--) {
+            //                       $("#id_form-0-district").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+            //                   }
+            //     }
+            //   if(id=='id_form-0-district'){
+  
+            //     $("#id_form-0-upazilla option").remove();
+            //   $("#id_form-0-upazilla").append('<option '+'value="">'+ '-------------' +'</option>');
+            //         for (var i = response.district.length - 1; i >= 0; i--) {
+            //                       $("#id_form-0-upazilla").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+            //                   }
+  
+            //   }
+
+            //   if(id=='id_form-1-division'){
+            //   $("#id_form-1-district option").remove();
+            //   $("#id_form-1-district").append('<option '+'value="">'+ '-----------' +'</option>');
+            //         for (var i = response.district.length - 1; i >= 0; i--) {
+            //                       $("#id_form-1-district").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+            //                   }
+            //     }
+            //   if(id=='id_form-1-district'){
+  
+            //     $("#id_form-1-upazilla option").remove();
+            //   $("#id_form-1-upazilla").append('<option '+'value="">'+ '-------------' +'</option>');
+            //         for (var i = response.district.length - 1; i >= 0; i--) {
+            //                       $("#id_form-1-upazilla").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+            //                   }
+  
+            //   }
+            } else {
+             ///alert("Success message not found");
+                    
+                }
+                
+        },
+        error: function (xhr, status, error) {
+           
+            // var err = eval("(" + xhr.responseText + ")");
+            // alert(err.Message);
+        }
+    });
+  
+      
+    } 
+    </script>
+
+        <!-- Js Plugins -->
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+        <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+        <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+    </body>
+
+    </html>
