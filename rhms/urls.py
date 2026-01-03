@@ -24,7 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.Frontpage.as_view(),name="frontpage"),
     path('rooms/', include('rooms.urls')),
-    path('cart/', include('cart.urls'))
+    path('cart/', include('cart.urls')),
+    path('region/', include('region.urls')),
+    path('payment/', include('payment.urls')),
     # path('jsi18n/', django_views.i18n.JavaScriptCatalog.as_view(), name='jsi18n'),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

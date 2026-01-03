@@ -29,7 +29,7 @@
                                         <i class="icon_star"></i>
                                         <i class="icon_star-half_alt"></i>
                                     </div>
-                                    <button class="btn btn-primary" onclick="addToCart( this.id )">Add To Book</button>
+                                    <button id="room_{{ room.id }}" class="btn btn-primary" onclick="addToCart( this.id )">Add To Book</button>
                                 </div>
                             </div>
                             <h2>{{ room.price }}&#x09F3;<span>/Pernight</span></h2>
@@ -61,11 +61,99 @@
                                 {% endif %}
                                     
                             </p>
-                            <form>
-                                {% csrf_token %}
-                            </form>
+                           
                         </div>
                     </div>
+<style>
+
+   
+
+
+
+#slider {
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto 0 auto;
+  border-radius: 4px;
+}
+
+#slider ul {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 200px;
+  list-style: none;
+}
+
+#slider ul li {
+  position: relative;
+  display: block;
+  float: left;
+  margin-left: 39px;
+  padding: 0;
+  width: 10%;
+  height: 33%;
+  background: #ccc;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 100px;
+}
+
+a.control_prev,
+a.control_next {
+  position: absolute;
+  z-index: 999;
+  display: block;
+  padding: 4% 2%;
+  width: auto;
+  height: auto;
+  background: #2a2a2a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 18px;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+a.control_prev:hover,
+a.control_next:hover {
+  opacity: 1;
+  -webkit-transition: all 0.2s ease;
+}
+
+a.control_prev {
+  border-radius: 0 2px 2px 0;
+}
+
+a.control_next {
+  right: 0;
+  border-radius: 2px 0 0 2px;
+}
+
+.slider_option {
+  position: relative;
+  margin: 10px auto;
+  width: 160px;
+  font-size: 18px;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<div id="slider">
+  <a href="#" class="control_next">>></a>
+  <a href="#" class="control_prev">
+    << </a>
+      <ul>
+        <li>SLIDE 1</li>
+        <li style="background: #aaa;">SLIDE 2</li>
+        <li>SLIDE 3</li>
+        <li style="background: #aaa;">SLIDE 4</li>
+      </ul>
+</div>
+
+
+                    
                     <div class="rd-reviews">
                         <h4>Reviews</h4>
                         <div class="review-item">
@@ -169,5 +257,56 @@
         </div>
     </section>
     <!-- Room Details Section End -->
-    
+    <script>
+        // Source - https://stackoverflow.com/a
+// Posted by user14922462, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-09, License - CC BY-SA 4.0
+
+jQuery(document).ready(function($) {
+
+  var slideCount = $('#slider ul li').length;
+  var slideWidth = $('#slider ul li').width();
+  var slideHeight = $('#slider ul li').height();
+  var sliderUlWidth = slideCount * slideWidth;
+
+  $('#slider').css({
+    width: slideWidth,
+    height: slideHeight
+  });
+
+  $('#slider ul').css({
+    width: sliderUlWidth,
+    marginLeft: -slideWidth
+  });
+
+  $('#slider ul li:last-child').prependTo('#slider ul');
+
+  function moveLeft() {
+    $('#slider ul').animate({
+      left: +slideWidth
+    }, 200, function() {
+      $('#slider ul li:last-child').prependTo('#slider ul');
+      $('#slider ul').css('left', '');
+    });
+  };
+
+  function moveRight() {
+    $('#slider ul').animate({
+      left: -slideWidth
+    }, 200, function() {
+      $('#slider ul li:first-child').appendTo('#slider ul');
+      $('#slider ul').css('left', '');
+    });
+  };
+
+  $('a.control_prev').click(function() {
+    moveLeft();
+  });
+
+  $('a.control_next').click(function() {
+    moveRight();
+  });
+
+});
+    </script>
     {% endblock content %}

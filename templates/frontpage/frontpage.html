@@ -26,7 +26,7 @@
                     <div class="booking-form" >
                         <h3 >Book Your Room</h3>
                         <form action="#">
-                            <div class="check-date">
+                            <div class="check-date" style="min-height: 33px;min-width: 100px;">
                                 <label for="date-in">Check In:</label>
                                 <input type="text" class="date-input" id="date-in">
                                 <i class="icon_calendar"></i>
@@ -36,16 +36,16 @@
                                 <input type="text" class="date-input" id="date-out">
                                 <i class="icon_calendar"></i>
                             </div>
-                            <div class="select-option">
+                            <div class="select-option" style="min-height: 32px;min-width: 250px;">
                                 <label for="guest">Guests:</label>
-                                <select id="guest">
+                                <select >
                                     <option value="">2 Adults</option>
                                     <option value="">3 Adults</option>
                                 </select>
                             </div>
                             <div class="select-option">
                                 <label for="room">Room:</label>
-                                <select id="room">
+                                <select style="min-height: 32px;min-width: 250px;">
                                     <option value="">1 Room</option>
                                     <option value="">2 Room</option>
                                 </select>
@@ -147,13 +147,14 @@
     <section class="hp-room-section">
         <div class="container-fluid">
             <div class="hp-room-items">
-                <div class="row">
+                <div class="row" style="overflow-x: scroll;">
                     
                     {% for room in rooms %}
                         <div class="col-lg-3 col-md-6">
                         <div class="hp-room-item set-bg" data-setbg="{% if room.main_image %}{{ room.main_image.url}} {% endif %}">
                             <div class="hr-text">
                                 <h2 style="color:brown">{{ room.name_eng }}</h2>
+                                <h3 style="color:rgb(10, 92, 85)">Room ID:{{ room.room_no }}</h3>
                                 <h3 style="color:brown">{{ room.room_type.name_eng }}</h3>
 
                                 <h3 style="color:green">{{ room.price }}&#x09F3;<span>/Pernight</span></h3>
@@ -376,7 +377,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4">
                     <div class="blog-item set-bg" data-setbg="{% static 'img/blog/blog-2.jpg' %}">
                         <div class="bi-text">
                             <span class="b-tag">Camping</span>
@@ -384,7 +385,7 @@
                             <div class="b-time"><i class="icon_clock_alt"></i> 16th Decemeber, 2025</div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-lg-4">
                     <div class="blog-item set-bg" data-setbg="{% static 'img/blog/blog-3.jpg' %}">
                         <div class="bi-text">

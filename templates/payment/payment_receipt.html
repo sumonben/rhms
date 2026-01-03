@@ -1,0 +1,351 @@
+{% extends 'basepage/basepage.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    button#print, button#next-btn, button#submit-btn {
+        font-size: 17px;
+        font-weight: bold;
+        position: relative;
+        width: 300px;
+        height: 50px;
+        background: #DC3545;
+        margin-left: 50%;
+        margin-top: 20px;
+        overflow: hidden;
+        z-index: 1;
+        cursor: pointer;
+        transition: color .3s;
+        text-align: center;
+        color: #fff;
+        border: 0;
+        -webkit-border-bottom-right-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      button#print:after, button#next-btn:after, button#submit-btn:after {
+        position: absolute;
+        top: 90%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #05812a;
+        content: "";
+        z-index: -2;
+        transition: transform .3s;
+      }
+      button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+        transform: translateY(-80%);
+        transition: transform .3s;
+      }
+.cyan11,.progress{
+    display:none;
+}
+table{
+    
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+
+}
+#first,#second{
+    width:100%;
+}
+#container_id{
+    width:100%;
+}
+#second td {
+    border:2px solid #b9b1b1;
+    -webkit-print-color-adjust: exact; 
+
+    }
+#main_body{
+          background-image:url('{{ LOGO_OPACITY.url }}');
+          background-repeat: no-repeat;
+          background-position: center;
+         
+        
+      
+      }
+      
+      
+@media print and (min-width: 480px) {
+
+            #submit-btn {
+              display: none !important;;
+            }
+  }
+    
+</style>
+
+
+            <table id="middle_head"  width="100%"  align="center" > 
+                      <tr>
+                        <td rowspan="3">
+                        </td> 
+                        <td align="center">                   
+                      <span class="GrayBlue20bold" style="color:#765760;font-size:30px;">{{exam}}
+                        </span>
+                      </td>
+                          
+                        </tr>
+                        <tr>
+                        <th width="100%" style=" text-align:center; background-color: transparent; color:rgb(223, 49, 49); padding: 10px;"><p style="font-size: 30px;line-height: 1.5;"><b>{{purpose.title_en}}</p></th>
+
+                        </tr>
+                          <tr>
+                            <!-- <td  width="100%" align="center" valign="middle"><img src="{% if student.image %}{{ student.image.url }}{% else %}{{ LOGO.url }}{% endif %}" width="170" height="170" ><h3 width="100%" style=" text-align:center; background-color: transparent; color:rgb(223, 49, 49);"><br><p style="font-size: 30px;line-height: 1.5;"><b>{{purpose.subtitle_en}}</p></h3>
+                        
+                        {% if student.department  %}
+
+                              <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(245, 22, 6);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.department}}</button>
+
+                        {% else  %}
+                        
+                         {% if student.group.title_en == 'Science' %}
+                              <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(245, 22, 6);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.group}}</button>
+                              {% elif student.group.title_en == 'Humanities' %}
+                              <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(11, 2, 138);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.group}}</button>
+                              {% else %}
+                              <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(184, 158, 13);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:10px"  type="button">{{student.group}} </button>
+                        {% endif %}
+                        
+                        {% endif %}
+                        <br>
+                        <br>
+                        <br>
+                       
+                            </td>
+                        </tr>
+                         
+                            
+                    </table>
+                
+                 
+                                      
+             <table id="second"  width="90%" border="2" align="center" cellpadding="3px" style="border:5px;font-size:25px;font-weight:bold;width:90%;">
+                    
+                    <tbody>
+                        <tr>
+                          <td width="250px" colspan="2" align="right" valign="middle"><b></b>&nbsp;Roll:</b></td>
+                          <td id="roll" width="550px" colspan="3" align="center" valign="middle" >{{student.class_roll}}</td>
+                          
+                      </tr>
+                      <tr>
+                          <td colspan="2" align="right" valign="middle">&nbsp;Name:</td>
+                          <td colspan="3" align="center" valign="middle" >{{student.name}}</td>
+                          
+                      </tr>
+                      <tr>
+                          <td colspan="2" align="right" valign="middle">&nbsp;Session:</td>
+                          <td colspan="3" align="center" valign="middle" >{{student.session}}</td>
+                          
+                      </tr>
+                      <tr>
+                        {%if student.department %}
+                            <td colspan="2" align="right" valign="middle">&nbsp;Department:</td>
+                             <td colspan="3" align="center" valign="middle" >{{student.department}}</td>
+                        {% else %}
+                             <td colspan="2" align="right" valign="middle">&nbsp;Group:</td>
+                             <td colspan="1" align="center" valign="middle" >{{student.group}}</td>
+                            <td colspan="1" align="right" valign="middle">&nbsp;Section: </td>
+                            <td colspan="1" align="center" valign="middle" >{{student.section}}</td>
+                        {% endif %}
+                         
+                          
+                      </tr>
+                      <tr>
+                        <td colspan="2" align="right" valign="middle">&nbsp;Amount Paid: </td>
+                        <td colspan="3" align="center" valign="middle" >
+                            {% if student.group.title_en == 'Science' %}
+                                {{purpose.amount_science}}
+                            {% elif student.group.title_en == 'Humanities' %}
+                                {{purpose.amount_humanities}}
+                            {% else %}
+                                {{purpose.amount_bussiness}}
+                            {% endif %}
+                            &nbsp; with online charge(1.5%)
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                      {%if student.department %}
+                      <td colspan="2" align="right" valign="middle">&nbsp;Phone: </td>
+                      <td colspan="3" align="center" valign="middle" >{% if student.phone %} {{student.phone}} {% else %} ---{% endif %}</td>
+                      {% else %}
+                      <td colspan="2" align="right" valign="middle">&nbsp;Phone: </td>
+                      <td colspan="3" align="center" valign="middle" >{% if student.phone %} {{student.phone}} {% else %} ---{% endif %}</td>
+                      {% endif %}
+                       -->
+                  </tr>
+                 
+          
+                  </tbody>
+                </table>
+                
+                
+                  
+                
+          
+                                      
+                    <button id="submit-btn" class="btn-default" onclick="goToPrint()" >Download or Print</button>
+
+                <table  width="90%" border="2" align="center" style="border:5px;text-align:center; margin-top:15%;margin-bottom:5px;">
+                
+                      <tbody>
+                        
+                        <tr>
+
+                             <!-- <td align="left" > <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data={{student.class_roll}}:{{student.name}}:{{student.session}}:{{transaction.tran_id}}:{{transaction.created_at}}&amp;size=200x200" width="120px" height="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /></td> -->
+                            <!-- <td align="right"><img  src="{% static 'images/principal_signature.png' %}" width="120px" alt="" title="{{student.class_roll}}:{{student.name}}" width="50" height="50" /><h3>Principal<h3><br></td> -->
+                            
+                        </tr>
+                        
+                        
+                    </tbody>
+                </table> 
+                <br><br> 
+                      
+
+<div id="routine" style="display: none;">
+    <table id="second" width="100%" border="0" align="center" style="margin-bottom: 10px;" >
+        <thead style=" background-color: #a6d1fb; color: #e03838;">
+          <th width="10%" style=" background-color:  #a6d1fb; color: #0f0f0f; padding: 15px; margin-bottom: 15px;"><img id="graph-image" height="80px" src="{% static 'images/gmrwc_logo.png' %}" alt="" style=" left: 0; right: 0; position: relative;">
+          </th>
+          <th width="65%" align="left" style=" background-color:  #a6d1fb; color: #1c0b0b; padding: 15px; margin-bottom: 15px;">Government Republic of Bangladesh<p style="font-size: 25px;"><b>GOVT. MOJIBOR RAHMAN BHANDARI WOMEN'S COLLEGE, BOGURA</p></th>
+
+          <th width="25%" align="right" style=" background-color:  #a6d1fb; color: #582a2a; padding: 15px; margin-bottom: 15px;"><p style="font-size: 20px;"><b>{{ purpose }}</b></p> <p></p></th>
+
+      </thead>
+      <tbody>
+
+      </tbody>
+      </table>
+  
+                <!-- {% if routines %}
+                <table   width="100%" border="2" align="center" cellpadding="3" cellspacing="3" style="border:5px;font-size:30px;font-weight:bold;">
+                  <thead align="center" width="100%">
+                    <th colspan="2">
+                      {% if student.group.title_en == 'Science' %}
+                              <button id="add-form" style="font-size:50px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(245, 22, 6);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:3px"  type="button">Exam Routine</button>
+                              {% elif student.group.title_en == 'Humanities' %}
+                              <button id="add-form" style="font-size:25px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(11, 2, 138);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:3px"  type="button">Exam Routine</button>
+                              {% else %}
+                              <button id="add-form" style="font-size:25px;  border-radius: 25px;background-color:rgb(251, 253, 253); color: rgb(184, 158, 13);text-shadow: 3px 3px 3px rgb(73, 25, 11);font-weight:bold;text-transform: uppercase;padding:10px;margin-bottom:3px"  type="button">Exam Routine</button>
+                        {% endif %}                    
+                    </th>
+                  </thead>
+                </table>
+                <br><br>
+        <div style="display: flex; align-items: center;justify-content: center;">
+                <table id="third"  width="100%" border="2" cellspacing="3" style="font-size:30px;font-weight:bold;">
+                  <thead >
+                    <th>
+                      Date
+                    </th>
+                    <th>
+                      Subject Name
+                    </th>                    
+                    <th>
+                      Start Time
+                    </th>
+                    <th>
+                      End Time
+                    </th>
+                  </thead>
+                  <tbody>
+                  {% for routine in routines %}
+                  <tr>
+                    <td>{{ routine.date}}</td>
+                    <td>{{ routine.subject.name_en}}</td>
+                    <td>{{ routine.start_at}}</td>
+                    <td>{{ routine.end_at}}</td>
+
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+                {% endif %}
+             -->
+        
+                    
+                
+    <script>
+                  function goTuoPrint(){
+                      window.print();
+                   /*   var divToPrint = document.getElementById('column');
+              var htmlToPrint = '' +
+                  '<style type="text/css">' +
+                      '.column {'+
+                  'background:url({% static "images/gmrwc_logo.png" %}) no-repeat;' +
+                      '}'+
+                  'table th, table td {' +
+                  'border:1px solid #000;' +
+                  'padding:0.5em;' +
+                  '}' +
+                  '@media print{'+
+            '.graph-image{display:inline;}'+
+          '}'+
+                  '</style>';
+              htmlToPrint += divToPrint.outerHTML;
+              newWin = window.open("");
+              newWin.document.write(htmlToPrint);
+              newWin.print();
+              newWin.close();
+                     // document.getElementById("print").style.display="none";
+                     // window.print();*/
+                  }
+          
+                function goToPrint() {
+                  var disp_setting="toolbar=yes,location=no,";
+                disp_setting+="directories=yes,menubar=yes,";
+                disp_setting+="scrollbars=yes,width=650, height=600, left=100, top=25";
+                style="display: none;"
+                   var content_vlue = document.getElementById('basepage_payment').innerHTML;
+                   var content_routine= document.getElementById('routine').innerHTML;
+                   var docprint=window.open();
+                   docprint.document.open();
+                  //  docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+                  //  docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+                  //  docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+                  //  docprint.document.write('<head><title>HSC-{{student.session}}-{{student.group}}-{{student.class_roll}} </title>');
+                  //  docprint.document.write('< type="text/css">body{ margin:0px;');
+                  //  docprint.document.write('font-family:verdana,Arial;color:#000;');
+                  //  docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:16px;}');
+                  //  docprint.document.write('a{color:#000;text-decoration:none;} ');
+                  //  docprint.document.write('.graph-image img{display:inline;result:fixed;align-items: center;}');
+                  //  docprint.document.write('.table_ssc{border:2px solid #eeeff0; background-color: #eeeff0;padding:0.1em;}');
+          
+                  //  docprint.document.write('</head><body onLoad="self.print()"><center>');
+                  docprint.document.write(content_vlue.replace('<body', '<body onload="self.print()"'));
+
+                  docprint.document.write('<div class="pagebreak"></div>'); 
+                  docprint.document.write('<style>#third th, #third td {border:2px solid #6B6969;padding:0.1em; text-align:center} .pagebreak { page-break-before: always; } </style>');
+ 
+                  docprint.document.write(content_routine.replace('style="display: none;"','style="display: block;"'));
+
+                  //  docprint.document.write('</center></body></html>');
+
+                   docprint.document.close();
+
+                }
+          
+              </script>       
+
+<script>
+   
+
+    $( document ).ready(function() {
+        const d = new Date();
+        var nric = '{{student.class_roll}}:{{student.name}}:{{student.session}}:'+d;
+        alert(nric)
+        var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=200x200';
+        $('#barcode').attr('src', url);
+      });
+</script>
+{% endblock %}
+

@@ -18,9 +18,11 @@ class HotelDetails(models.Model):
     serial=models.IntegerField(default=10)
     title=models.CharField(max_length=100,unique=True)
     title_en=models.CharField(max_length=100,unique=True)
-    slogan=models.CharField(max_length=100,unique=True)
-    slogan_en=models.CharField(max_length=100,unique=True)
-    license_no=models.CharField(max_length=25,unique=True)
+    title_short=models.CharField(max_length=100,blank=True,null=True)
+    title_short_en=models.CharField(max_length=100,blank=True,null=True)
+    slogan=models.CharField(max_length=100,blank=True,null=True)
+    slogan_en=models.CharField(max_length=100,blank=True,null=True)
+    license_no=models.CharField(max_length=25,blank=True,null=True)
     upazilla=models.ForeignKey(Upazilla, on_delete=models.CASCADE,blank=True,null=True)
     district=models.ForeignKey(District, on_delete=models.CASCADE,blank=True,null=True)
     logo=models.FileField(upload_to='media/logo',blank=True,null=True,)
@@ -63,3 +65,46 @@ class Booking(models.Model):
             else:
                 return None
         transaction_details.allow_tags=True
+
+
+class ImportantLinks(models.Model):
+    serial=models.IntegerField(default=10)
+    title=models.CharField(max_length=500, blank=True, null=True)
+    title_en=models.CharField(max_length=500, blank=True, null=True)
+    link=models.URLField(max_length=200, blank=True, null=True)
+    class Meta:
+        ordering = ['serial']
+        verbose_name="লিংকসমূহ"
+        verbose_name_plural="লিংকসমূহ"
+    def __str__(self):
+        if self.title:
+            return self.title
+        else:
+            return '1'
+
+class ColorRoot(models.Model):
+    serial=models.IntegerField(default=10)
+    title=models.CharField(max_length=100,blank=True,null=True)
+    title_en=models.CharField(max_length=100,blank=True,null=True)
+    body=models.CharField(max_length=250,blank=True,null=True)
+    weather=models.CharField(max_length=250,blank=True,null=True)
+    service=models.CharField(max_length=250,blank=True,null=True)
+    card=models.CharField(max_length=250,blank=True,null=True)
+    heading=models.CharField(max_length=250,blank=True,null=True)
+    sub_heading=models.CharField(max_length=250,blank=True,null=True)
+    navitem=models.CharField(max_length=250,blank=True,null=True)
+    navbar_collaps=models.CharField(max_length=250,blank=True,null=True)
+    member_registration=models.CharField(max_length=250,blank=True,null=True)
+    internal=models.CharField(max_length=250,blank=True,null=True)
+    other_text=models.CharField(max_length=250,blank=True,null=True)
+    hotel_details=models.ForeignKey(HotelDetails, on_delete=models.SET_NULL,blank=True,null=True)
+    is_active=models.BooleanField(default=False)
+    class Meta:
+        ordering = ['serial']
+        verbose_name="কালারসমূহ"
+        verbose_name_plural="কালারসমূহ"
+    def __str__(self):
+        if self.title and self.title_en:
+            return self.title+'('+self.title_en+')'
+        else:
+            return str(id)+':'

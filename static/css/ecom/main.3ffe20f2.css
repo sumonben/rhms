@@ -7287,7 +7287,7 @@ label {
 }
 
 .qty-dec-btn {
-    background: var(--secondary);
+    background: brown;
     border: 1px solid var(--secondary);
     color: #fff;
     font-size: 14px;
@@ -7321,7 +7321,7 @@ label {
 }
 
 .qty-inc-btn {
-    background: var(--secondary);
+    background: #04ac04;
     border-radius: 0;
     color: #fff;
     display: inline-block;
@@ -11805,7 +11805,8 @@ span.notify-right {
 .cart_summary>tfoot,.cart_summary>thead {
     background: #f7f7f7;
     font-size: 16px;
-    font-weight: 600
+    font-weight: 600;
+    width: 100%;
 }
 
 .cart_summary>thead>th {
@@ -15579,7 +15580,7 @@ span.notify-right {
         right: 82px;
         top: -2px
     }
-
+    
     .row.custom-row .col-xs-12.col-sm-4.col-lg-3.logo a img {
         width: 200px!important
     }
@@ -16584,7 +16585,7 @@ span.notify-right {
     --roboto: "Roboto",sans-serif;
     --green-color: #4fa961;
     --primary: #0c8542;
-    --secondary: #2bcb73
+    --secondary: brown;
 }
 
 body {
@@ -16899,9 +16900,9 @@ body {
     padding-bottom: 50px
 }
 
-.col-lg-3 {
+/* .col-lg-3 {
     width: 25%!important
-}
+} */
 
 .col-md-6.career-content {
     padding-right: 90px
@@ -20977,8 +20978,8 @@ span.comment_time.col {
 }
 
 .cart_summary tfoot tr,.cart_summary thead tr {
-    background-color: #dcdcdc!important;
-    color: #000!important
+    background-color: brown!important;
+    color: #fff!important;
 }
 
 .cart_summary thead tr th {
@@ -21809,7 +21810,7 @@ ul {
 
 .Button_button__Poz4v {
     align-items: center;
-    background-color: var(--secondary);
+    background-color:brown;
     border: 1px solid transparent;
     border-radius: 4px;
     box-shadow: 2px 2px 3px 1px var(--primary);
@@ -23388,7 +23389,8 @@ li.list-group-item.b-none {
     background-color: #fff;
     border: 1px solid #dcdcdc;
     border-radius: 4px;
-    padding: 8px
+    padding: 8px;
+    width: 100%;
 }
 
 .Card_card__D-XC2.Card_primary__CuCP7 {

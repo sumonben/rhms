@@ -1,0 +1,173 @@
+{% extends 'basepage/ictparkbd_layout.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+button#print, button#next-btn, button#submit-btn {
+          font-size: 17px;
+          font-weight: bold;
+          position: relative;
+          width: 150px;
+          height: 50px;
+          background: #9c0d03;
+          margin-left: 50%;
+          margin-top: 20px;
+          overflow: hidden;
+          z-index: 1;
+          cursor: pointer;
+          transition: color .3s;
+          text-align: center;
+          color: #fff;
+          border: 0;
+          -webkit-border-bottom-right-radius: 5px;
+          -webkit-border-bottom-left-radius: 5px;
+          -moz-border-radius-bottomright: 5px;
+          -moz-border-radius-bottomleft: 5px;
+          border-bottom-right-radius: 5px;
+          border-bottom-left-radius: 5px;
+        }
+        button#print:after, button#next-btn:after, button#submit-btn:after {
+          position: absolute;
+          top: 90%;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: #035a4c;
+          content: "";
+          z-index: -2;
+          transition: transform .3s;
+        }
+        button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+          transform: translateY(-80%);
+          transition: transform .3s;
+        }
+    #table td {
+        color: #fff;
+        border:1px solid #b9b1b1;
+        background-color:rgb(80, 7, 7);
+        padding:0.5em;
+        -webkit-print-color-adjust: exact; 
+
+        }
+
+</style>
+<div class="services">
+  <div><h2 style="text-align: center;color: #641e16 ;;font-weight:bold;"><u>Student's Online Payment</u></h2></div>
+  
+  <div data-v-6f04a53f="" class="memberRegistration py-5" >
+    <div class="container-wrapper">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-10">
+          <div class="card login-body shadow-lg rounded-10 py-5">
+<fieldset style="margin-bottom: 2%;">
+    <table id="table" width="50%" border="1" cellspacing="0" cellpadding="2" align="center" style="font-size:19px;">
+        <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 20px;font-size:20px;text-align:center;"> {{purpose}}  </th></thead>
+        <!--<thead style="height: 25px; background-color: #245b80; color: #fff;padding: 15px"><th colspan="5" style="height: 25px; background-color: #245b80; color: #fff;padding: 15px;">{{purpose}} </th></thead>-->
+
+      <tbody>
+        {% if purpose %}
+           <tr>
+            <td>Name:</td>
+            <td>{{student.name}}</td>
+           </tr>
+           <tr>
+            <td>Roll:</td>
+            <td>{{student.class_roll}}</td>
+           </tr>
+           <tr>
+               
+            {%if student.department %}
+            <td>Department:</td>
+            <td>{{student.department}}</td>
+            {% else %}
+            <td>Group:</td>
+            <td>{{student.group}}</td>
+            {% endif %}
+            
+           </tr>
+           <tr>
+            <td>Amount:</td>
+            {% if payment_consession %}
+                <td>{{payment_consession.amount}}&nbsp;+(Online charge 1.5%) &#x09F3;</td>
+            {% else %}
+                {% if student.group.title_en == 'Science' %}
+                <td>{{purpose.amount_science}} &nbsp;(+Online charge 1.5%) &#x09F3;</td>
+                {% elif student.group.title_en == 'Humanities' %}
+                <td>{{purpose.amount_humanities}} &nbsp;(+Online charge 1.5%) &#x09F3;</td>
+                {% else %}
+                <td>{{purpose.amount_bussiness}} &nbsp;(+Online charge 1.5%) &#x09F3;</td>
+                {% endif %}            
+            {% endif %}            
+            
+            
+           </tr>
+           <tr>
+                  
+            
+            
+           </tr>
+            {% endif %}
+      </tbody>
+    </table>
+</fieldset>
+                   
+
+    <fieldset style="margin-bottom: 2%;">
+
+            <form method="post" action="{% url 'proceed_payment' %}" id="form1" name="form1" target="_blank">
+                {% csrf_token %}
+                 <input type="hidden" name="student" value="{{student.class_roll}}">
+                    <input type="hidden" name="purpose" value="{{purpose.id}}">
+            {% if purpose.payment_type.title_en == 'Form fill-up' %}
+
+                    <div class="col-sm-8 form-group" style="margin:auto;">
+                              <div class="row">
+                                <div class="col-sm-10" >
+                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">Additional Amount:(&#x09F3;) </label> 
+                                  <div class="loginBox">
+                                  <input type="text" name="additional_amount" placeholder="আপনার জন্য প্রযোজ্য ফি এর পরিমান" class='form-control form-control-sm' required >                                            <span class="fa fa-universal-access"></span>
+                                   
+                                  </div> <!--  --> <div class="invalid-feedback"></div>
+                                </div>
+                              </div>
+                            </div>
+                <!-- <td></td> -->
+                       
+            {% endif %}  
+            
+                      <div class="col-sm-9 form-group">
+                        <p class="text-right">
+                          <button type="submit" id="submit-btn"  >Payment Procced</button>
+                        </p>
+                      </div>               
+                
+          </form>
+
+        
+    </fieldset>
+    </div>    
+    </div>    
+    </div>   
+    </div>    
+    </div>    
+    </div>    
+    </div>
+   
+<script>
+    function myFunction( id ){
+            
+            var e=document.getElementById('id_student_category')
+            var val = e.options[e.selectedIndex].value;
+            if(val == 3){
+                document.getElementById('id_group').style.display='block';
+                document.getElementByFor('id_group').label.visibility='visible';
+
+            }else{
+                
+                document.getElementById('id_group').style.display='none';
+                document.getElementByFor('id_group').label.visibility='hidden';
+
+            }
+    }
+</script>
+{% endblock  %}

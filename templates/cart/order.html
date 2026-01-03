@@ -1,0 +1,202 @@
+{% extends 'basepage/basepage.html' %}
+{% load static  %}
+
+    <!-- Page Preloder -->
+    <!-- <div id="preloder">
+        <div class="loader"></div>
+    </div> -->
+
+    <!-- Offcanvas Menu Section Begin -->
+    
+    {% block content %}
+    <style>
+      .form-control {
+         min-height: 33px;
+      }
+      </style>
+<main class="home option2 homeServicePadding" style="overflow: hidden; padding-top: 50px;">
+   <form action="{% url 'order_cart' %}" method="POST">
+    {% csrf_token %}
+   <div class="Checkout_checkout__UBWBo relative" id="checkout">
+      <div class="flex flex-column gap-16">
+         <div class="Card_card__D-XC2 undefined false">
+            <table class="table table-responsive cart_summary">
+               <thead>
+                  <tr class="Payment_payment__row__v5dNA">
+                     <th class="cart_product text-semibold">Product</th>
+                     <th class="text-semibold">Description</th>
+                     <th class="unit_price text-semibold">Price</th>
+                     <th class="text-semibold">Qty</th>
+                     <th class="text-semibold">Amount</th>
+                     <th class="action text-semibold">Action</th>
+                  </tr>
+               </thead>
+               <tbody>
+                {% for room in cart_rooms %}
+                  <tr>
+                     <td class="cart_product"><a href="{% url 'room_details' room.id %}"><img src="{{ room.main_image.url }}" alt="Product"></a></td>
+                     <td class="cart_description">
+                        <p class="product-name"><a>{{ room.name_eng }}</a></p>
+                     </td>
+                     <td class="price" style="text-align: center; width: 15%;"><span>৳ {{ room.price }}</span></td>
+                     <td class="qty">
+                        <div class="pro_qty"><a><i class="fa fa-minus" aria-hidden="true"></i></a><input class="form-control input-sm" type="text" value="{{ room.id }}"><a><i class="fa fa-plus"></i></a></div>
+                     </td>
+                     <td class="price" style="text-align: center; width: 18%;"><span>৳ {{ room.price }}</span></td>
+                     <td class="action"><a class="icon-remove" style="font-size: 1.5rem; color: red;"><i class="fa fa-remove" aria-hidden="true"></i></a></td>
+                  </tr>
+                {% endfor %}
+               </tbody>
+               <tfoot>
+                  <tr>
+                     <td colspan="4" class="text-semibold">Total</td>
+                     <td colspan="2" class="text-semibold" style="text-align: center;">৳ <span>{{ total_cart_amount }}</span></td>
+                  </tr>
+               </tfoot>
+            </table>
+         </div>
+         <div class="Card_card__D-XC2 undefined false">
+            <table class="Payment_payment__cEYmj">
+               <tbody>
+                  <tr class="Payment_payment__row__v5dNA">
+                     <td>Amount (tax incl.)</td>
+                     <td>{{ total_cart_amount }}</td>
+                     <td>TK</td>
+                  </tr>
+                  <tr class="Payment_payment__row__v5dNA">
+                     <td>Delivery Charge</td>
+                     <td>120</td>
+                     <td>TK</td>
+                  </tr>
+                  <tr class="Payment_payment__row__v5dNA">
+                     <td>Total Amount</td>
+                     <td>{{ total_cart_amount|add:'120' }}</td>
+                     <td>TK</td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         
+         <div class="discount-cupon-payment">
+            <form id="discount_codeSubmit"><input type="text" id="discount_code" placeholder="Coupon Code..."><button type="button">Apply</button></form>
+         </div>
+      </div>
+      
+      <div class="flex flex-column gap-16">
+         <div class="Card_card__D-XC2 Address_address__yw7QK false">
+            <div>
+               <div class="Input_form_control__k2Lye false undefined"><label for="Receiver Name"><span class="Input_form_control__label__SOQJo">Receiver Name <span class="Input_form_control__label__option__YxCA5">(Optional)</span></span><input type="text" id="receiver_name" name="receiver_name"  value=""><small> </small></label></div>
+               <div class="Input_form_control__k2Lye Input_form_control--error__HPRMG undefined"><label for="Receiver Phone"><span class="Input_form_control__label__SOQJo">Receiver Phone <span class="Input_form_control__label__option__YxCA5">(Required)</span></span><input type="text" id="receiver_phone" name="receiver_phone" ><small> </small></label></div>
+            </div>
+            <div>
+               
+
+               <div class="Select_form_control__-W7rB" >
+                  <label for="Region"><span class="Select_form_control__label__8gi3V">Region <span class="Select_form_control__label__option__zbnTX">(Required)</span></span></label>
+                  <div class="loginBox" style="font-size: 20px;">
+                       {{ address_form.division }}
+                     
+                  </div>
+               </div>
+               <div class="Select_form_control__-W7rB">
+                  <label for="City"><span class="Select_form_control__label__8gi3V">City <span class="Select_form_control__label__option__zbnTX">(Required)</span></span></label>
+                  <div class="loginBox" style="font-size: 20px;">
+                       {{ address_form.district }}
+                     
+                  </div>
+               </div>
+               <div class="Select_form_control__-W7rB">
+                  <label for="Area"><span class="Select_form_control__label__8gi3V">Area <span class="Select_form_control__label__option__zbnTX">(Optional)</span></span></label>
+                      {{ address_form.upazilla }}
+
+                     
+               </div>
+            </div>
+            <div>
+               <div class="Textarea_form_control__oik5R"><label for="Address"><span class="Textarea_form_control__label__hBHV6">                       {{ address_form.others }}
+ <span class="Textarea_form_control__label__option__JTJT7">(Required)</span></span><textarea id="Address"></textarea><small> </small></label></div>
+            </div>
+         </div>
+         <div class="Card_card__D-XC2 relative false">
+            <div class="prescription_order_section">
+               <div class="file_uploader" style="max-width: 33.33%;"><input class="display-none--important" type="file" name="" id=""><button class="Button_button__Poz4v false false " type="button">Select Prescription (optional)</button></div>
+            </div>
+         </div>
+      </div>
+      <div class="Checkout_grid__span__2__wynh- flex flex-column gap-16">
+         <div class="PaymentOptions_payment-options__wPRGy">
+            <div class="PaymentOption_payment-option__6-0db PaymentOption_active__3zfwe"><label class=""><input type="radio" name="payment-option" class="PaymentOption_payment-option__6-0db">Cash On Delivery</label></div>
+         </div>
+         <div class="Policy_order-policy__V+UQp">
+            <p class="OrderNotice">*** Please pay first for outside Dhaka delivery (ঢাকার বাইরে অর্ডারের ক্ষেত্রে ক্যাশ অন ডেলিভারি প্রযোজ্য নয়)</p>
+            <p class="OrderNotice">*** LP agent will call you for delivery charge and reconfirm your order (আপনার অর্ডার পুনরায় নিশ্চিত করতে লাজ ফার্মা থেকে আপনার সাথে যোগাযোগ করা হবে)</p>
+         </div>
+         <div class="Action_action__K65rE">
+            <div class="AutoOrder_auto_order__V0y5K"><label for="auto-order"><input type="checkbox" name="autoOrder" id="auto-order">Auto Order After 28 Days</label></div>
+            <button class="Button_button__Poz4v false false " type="submit">Place Order</button>
+         </div>
+      </div>
+   </div>
+   </form>
+</main>
+
+<script>
+    function myFunctionTeacher(id){
+      var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+      
+      var division=document.getElementById(id).value;
+      //alert(division);
+      var $j = jQuery.noConflict();
+    
+      url="{% url 'get_district'%}";
+      //alert(url);
+      
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'get_district'%}",  // Adjust the URL as per your project structure
+        data: {"id":id, "value":division},
+        headers: {
+               'X-CSRFToken': csrfToken
+           },
+       
+        success: function (response) {
+         
+             //document.getElementById("student_form").reset();
+            if (response.status === 'success') {
+            
+
+              if(id =='id_division'){
+              $("#id_district option").remove();
+              $("#id_district").append('<option '+'value="">'+ '-----------' +'</option>');
+                    for (var i = response.district.length - 1; i >= 0; i--) {
+                                  $("#id_district").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+                              }
+                }
+              if(id=='id_district'){
+  
+                $("#id_upazilla option").remove();
+              $("#id_upazilla").append('<option '+'value="">'+ '-------------' +'</option>');
+                    for (var i = response.district.length - 1; i >= 0; i--) {
+                                  $("#id_upazilla").append('<option '+'value="'+response.district[i].id+'">'+ response.district[i].name_en +'</option>');
+                              }
+  
+              }
+            } else {
+             ///alert("Success message not found");
+                    
+                }
+                
+        },
+        error: function (xhr, status, error) {
+           
+            // var err = eval("(" + xhr.responseText + ")");
+            // alert(err.Message);
+        }
+    });
+  
+      
+    } 
+    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+{% endblock content %}

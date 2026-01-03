@@ -357,8 +357,8 @@ ul, ol {
 	z-index: 9;
 }
 .menu-item .logo {
-	width: 150px;
-	padding: 5px 0;
+	width: 110px;
+	/* padding: 0px 0; */
 }
 .menu-item .logo a {
 	display: inline-block;

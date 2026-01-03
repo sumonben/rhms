@@ -20,6 +20,7 @@ class Cart:
             self.cart[room_id]['quantity'] += quantity
         self.save()
         return self.session[settings.CART_SESSION_ID]
+
         
     def remove(self, room):
         room_id = str(room.id)

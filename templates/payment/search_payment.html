@@ -1,0 +1,175 @@
+{% extends 'basepage/ictparkbd_layout.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .main_body{
+        width:100%;
+        height:100%;
+        color:red;
+    }
+    option{
+      color:#035a4c;
+      font-weight:bold;
+      font-size:17px;
+    }
+    option:hover:after{
+      background-color:#035a4c;
+      font-weight:bold;
+    }
+    button#print, button#next-btn, button#submit-btn {
+          font-size: 17px;
+          font-weight: bold;
+          position: relative;
+          width: 150px;
+          height: 50px;
+          background: #2d5986;
+          margin-left: 50%;
+          margin-top: 20px;
+          overflow: hidden;
+          z-index: 1;
+          cursor: pointer;
+          transition: color .3s;
+          text-align: center;
+          color: #fff;
+          border: 0;
+          -webkit-border-bottom-right-radius: 5px;
+          -webkit-border-bottom-left-radius: 5px;
+          -moz-border-radius-bottomright: 5px;
+          -moz-border-radius-bottomleft: 5px;
+          border-bottom-right-radius: 5px;
+          border-bottom-left-radius: 5px;
+        }
+        button#print:after, button#next-btn:after, button#submit-btn:after {
+          position: absolute;
+          top: 90%;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: #05812a;
+          content: "";
+          z-index: -2;
+          transition: transform .3s;
+        }
+        button#print:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+          transform: translateY(-80%);
+          transition: transform .3s;
+        }
+    @media(max-width:767px){
+        .main_body{
+            width:100%;
+            height:700px;
+            color:red;
+            background-color:green;
+        }   
+    }
+</style>
+<div class="services">
+  <div><h2 style="text-align: center;color: #641e16 ;;font-weight:bold;"><u>Student's Online Payment</u></h2></div>
+  
+  <div data-v-6f04a53f="" class="memberRegistration py-5" >
+    <div class="container-wrapper">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-10">
+          <div class="card login-body shadow-lg rounded-10 py-5">
+            <table width="100%" border="1" cellspacing="0" cellpadding="10">
+              <thead><th colspan="5" style="height: 40px; background-color: #035a4c; color: #fff;padding: 15px;font-size:20px;text-align:center;"> Payment Form </th></thead>
+              {% if notfound %}
+                              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 5px"><th colspan="5" style="height: 40px; font-size:30px; background-color:rgb(168, 8, 8); color: #fff;padding: 5px;">{{ notfound }}</th></thead>
+              {% endif %}
+              {% if messages %}
+                     
+                          {% for message in messages %}
+                              <thead style="height: 25px; background-color: #245b80; color: #fff;padding: 5px"><th colspan="5" style="height: 40px; font-size:30px; background-color:rgb(168, 8, 8); color: #fff;padding: 5px;">{{ message }}</th></thead>
+                          {% endfor %}
+                      
+                {% endif %}
+              <tbody>
+              </tbody>
+            </table>
+                <div class="card-body">
+
+                <span class="bubbleNew"><img src="{%static 'images/gmrwc_logo.png'%}" class="rounded-circle" style="width: 200px;height: 200px;" /></span>
+
+                <span class="shape"><img align="center" src="{% static 'images\ictparkbd_logo.jpg' %}"><img align="center" style="height:60%;margin-top:10%;rotate: -50deg;" src="{% static 'images\gmrwc_logo.png' %}"></span> 
+                {%if email %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{email}}</strong> 
+            </div>
+            
+            {% endif %}
+            {%if phone %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{phone}}</strong> 
+            </div>
+            
+            {% endif %} 
+            
+            {%if password %}
+            
+            <div class="alert alert-danger" role="alert">
+              <strong>{{password}}</strong> 
+            </div>
+            
+            {% endif %}
+            
+            {%if success %}
+            
+            <div class="alert alert-success" role="alert">
+              <strong>{{success}}</strong> 
+            </div>
+            
+            {% endif %}
+            
+            <form autocomplete="off" id="form" class="form-row px-3" method="post" action="">
+               {% csrf_token %}
+                            <div class="col-sm-8 form-group" style="margin:auto;">
+                              <div class="row">
+                                <div class="col-sm-10" >
+                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.roll.label}}</label> 
+                                  <div class="loginBox">
+                                            {{form.roll}}     
+                                            <span class="fa fa-universal-access"></span>
+                                   
+                                  </div> <!--  --> <div class="invalid-feedback"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-8 form-group" style="margin:auto;">
+                              <div class="row">
+                                <div class="col-sm-10" >
+                                  <label for="" class="col-form-label-sm m-0" style="font-size:20px;">{{form.purpose.label}}</label> 
+                                  <div class="loginBox">
+                                            {{form.purpose}}     
+                                            <span class="fa fa-certificate"></span>
+                                   
+                                  </div> <!--  --> <div class="invalid-feedback"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                
+              
+              
+             
+              <div class="col-sm-9 form-group">
+                <p class="text-right">
+                  <button type="submit" class="btn btn-danger text-white"><span>Submit</span></button>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTAINER -->
+
+
+ 
+{% endblock  %}

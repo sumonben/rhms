@@ -97,6 +97,5 @@
     /*------------------
 		Nice Select
 	--------------------*/
-    $("select").niceSelect();
 
 })(jQuery);

@@ -23,7 +23,7 @@ class Guest(models.Model):
     class Meta:
         ordering = ['name_eng']
     def __str__(self):
-        return self.name+'('+self.name_eng+')'
+        return self.name
 class Staff(models.Model):
     serial=models.IntegerField(default=0)
     name=models.CharField(max_length=254)

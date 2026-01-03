@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import TextInput, Textarea
 from django.db import models
-from .models import HotelDetails, Carousel, Booking
+from .models import HotelDetails, Carousel, Booking, ImportantLinks, ColorRoot
 from import_export.admin import ExportActionMixin,ImportExportMixin
 from rangefilter.filters import (
     DateRangeFilterBuilder,
@@ -28,3 +28,35 @@ class BookingAdmin(ImportExportMixin, admin.ModelAdmin):
     list_filter=( 'booked_on',("booked_on", DateRangeFilterBuilder()),)
     filter_horizontal = ['room',]
 
+@admin.register(ImportantLinks)
+class ImportantLinksAdmin(ImportExportMixin,admin.ModelAdmin):
+    pass
+@admin.register(ColorRoot)
+class ColorRootAdmin(ImportExportMixin, admin.ModelAdmin):
+    list_display=[   'serial','title','title_en','body',
+    'weather',
+    'service',
+    'card',
+    'heading',
+    'sub_heading',
+    'navitem',
+    'navbar_collaps',
+    'member_registration',
+    'internal',
+    'other_text',
+    'hotel_details',
+    'is_active']
+    search_fields=[  'title','title_en']
+    list_display_links = ['serial','title']
+    list_editable=[ 'title_en','body',
+    'weather',
+    'service',
+    'card',
+    'heading',
+    'sub_heading',
+    'navitem',
+    'navbar_collaps',
+    'member_registration',
+    'internal',
+    'other_text',
+    'is_active']
