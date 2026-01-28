@@ -13,12 +13,18 @@
         <br><br>
          <section class="rooms-section spad">
         <div class="container">
+            <h1>
+                {% if room_type %}
+                    {{ room_type.name_eng }}
+                {% endif %}
+                     </h1>
             <div class="row">
+                
                 {% for room in rooms %}
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                         <div class="room-item" >
-                           <img src="{% if room.main_image %}{{ room.main_image.url}} {% endif %}" alt="">
-                            <div class="ri-text">
+                           <img src="{% if room.main_image %}{{ room.main_image.url}} {% endif %}"  alt="">
+                            <div class="ri-text" style="background: var(--service);">
                                 <h2 style="color:brown">{{ room.name_eng }}</h2>
                                 <h3 style="color:brown">{{ room.room_type.name_eng }}</h3>
 
@@ -43,7 +49,8 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{% url 'room_details' room.id %}" class="primary-btn" style="color:brown">More Details</a>
+                                <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather);float: left;" onclick="addToCart( this.id )">Add To Book</button>
+                                <a href="{% url 'room_details' room.id %}" class="primary-btn" style="color:brown;float: right;">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -52,7 +59,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
                         <img src="{% static 'img/room/room-2.jpg' %}" alt="">
-                        <div class="ri-text">
+                        <div class="ri-text" style="background: var(--service);">
                             <h4>Deluxe Room</h4>
                             <h3>159&#x09F3;<span>/Pernight</span></h3>
                             <table>

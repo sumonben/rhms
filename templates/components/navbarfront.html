@@ -92,10 +92,10 @@
                 </div>
             </div>
         </div>
-        <div class="menu-item" style="background-color: brown;z-index: 1;">
+        <div class="menu-item" style="background: var(--weather);z-index: 1;">
             <div class="container"  >
                 <div class="row">
-                    <div class="col-lg-2" style="position: absolute;z-index: 1000;">
+                    <div class="col-lg-2" style="background: transparent;position: absolute;z-index: 1000;">
                         <div class="logo">
                             <a href="{% url 'frontpage' %}">
                                 <table>
@@ -107,12 +107,21 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-10" style=" background-color: brown;">
+                    <div class="col-lg-10" style=" background: transparent">
                         <div class="nav-menu">
                             <nav class="mainmenu">
                                 <ul>
                                     <li class="active"><a href="{% url 'frontpage' %}">Home</a></li>
-                                    <li><a href="{% url 'rooms_view' %}">Rooms</a></li>
+                                    <li><a href="{% url 'rooms_view' %}">Rooms</a>
+                                     <ul class="dropdown">
+                                        
+                                        {% for room_type  in room_types %}
+                                            <li><a href="{% url 'room_type_rooms' room_type.id  %}">{{ room_type.name_eng }}</a></li> 
+                                        {% endfor %}
+                                            
+                                            
+                                        </ul>
+                                    </li>
                                     <li><a href="./about-us.html">About Us</a></li>
                                     <li><a href="./pages.html">Pages</a>
                                         <ul class="dropdown">

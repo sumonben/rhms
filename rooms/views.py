@@ -25,6 +25,33 @@ class Rooms(View):
         #     return redirect('admission_login')
         # else:
         #     return redirect('admission_login_others')
+class RoomTypeRooms(View):
+    template_name = 'rooms/rooms.html'
+    
+    def get(self, request, *args, **kwargs):
+        room_type=RoomType.objects.filter(id=int(kwargs['id'])).first()
+        rooms=Room.objects.filter(room_type=room_type)
+        staffs=Staff.objects.all().order_by("serial")
+        guests=Guest.objects.all().order_by("-id")
+        context={}
+        context['room_type']=room_type
+        context['rooms']=rooms
+        context['staffs']=staffs
+        context['guests']=guests
+        return render(request, self.template_name,context)
+
+    def post(self, request, *args, **kwargs):
+        room_type=RoomType.objects.filter(id=int(kwargs['id'])).first()
+        rooms=Room.objects.filter(room_type=room_type)
+        staffs=Staff.objects.all().order_by("serial")
+        guests=Guest.objects.all().order_by("-id")
+        context={}
+        context['room_type']=room_type
+        context['rooms']=rooms
+        context['staffs']=staffs
+        context['guests']=guests
+        return render(request, self.template_name,context)
+
 
 class RoomDetails(View):
     template_name = 'rooms/room_details.html'

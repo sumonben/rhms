@@ -55,7 +55,7 @@ class Address(models.Model):
     division=models.ForeignKey(Division, on_delete=models.CASCADE,blank=True,null=True,verbose_name=" বিভাগ ")
     district=models.ForeignKey(District,blank=True,null=True,on_delete=models.SET_NULL,verbose_name=" জেলা ")
     upazilla=models.ForeignKey(Upazilla,blank=True,null=True,on_delete=models.SET_NULL,verbose_name="উপজেলা ")
-    Others=models.CharField(max_length=500,blank=True,null=True,verbose_name="অন্য ঠিকানা ")
+    others=models.CharField(max_length=500,blank=True,null=True,verbose_name="অন্য ঠিকানা ")
 
     class Meta:
         ordering = ['serial']
@@ -64,5 +64,7 @@ class Address(models.Model):
     def __str__(self):
         if self.village_or_street:
             return self.village_or_street.name
+        elif self.others :
+            return self.others
         else:
             return '1'

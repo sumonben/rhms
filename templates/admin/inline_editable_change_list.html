@@ -1,0 +1,292 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .inline-edit-btn {
+        background: #417690;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        border: none;
+    }
+    .inline-edit-btn:hover {
+        background: #2e5266;
+    }
+    tr.editing {
+        background-color: #fff3cd !important;
+    }
+    tr.editing input,
+    tr.editing select,
+    tr.editing textarea {
+        width: 95%;
+        padding: 4px 8px;
+        border: 1px solid #4a90e2;
+        border-radius: 3px;
+        font-size: 13px;
+    }
+    tr.editing input[type="checkbox"] {
+        width: auto;
+    }
+    .inline-save-btn {
+        background: #28a745;
+        color: white;
+        padding: 5px 15px;
+        margin-right: 5px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .inline-save-btn:hover {
+        background: #218838;
+    }
+    .inline-cancel-btn {
+        background: #dc3545;
+        color: white;
+        padding: 5px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .inline-cancel-btn:hover {
+        background: #c82333;
+    }
+    .save-indicator {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+    }
+    .save-success {
+        background: #d4edda;
+        color: #155724;
+    }
+    .save-error {
+        background: #f8d7da;
+        color: #721c24;
+    }
+</style>
+
+<script>
+// Get CSRF token for AJAX requests
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+const inlineEditableFields = {{ inline_editable_fields_json| default:"[]"|safe }};
+
+
+function enableInlineEdit(button, event) {
+    event.preventDefault();
+
+    const row = button.closest('tr');
+    const objectId = button.getAttribute('data-id');
+    const appLabel = button.getAttribute('data-app');
+    const modelName = button.getAttribute('data-model');
+
+    if (row.classList.contains('editing')) {
+        return false;
+    }
+    row.classList.add('editing');
+
+    const cells = Array.from(row.querySelectorAll('td')).slice(0, -1);
+    const originalData = {};
+    const headers = Array.from(document.querySelectorAll('thead th'));
+
+    cells.forEach((cell, index) => {
+        // Skip checkbox column if present
+        if (index === 0 ) {
+            return;
+        }
+        
+        const cellText = cell.textContent.trim();
+
+        // Try extract field name from the td class first (Django admin often uses "field-<name>" or "column-<name>")
+        let fieldName = null;
+        const tdClasses = Array.from(cell.classList || []);
+        const tdFieldClass = tdClasses.find(c => c.startsWith('field-') || c.startsWith('column-') || c.startsWith('sortable'));
+        if (tdFieldClass) {
+            fieldName = tdFieldClass.replace(/^field-/, '').replace(/^column-/, '');
+            // sortable class can be like "sortable column-name"; try another attempt:
+            if (fieldName === 'sortable' && tdClasses.some(c => c.startsWith('column-'))) {
+                const col = tdClasses.find(c => c.startsWith('column-'));
+                fieldName = col.replace(/^column-/, '');
+            }
+        }
+
+        // Fallback: use header text if no td class provided
+        const header = headers[index + 1]; // offset by checkbox column
+        if (!fieldName && header) {
+            const colClass = Array.from(header.classList || []).find(c => c.startsWith('column-'));
+            if (colClass) {
+                fieldName = colClass.replace(/^column-/, '');
+            } else {
+                fieldName = header.textContent.trim().toLowerCase().replace(/\s+/g, '_');
+            }
+        }
+        if(inlineEditableFields.includes(fieldName) ===  false){
+            return;
+        }        
+        if (!fieldName || fieldName === 'actions' || fieldName === 'action_checkbox') return;
+
+        originalData[fieldName] = cellText;
+
+        // Skip link cells and id
+        if (cell.querySelector('a') || fieldName === 'id') {
+            return;
+        }
+
+        // Determine boolean visuals
+        const isBool = ['✔', '✓', 'true', '✖', '✗', 'false', 'yes', 'no'].includes(cellText.toLowerCase());
+
+        if (isBool) {
+            const isChecked = ['✔', '✓', 'true', 'yes'].includes(cellText.toLowerCase());
+            cell.innerHTML = `<input type="checkbox" data-field="${fieldName}" ${isChecked ? 'checked' : ''}>`;
+        } else {
+            cell.innerHTML = `<input type="text" data-field="${fieldName}" value="${cellText.replace(/"/g, '&quot;')}">`;
+        }
+    });
+
+    row.dataset.originalData = JSON.stringify(originalData);
+    row.dataset.objectId = objectId;
+    row.dataset.appLabel = appLabel;
+    row.dataset.modelName = modelName;
+
+    const actionsCell = row.querySelector('td:last-child');
+    actionsCell.innerHTML = `
+        <button class="inline-save-btn" onclick="saveInlineEdit(this, event)">Save</button>
+        <button class="inline-cancel-btn" onclick="cancelInlineEdit(this, event)">Cancel</button>
+    `;
+
+    return false;
+}
+
+function saveInlineEdit(button, event) {
+    event.preventDefault();
+
+    const row = button.closest('tr');
+    const objectId = row.dataset.objectId;
+    const appLabel = row.dataset.appLabel;
+    const modelName = row.dataset.modelName;
+
+    // Collect updated values (include input, select, textarea)
+    const updatedData = {};
+    const inputs = row.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
+
+    inputs.forEach(input => {
+        const fieldName = input.getAttribute('data-field');
+        if (!fieldName) return;
+        if (input.type === 'checkbox') {
+            updatedData[fieldName] = input.checked;
+        } else {
+            if(input.value.trim() === ''){
+                updatedData[fieldName]= null;
+            }
+            else{
+            updatedData[fieldName] = input.value;
+            }
+        }
+    });
+
+    // Show saving indicator
+    const actionsCell = row.querySelector('td:last-child');
+    actionsCell.innerHTML = '<span class="save-indicator">Saving...</span>';
+
+    const url = `/admin/${appLabel}/${modelName}/${objectId}/inline-save/`;
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            inputs.forEach(input => {
+                const cell = input.closest('td');
+                if (input.type === 'checkbox') {
+                    cell.textContent = input.checked ? '✔' : '✖';
+                } else {
+                    cell.textContent = input.value;
+                }
+            });
+
+            actionsCell.innerHTML = '<span class="save-indicator save-success">✓ Saved</span>';
+            setTimeout(() => {
+                restoreEditButton(row);
+            }, 1500);
+        } else {
+            actionsCell.innerHTML = `<span class="save-indicator save-error">✗ ${data.message}</span>`;
+            setTimeout(() => {
+                actionsCell.innerHTML = `
+                    <button class="inline-save-btn" onclick="saveInlineEdit(this, event)">Retry</button>
+                    <button class="inline-cancel-btn" onclick="cancelInlineEdit(this, event)">Cancel</button>
+                `;
+            }, 2500);
+        }
+    })
+    .catch(error => {
+        actionsCell.innerHTML = `<span class="save-indicator save-error">✗ Error: ${error}</span>`;
+        setTimeout(() => {
+            actionsCell.innerHTML = `
+                <button class="inline-save-btn" onclick="saveInlineEdit(this, event)">Retry</button>
+                <button class="inline-cancel-btn" onclick="cancelInlineEdit(this, event)">Cancel</button>
+            `;
+        }, 2500);
+    });
+
+    return false;
+}
+
+function cancelInlineEdit(button, event) {
+    event.preventDefault();
+    
+    const row = button.closest('tr');
+    const originalData = JSON.parse(row.dataset.originalData);
+    
+    // Restore original values
+    const inputs = row.querySelectorAll('input[data-field]');
+    inputs.forEach(input => {
+        const cell = input.closest('td');
+        const fieldName = input.getAttribute('data-field');
+        cell.textContent = originalData[fieldName] || '';
+    });
+    
+    restoreEditButton(row);
+    
+    return false;
+}
+
+function restoreEditButton(row) {
+    const objectId = row.dataset.objectId;
+    const appLabel = row.dataset.appLabel;
+    const modelName = row.dataset.modelName;
+    
+    const actionsCell = row.querySelector('td:last-child');
+    actionsCell.innerHTML = `
+        <button class="button inline-edit-btn" data-id="${objectId}" 
+                data-app="${appLabel}" data-model="${modelName}" 
+                onclick="enableInlineEdit(this, event);">Edit</button>
+    `;
+    
+    row.classList.remove('editing');
+}
+</script>
+{% endblock %}

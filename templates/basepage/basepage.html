@@ -40,6 +40,29 @@
             .cart-box{
                 background-color: brown;
             }
+            :root{
+      --weather: {{ color.weather }};
+      --body: {{ color.body }};
+      --weather: {{ color.weather }};
+      --service:{{ color.service }};
+      --card:{{ color.card }};
+      --heading:{{ color.heading }};
+      --sub_heading:{{ color.sub_heading }};
+      --navitem:{{ color.navitem}};
+      --navbar_collaps:{{ color.navbar_collaps}};
+      --member_registration:{{ color.member_registration}};
+      --internal:{{ color.internal}};
+      --other_text:{{ color.other_text}};
+      --main_body_bg: {{ certificate_type.main_body_bg }};
+      --header_bg: {{ certificate_type.header_bg }};
+      --title_bg: {{ certificate_type.title_bg }};
+      --body_bg:{{ certificate_type.body_bg }};
+      --heading_color:{{ certificate_type.heading_color }};
+      --subheading_color:{{ certificate_type.subheading_color }};
+      --title_color:{{ certificate_type.title_color}};
+      
+      }
+
         </style>
     </head>
 
@@ -57,7 +80,7 @@
         <!-- Blog Section End -->
 
         <!-- Footer Section Begin -->
-        <footer class="footer-section">
+        <footer class="footer-section" style="background: var(--card)">
             <div class="container">
                 <div class="footer-text">
                     <div class="row">
@@ -101,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="copyright-option">
+            <div class="copyright-option" style="background: var(--service)">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-7">
@@ -136,7 +159,7 @@
                                 {% csrf_token %}
                             </form>
         <!-- Search model end -->
-        <div id="minicart" onclick="showShopingCart(this.id)" class="cart_box_container cart_info"><div class="cart-box"><div class="cart-items text-center text-white"><span id="number_of_item_mini" class="cart-count" style="color: white;">{{ cart_rooms.count }}</span><span style="color: white;">&nbsp; {% if cart_rooms.count == 1 %} Room {% else %} Rooms {% endif %}</span></div><div class="cart-bag text-center"><img src="{{ LOGO.url }}" alt="img"></div><div class="cart-amount"><span>৳ </span><span class="cart-amount-span" id="mini_cart_total">{{ total_cart_amount }}</span></div></div></div>
+        <div id="minicart" onclick="showShopingCart(this.id)" class="cart_box_container cart_info" style="background: var(--weather)"><div class="cart-box"><div class="cart-items text-center text-white" style="background: var(--weather)"><span id="number_of_item_mini" class="cart-count" style="color: white;">{{ cart_rooms.count }}</span><span style="color: white;">&nbsp; {% if cart_rooms.count == 1 %} Room {% else %} Rooms {% endif %}</span></div><div class="cart-bag text-center"><img src="{{ LOGO.url }}" alt="img"></div><div class="cart-amount" style="background: var(--weather)"><span>৳ </span><span class="cart-amount-span" id="mini_cart_total">{{ total_cart_amount }}</span></div></div></div>
 
         <div id="max_shoppnig_cart" class="cart-box-view"><div class="cart-box-inner-view"><div class="flex justify-between align-center background-secondary p-4"><div class="flex flex-center gap-4"><span><i class="fa fa-home" style="font-size:24px;color:white"></i></span><strong class="car-box-title SearchFont m-0"><span id="number_of_item" class="text-white">{{ cart_rooms.count }}</span><span class="text-white"> {% if cart_rooms.count == 1 %} Room {% else %} Rooms {% endif %}</span></strong></div><div id="shoping_cart_close" onclick="showMiniCart( this.id )" class="text-bold text-white cursor-pointer px-4 py-2 border-radius-4 hover-background-warn">✖</div></div><div class="cart-body text-center"><div class="cart-table-wrap"><span>Happy Staying!! </span>
             <table  class="cart-table" style="width: 100%; font-size: 11px;">

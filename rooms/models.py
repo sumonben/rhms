@@ -16,6 +16,12 @@ class RoomType(models.Model):
     name_eng=models.CharField(max_length=100,unique=True)
     description=RichTextField(blank=True,null=True)
     occupancy=models.CharField(max_length=100,blank=True,null=True)
+    bed_type=models.ManyToManyField(BedType,blank=True,null=True)
+    price=models.CharField(max_length=10,blank=True,null=True)
+    services=models.CharField(max_length=500,blank=True,null=True)
+    comment=models.ManyToManyField(Comment,blank=True,null=True)
+    main_image=models.FileField(upload_to='media/room_type_images',blank=True,null=True,)
+    second_image=models.FileField(upload_to='media/room_type_images',blank=True,null=True,)
     def __str__(self):
         return self.name+'('+self.name_eng+')'
 class Room(models.Model):

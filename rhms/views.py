@@ -8,11 +8,13 @@ class Frontpage(View):
     
     def get(self, request, *args, **kwargs):
         rooms=Room.objects.all().order_by("serial")
+        room_types=RoomType.objects.all().order_by("serial")
         carousels=Carousel.objects.all().order_by("serial")[0:4]
         staffs=Staff.objects.all().order_by("serial")
         guests=Guest.objects.all().order_by("-id")
         context={}
         context['rooms']=rooms
+        context['room_types']=room_types
         context['carousels']=carousels
         context['staffs']=staffs
         context['guests']=guests

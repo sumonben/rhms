@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
-                    <div class="booking-form" >
+                    <div class="booking-form" style="background: var(--weather)" >
                         <h3 >Book Your Room</h3>
                         <form action="#">
                             <div class="check-date" style="min-height: 33px;min-width: 100px;">
@@ -149,36 +149,41 @@
             <div class="hp-room-items">
                 <div class="row" style="overflow-x: scroll;">
                     
-                    {% for room in rooms %}
+                    {% for room_type in room_types %}
                         <div class="col-lg-3 col-md-6">
-                        <div class="hp-room-item set-bg" data-setbg="{% if room.main_image %}{{ room.main_image.url}} {% endif %}">
+                        <div class="hp-room-item set-bg" data-setbg="{% if room_type.main_image %}{{ room_type.main_image.url}} {% endif %}">
                             <div class="hr-text">
-                                <h2 style="color:brown">{{ room.name_eng }}</h2>
-                                <h3 style="color:rgb(10, 92, 85)">Room ID:{{ room.room_no }}</h3>
-                                <h3 style="color:brown">{{ room.room_type.name_eng }}</h3>
+                                <h2 style="color:brown">{{ room_type.name_eng }}</h2>
+                                <!-- <h3 style="color:rgb(10, 92, 85)">Room ID:{{ room.room_no }}</h3> -->
+                                <!-- <h3 style="color:brown">{{ room.room_type.name_eng }}</h3> -->
 
-                                <h3 style="color:green">{{ room.price }}&#x09F3;<span>/Pernight</span></h3>
+                                <h3 style="color:green">{{ room_type.price }}&#x09F3;<span>/Pernight</span></h3>
                                 <table >
                                     <tbody>
-                                        <tr>
+                                        <!-- <tr>
                                             <td class="r-o">Size:</td>
-                                            <td>{{room.size}} (sq ft)</td>
-                                        </tr>
+                                            <td>{{room_type.size}} (sq ft)</td>
+                                        </tr> -->
                                         <tr>
                                             <td class="r-o">Capacity:</td>
-                                            <td>Max persion {{ room.person_occupancy }}</td>
+                                            <td>{{ room_type.occupancy }}</td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Bed Type:</td>
-                                            <td>{{ room.bed_type.name_eng }}</td>
+                                            <td>
+                                            {% for bed in room_type.bed_type.all %}
+                                                {{ bed.name_eng }}-
+                                            {% endfor %}
+                                                
+                                                </td>
                                         </tr>
                                         <tr>
                                             <td class="r-o">Services:</td>
-                                            <td>{{ room.services }}</td>
+                                            <td>{{ room_type.services }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{% url 'room_details' room.id %}" class="primary-btn" style="color:brown">More Details</a>
+                                <a href="{% url 'room_type_rooms' room_type.id  %}" class="primary-btn" style="color:brown">Explore Rooms</a>
                             </div>
                         </div>
                     </div>

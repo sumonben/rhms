@@ -1,5 +1,5 @@
 from django.conf import settings
-from .models import HotelDetails
+from .models import HotelDetails, ColorRoot
 from rooms.models import Room
 from cart.cart import Cart
 def site_info(request):
@@ -9,6 +9,7 @@ def site_info(request):
         cart = request.session.get(settings.CART_SESSION_ID)
         cart_rooms=Room.objects.filter(id__in=cart)
         total_cart_amount=0
+        color=ColorRoot.objects.filter(is_active=True).first()
         for cart_room in cart_rooms:
             total_cart_amount = total_cart_amount+int(cart_room.price)
 
@@ -27,5 +28,7 @@ def site_info(request):
             'MONOGRAM_ENG': hotel_details.monogram_en,
             'cart_rooms':cart_rooms,
             'total_cart_amount':total_cart_amount,
+            'color':color,
+
 
         }
