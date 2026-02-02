@@ -21,7 +21,9 @@ def cartAddRoom(request):
     context={}
     cart = Cart(request)
     room = get_object_or_404(Room, id=request.POST.get('id'))
-    cart=cart.add(room=room)
+    check_in = request.POST.get('check_in')
+    check_out = request.POST.get('check_out')
+    cart=cart.add(room=room, check_in=check_in, check_out=check_out)
     rooms=Room.objects.filter(id__in=cart)
     context['status']='success'
     total=0
@@ -49,16 +51,28 @@ class orderCartView(View):
         context={}
         cart = Cart(request)
         request.session = request.session
-        cart = request.session.get(settings.CART_SESSION_ID)  
-        cart_rooms=Room.objects.filter(id__in=cart)  
+        cart_data = request.session.get(settings.CART_SESSION_ID, {})  
+        cart_rooms=Room.objects.filter(id__in=cart_data.keys())  
         total_cart_amount=0
-        for cart_room in cart_rooms:
-            total_cart_amount = total_cart_amount+int(cart_room.price)
+        
+        # Collect check-in and check-out dates from form
+        booking_dates = {}
+        for room in cart_rooms:
+            check_in = request.POST.get(f'check_in_{room.id}')
+            check_out = request.POST.get(f'check_out_{room.id}')
+            booking_dates[room.id] = {
+                'check_in': check_in,
+                'check_out': check_out
+            }
+            total_cart_amount = total_cart_amount + int(room.price)
+        
         address = AddressForm(request.POST)
         if address.is_valid:
             address=address.save()
             guest=Guest(name=request.POST.get('receiver_name'),name_eng=request.POST.get('receiver_name'), phone=request.POST.get('receiver_phone'),address=address)
             guest.save()
+            # Store booking dates in session for payment processing
+            request.session['booking_dates'] = booking_dates
             return redirect(sslcommerz_payment_gateway(request, guest, cart_rooms, total_cart_amount))
         return HttpResponse('Address Not Valid')
 
@@ -82,18 +96,30 @@ def orderCart(request):
 
 def orderPage(request):
     context={}
-    room_ids = [int(s) for s in request.POST.getlist('items[]')]
-    rooms = Room.objects.filter(id__in=room_ids)
-    address_form=AddressForm()
-    context['address_form']=address_form
-    context['status']='success'
-    context['rooms']=list(rooms)
+    cart = Cart(request)
+    request.session = request.session
+    cart_data = request.session.get(settings.CART_SESSION_ID, {})
+    
+    if not cart_data:
+        context['cart_rooms'] = []
+        context['total_cart_amount'] = 0
+        context['address_form'] = AddressForm()
+        context['status'] = 'success'
+        return render(request, 'cart/order.html', context)
+    
+    # Get room IDs from cart data
+    room_ids = [int(room_id) for room_id in cart_data.keys()]
+    cart_rooms = Room.objects.filter(id__in=room_ids)
+    
+    # Calculate total
+    total_cart_amount = 0
+    for room in cart_rooms:
+        total_cart_amount += int(room.price)
+    
+    address_form = AddressForm()
+    context['address_form'] = address_form
+    context['status'] = 'success'
+    context['cart_rooms'] = cart_rooms
+    context['total_cart_amount'] = total_cart_amount
 
-    return render(request, 'cart/order.html', context)
-    context={}
-    room_ids = [int(s) for s in request.POST.getlist('items[]')]
-    rooms = Room.objects.filter(id__in=room_ids)
-    print(rooms)
-    context['rooms']=rooms
-    return HttpResponse('hello')
     return render(request, 'cart/order.html', context)

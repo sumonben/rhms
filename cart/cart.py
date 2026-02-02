@@ -10,14 +10,19 @@ class Cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def add(self, room, quantity=1, override_quantity=False):
+    def add(self, room, quantity=1, override_quantity=False, check_in=None, check_out=None):
         room_id = str(room.id)
         if room_id not in self.cart:
-            self.cart[room_id] = {'quantity': 0, 'price': str(room.price)}
+            self.cart[room_id] = {'quantity': 0, 'price': str(room.price), 'check_in': check_in, 'check_out': check_out}
         if override_quantity:
             self.cart[room_id]['quantity'] = quantity
         else:
             self.cart[room_id]['quantity'] += quantity
+        # Update check-in and check-out dates if provided
+        if check_in:
+            self.cart[room_id]['check_in'] = check_in
+        if check_out:
+            self.cart[room_id]['check_out'] = check_out
         self.save()
         return self.session[settings.CART_SESSION_ID]
 
