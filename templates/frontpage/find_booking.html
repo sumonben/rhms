@@ -1,0 +1,148 @@
+{% extends 'basepage/basepage.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Breadcrumb Section Begin -->
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <h2>Find Your Booking</h2>
+                    <div class="bt-option">
+                        <a href="{% url 'frontpage' %}">Home</a>
+                        <span>Find Booking</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section End -->
+
+<!-- Find Booking Section Begin -->
+<section class="contact-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="contact-text">
+                    <h2>Find Your Booking</h2>
+                    <p>Enter your Tracking Number (required). You may also provide Phone Number or Email Address for additional verification.</p>
+                </div>
+                
+                <!-- Display Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Search Form -->
+                <form method="post" class="contact-form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <input type="tel" 
+                                   name="phone" 
+                                   placeholder="Phone Number"
+                                   value="{{ phone|default:'' }}">
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <input type="text" 
+                                   name="tracking_no" 
+                                   placeholder="Tracking Number *"
+                                   required
+                                   value="{{ tracking_no|default:'' }}">
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <input type="email" 
+                                   name="email" 
+                                   placeholder="Email Address"
+                                   value="{{ email|default:'' }}">
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <button type="submit" class="site-btn">Search Booking</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Search Results -->
+                {% if bookings %}
+                    <div class="booking-results" style="margin-top: 50px;">
+                        <h3>Search Results</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Tracking No</th>
+                                        <th>Guest Name</th>
+                                        <th>Check-in Date</th>
+                                        <th>Check-out Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for booking in bookings %}
+                                        <tr>
+                                            <td>{{ booking.id }}</td>
+                                            <td>{{ booking.tracking_no|default:"N/A" }}</td>
+                                            <td>{{ booking.guest.name_eng|default:"N/A" }}</td>
+                                            <td>{{ booking.start_day }}</td>
+                                            <td>{{ booking.end_day }}</td>
+                                            <td>
+                                                {% if booking.check_in_status == 'pending' %}
+                                                    <span class="badge badge-warning">Pending</span>
+                                                {% elif booking.check_in_status == 'checked_in' %}
+                                                    <span class="badge badge-success">Checked In</span>
+                                                {% elif booking.check_in_status == 'checked_out' %}
+                                                    <span class="badge badge-info">Checked Out</span>
+                                                {% elif booking.check_in_status == 'cancelled' %}
+                                                    <span class="badge badge-danger">Cancelled</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'booking_details' booking.id %}" class="btn btn-sm btn-primary">View Details</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Find Booking Section End -->
+
+<style>
+    .booking-results {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+    }
+    .booking-results h3 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+    .table {
+        background: white;
+    }
+    .badge {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    .alert {
+        margin-bottom: 20px;
+    }
+</style>
+
+{% endblock %}

@@ -227,27 +227,32 @@ a.control_next {
                 <div class="col-lg-4">
                     <div class="booking-form">
                         <h3>Your Reservation</h3>
-                        <form action="#">
+                        <form action="{% url 'room_details' room.id %}" method="POST">
+                            {% csrf_token %}
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
+                                <input type="date" class="date-input" id="date-in" name="check_in" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
+                                <input type="date" class="date-input" id="date-out" name="check_out" required>
                                 <i class="icon_calendar"></i>
                             </div>
                             <div class="select-option">
                                 <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">3 Adults</option>
+                                <select id="guest" name="guests">
+                                    <option value="1">1 Adult</option>
+                                    <option value="2">2 Adults</option>
+                                    <option value="3" selected>3 Adults</option>
+                                    <option value="4">4 Adults</option>
                                 </select>
                             </div>
                             <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
+                                <label for="room-select">Room:</label>
+                                <select id="room-select" name="rooms">
+                                    <option value="1" selected>1 Room</option>
+                                    <option value="2">2 Rooms</option>
                                 </select>
                             </div>
                             <button type="submit">Check Availability</button>

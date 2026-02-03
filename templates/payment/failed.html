@@ -1,1 +1,96 @@
-<h1>Payment Declined by your Bank or payment method</h1>
+{% extends 'basepage/basepage.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .failed-container {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .failed-icon {
+        font-size: 80px;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+    
+    .failed-title {
+        font-size: 32px;
+        color: #dc3545;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    
+    .failed-message {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+    
+    .action-buttons {
+        margin-top: 30px;
+    }
+    
+    .btn-custom {
+        padding: 12px 30px;
+        margin: 0 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-retry {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-retry:hover {
+        background: #0056b3;
+        color: white;
+    }
+    
+    .btn-home {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-home:hover {
+        background: #545b62;
+        color: white;
+    }
+</style>
+
+<div class="failed-container">
+    <div class="failed-icon">✗</div>
+    <h1 class="failed-title">Payment Failed</h1>
+    <p class="failed-message">
+        We're sorry, but your payment could not be processed. This may have occurred due to:
+        <br><br>
+        • Insufficient funds<br>
+        • Incorrect card details<br>
+        • Payment gateway timeout<br>
+        • Network connectivity issues<br>
+        <br>
+        Please try again or contact your bank for more information.
+    </p>
+    
+    <div class="action-buttons">
+        <a href="{% url 'frontpage' %}" class="btn-custom btn-retry">
+            🔄 Try Again
+        </a>
+        <a href="{% url 'frontpage' %}" class="btn-custom btn-home">
+            🏠 Back to Home
+        </a>
+    </div>
+</div>
+
+{% endblock %}

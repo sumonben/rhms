@@ -22,11 +22,12 @@ class CarouselAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display_links = ['serial','title']
 @admin.register(Booking)
 class BookingAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display=[   'id','tracking_no','guest_details','start_day','end_day','booked_on','transaction_details']
+    list_display=[   'id','tracking_no','guest_details','start_day','end_day','check_in_status','check_in_time','check_out_status','booked_on','transaction_details']
     search_fields=[  'tracking_no',]
     list_display_links = ['id','tracking_no']
-    list_filter=( 'booked_on',("booked_on", DateRangeFilterBuilder()),)
+    list_filter=( 'booked_on','check_in_status','check_out_status',("booked_on", DateRangeFilterBuilder()),)
     filter_horizontal = ['room',]
+    readonly_fields = ['check_in_time', 'check_out_time']
 
 @admin.register(ImportantLinks)
 class ImportantLinksAdmin(ImportExportMixin,admin.ModelAdmin):

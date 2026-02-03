@@ -1,0 +1,457 @@
+{% extends 'basepage/basepage.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Breadcrumb Section Begin -->
+<div class="breadcrumb-section no-print">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <h2>Booking Details</h2>
+                    <div class="bt-option">
+                        <a href="{% url 'frontpage' %}">Home</a>
+                        <a href="{% url 'find_booking' %}">Find Booking</a>
+                        <span>Booking #{{ booking.id }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Section End -->
+
+<!-- Print Button Section -->
+<div class="container no-print" style="margin-top: 20px; margin-bottom: 20px;">
+    <div class="row">
+        <div class="col-lg-12 text-right">
+            <button onclick="window.print()" class="btn btn-primary">
+                <i class="fa fa-print"></i> Print Booking Details
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Details Section Begin -->
+<section class="room-details-section spad">
+    <div class="container">
+        <!-- Display Messages -->
+        {% if messages %}
+            <div class="no-print">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="room-details-item">
+                    <div class="rd-text">
+                        <div class="rd-title">
+                            <h3>Booking Information</h3>
+                            <div class="rdt-right">
+                                <div class="rating">
+                                    {% if booking.check_in_status == 'pending' %}
+                                        <span class="badge badge-warning" style="font-size: 16px;">Pending Check-in</span>
+                                    {% elif booking.check_in_status == 'checked_in' %}
+                                        <span class="badge badge-success" style="font-size: 16px;">Checked In</span>
+                                    {% elif booking.check_in_status == 'checked_out' %}
+                                        <span class="badge badge-info" style="font-size: 16px;">Checked Out</span>
+                                    {% elif booking.check_in_status == 'cancelled' %}
+                                        <span class="badge badge-danger" style="font-size: 16px;">Cancelled</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="booking-info-grid">
+                            <div class="info-row">
+                                <div class="info-label">Booking ID:</div>
+                                <div class="info-value"><strong>{{ booking.id }}</strong></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Tracking Number:</div>
+                                <div class="info-value"><strong>{{ booking.tracking_no|default:"N/A" }}</strong></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Guest Name:</div>
+                                <div class="info-value">{{ booking.guest.name_eng|default:"N/A" }}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Email:</div>
+                                <div class="info-value">{{ booking.guest.email|default:"N/A" }}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Phone:</div>
+                                <div class="info-value">{{ booking.guest.phone|default:"N/A" }}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Number of Persons:</div>
+                                <div class="info-value">{{ booking.number_of_person|default:"N/A" }}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Check-in Date:</div>
+                                <div class="info-value"><strong>{{ booking.start_day }}</strong></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Check-out Date:</div>
+                                <div class="info-value"><strong>{{ booking.end_day }}</strong></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Booked On:</div>
+                                <div class="info-value">{{ booking.booked_on|date:"d M Y, h:i A" }}</div>
+                            </div>
+                            
+                            {% if booking.check_in_time %}
+                            <div class="info-row">
+                                <div class="info-label">Checked In At:</div>
+                                <div class="info-value">{{ booking.check_in_time|date:"d M Y, h:i A" }}</div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if booking.check_out_time %}
+                            <div class="info-row">
+                                <div class="info-label">Checked Out At:</div>
+                                <div class="info-value">{{ booking.check_out_time|date:"d M Y, h:i A" }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Booked Rooms -->
+                        <h4 style="margin-top: 30px; margin-bottom: 20px;">Booked Rooms</h4>
+                        <div class="row">
+                            {% for room in rooms %}
+                                <div class="col-lg-6 col-md-6 mb-3">
+                                    <div class="room-card">
+                                        {% if room.main_image %}
+                                            <img src="{{ room.main_image.url }}" alt="{{ room.name_eng }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px;">
+                                        {% endif %}
+                                        <h5 style="margin-top: 10px;">{{ room.name_eng }}</h5>
+                                        <p><strong>Room No:</strong> {{ room.room_no }}</p>
+                                        <p><strong>Type:</strong> {{ room.room_type.name_eng|default:"N/A" }}</p>
+                                        <p><strong>Price:</strong> ৳{{ room.price|default:"N/A" }}</p>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p>No rooms assigned to this booking.</p>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Check-in/Check-out Actions -->
+                        <div class="booking-actions no-print" style="margin-top: 30px;">
+                            {% if can_check_in %}
+                                <form method="post" action="{% url 'check_in' booking.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Are you sure you want to check in?')">
+                                        <i class="fa fa-sign-in"></i> Check In Now
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {% if can_check_out %}
+                                <form method="post" action="{% url 'check_out' booking.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure you want to check out?')">
+                                        <i class="fa fa-sign-out"></i> Check Out Now
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="room-booking">
+                    <h3>Payment Information</h3>
+                    <div class="payment-info">
+                        {% if booking.transaction %}
+                            <div class="info-row">
+                                <span>Transaction ID:</span>
+                                <span>{{ booking.transaction.tracking_no }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span>Amount:</span>
+                                <span><strong>৳{{ booking.transaction.amount|default:"N/A" }}</strong></span>
+                            </div>
+                            <div class="info-row">
+                                <span>Payment Status:</span>
+                                <span class="badge badge-success">Paid</span>
+                            </div>
+                        {% else %}
+                            <p>No payment information available.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="booking-help no-print" style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+                        <h5>Need Help?</h5>
+                        <p>If you have any questions about your booking or check-in/check-out process, please contact our reception desk.</p>
+                        <a href="{% url 'frontpage' %}" class="btn btn-secondary btn-block">Back to Home</a>
+                        <a href="{% url 'find_booking' %}" class="btn btn-outline-secondary btn-block">Find Another Booking</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Booking Details Section End -->
+
+<style>
+    .booking-info-grid {
+        display: grid;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    .info-row {
+        display: flex;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 5px;
+    }
+    .info-label {
+        flex: 0 0 180px;
+        font-weight: 600;
+        color: #555;
+    }
+    .info-value {
+        flex: 1;
+        color: #333;
+    }
+    .room-card {
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        height: 100%;
+    }
+    .room-card h5 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+    .room-card p {
+        margin-bottom: 5px;
+        color: #666;
+    }
+    .booking-actions {
+        text-align: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    .booking-actions button {
+        margin: 5px;
+        padding: 12px 30px;
+    }
+    .payment-info .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .payment-info .info-row:last-child {
+        border-bottom: none;
+    }
+    .alert {
+        margin-bottom: 20px;
+    }
+    .badge {
+        padding: 5px 12px;
+        font-size: 14px;
+    }
+    .btn {
+        border-radius: 5px;
+    }
+    .btn-block {
+        margin-top: 10px;
+    }
+    
+    /* ========================================
+       PRINT STYLES
+       ======================================== */
+    @media print {
+        /* Hide header, footer, navigation, and interactive elements */
+        .no-print,
+        .breadcrumb-section,
+        .booking-actions,
+        .booking-help,
+        header,
+        footer,
+        nav,
+        .header-section,
+        .footer-section,
+        .offcanvas-menu-wrapper,
+        .canvas-open,
+        button,
+        .btn,
+        .alert,
+        .close {
+            display: none !important;
+        }
+        
+        /* Reset page margins and padding */
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+        
+        /* Full width for print */
+        .container {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 20px !important;
+        }
+        
+        .row {
+            margin: 0 !important;
+        }
+        
+        /* Adjust column widths for print */
+        .col-lg-8,
+        .col-lg-4 {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: 0 0 100% !important;
+        }
+        
+        /* Print header */
+        .room-details-section::before {
+            content: "Hotel Red Rock - Booking Details";
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        
+        /* Optimize spacing for print */
+        .spad {
+            padding: 20px 0 !important;
+        }
+        
+        /* Make room cards display better */
+        .col-lg-6 {
+            width: 50% !important;
+            max-width: 50% !important;
+            flex: 0 0 50% !important;
+            page-break-inside: avoid;
+        }
+        
+        .room-card {
+            border: 1px solid #333 !important;
+            page-break-inside: avoid;
+            margin-bottom: 15px;
+        }
+        
+        /* Ensure images print well */
+        .room-card img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Payment info section */
+        .room-booking {
+            page-break-before: auto;
+            margin-top: 30px;
+            border: 1px solid #333;
+            padding: 15px;
+        }
+        
+        .room-booking h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        /* Info rows */
+        .info-row {
+            background: white !important;
+            border: 1px solid #ddd !important;
+            page-break-inside: avoid;
+        }
+        
+        .info-label {
+            font-weight: bold;
+        }
+        
+        /* Badges */
+        .badge {
+            border: 1px solid #333;
+            padding: 3px 8px;
+            display: inline-block;
+        }
+        
+        /* Headings */
+        h3, h4, h5 {
+            color: #000 !important;
+            page-break-after: avoid;
+        }
+        
+        /* Ensure all text is black */
+        * {
+            color: #000 !important;
+        }
+        
+        /* Remove backgrounds */
+        .rd-text,
+        .booking-info-grid,
+        .payment-info {
+            background: white !important;
+        }
+        
+        /* Footer for print */
+        .room-details-section::after {
+            content: "Printed from Hotel Red Rock Management System";
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            font-size: 12px;
+            color: #666 !important;
+        }
+        
+        /* Page breaks */
+        .room-details-item {
+            page-break-inside: avoid;
+        }
+        
+        /* Remove shadows and fancy styling */
+        * {
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
+    }
+    
+    /* Print button styling */
+    .btn-primary {
+        background-color: #dfa974;
+        border-color: #dfa974;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background-color: #c89968;
+        border-color: #c89968;
+    }
+    
+    .btn-primary i {
+        margin-right: 8px;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,148 @@
+/* ========================================
+   NAVBAR DROPDOWN FIX
+   Fixes dropdown hiding issue by removing gap
+   ======================================== */
+
+/* CRITICAL: Ensure header and menu are above hero section */
+.header-section {
+    position: relative;
+    z-index: 1000 !important;
+}
+
+.menu-item {
+    position: relative;
+    z-index: 1001 !important;
+}
+
+.menu-item .nav-menu .mainmenu {
+    position: relative;
+    z-index: 1002 !important;
+}
+
+/* Fix dropdown positioning to prevent hiding */
+.menu-item .nav-menu .mainmenu li {
+    position: relative;
+}
+
+.menu-item .nav-menu .mainmenu li .dropdown {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 200px;
+    background: #ffffff;
+    z-index: 1003 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0px 9px 15px rgba(25, 25, 26, 0.15);
+    margin-top: 0;
+    padding: 10px 0;
+    border-top: 2px solid #dfa974;
+    pointer-events: auto !important;
+}
+
+/* Show dropdown on parent hover */
+.menu-item .nav-menu .mainmenu li:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0;
+    pointer-events: auto !important;
+}
+
+/* Ensure dropdown stays visible when hovering over it */
+.menu-item .nav-menu .mainmenu li .dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Dropdown items styling */
+.menu-item .nav-menu .mainmenu li .dropdown li {
+    list-style: none;
+    display: block;
+    margin: 0;
+}
+
+.menu-item .nav-menu .mainmenu li .dropdown li a {
+    font-size: 15px;
+    color: #19191a;
+    display: block;
+    text-align: left;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    white-space: nowrap;
+    cursor: pointer;
+    pointer-events: auto !important;
+}
+
+.menu-item .nav-menu .mainmenu li .dropdown li a:hover {
+    color: #ffffff;
+    background-color: #dfa974;
+    padding-left: 25px;
+}
+
+.menu-item .nav-menu .mainmenu li .dropdown li a:after {
+    display: none;
+}
+
+/* Add hover delay to prevent accidental closing */
+.menu-item .nav-menu .mainmenu li {
+    transition: all 0.1s ease;
+}
+
+/* Ensure parent link area covers the gap */
+.menu-item .nav-menu .mainmenu li > a {
+    position: relative;
+    z-index: 10;
+}
+
+/* Create invisible bridge between menu and dropdown */
+.menu-item .nav-menu .mainmenu li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 5px;
+    background: transparent;
+    z-index: 1002;
+}
+
+/* Ensure hero section doesn't cover menu */
+.hero-section {
+    position: relative;
+    z-index: 1 !important;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 5 !important;
+}
+
+/* Responsive dropdown fix */
+@media (max-width: 991.98px) {
+    .menu-item .nav-menu .mainmenu li .dropdown {
+        position: static;
+        width: 100%;
+        opacity: 1;
+        visibility: visible;
+        box-shadow: none;
+        border-top: none;
+        display: none;
+        padding: 0;
+        margin-top: 0;
+    }
+    
+    .menu-item .nav-menu .mainmenu li:hover .dropdown {
+        display: block;
+    }
+    
+    .menu-item .nav-menu .mainmenu li .dropdown li a {
+        padding-left: 30px;
+        background: #f8f9fa;
+    }
+    
+    .menu-item .nav-menu .mainmenu li .dropdown li a:hover {
+        padding-left: 35px;
+    }
+}

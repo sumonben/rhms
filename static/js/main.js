@@ -87,15 +87,16 @@
     });
 
     /*------------------
-		Date Picker
+		Date Picker - DISABLED (Using native HTML5 date input instead)
 	--------------------*/
-    $(".date-input").datepicker({
-        minDate: 0,
-        dateFormat: 'dd MM, yy'
-    });
+    // $(".date-input").datepicker({
+    //     minDate: 0,
+    //     dateFormat: 'dd MM, yy'
+    // });
 
     /*------------------
 		Nice Select
 	--------------------*/
+    $('select').niceSelect();
 
 })(jQuery);

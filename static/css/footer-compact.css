@@ -1,0 +1,48 @@
+/* Footer Height Reduction - 50% of Original */
+.footer-section .footer-text {
+	padding: 40px 0 15px; /* Original: 80px 0 30px */
+}
+
+.footer-section .footer-text .ft-about {
+	margin-bottom: 15px; /* Original: 30px */
+}
+
+.footer-section .footer-text .ft-about .logo {
+	margin-bottom: 10px; /* Original: 20px */
+}
+
+.footer-section .footer-text .ft-about p {
+	margin-bottom: 10px; /* Original: 20px */
+}
+
+.footer-section .footer-text .ft-contact {
+	margin-bottom: 15px; /* Original: 30px */
+}
+
+.footer-section .footer-text .ft-contact h6 {
+	margin-bottom: 10px; /* Original: 20px */
+}
+
+.footer-section .footer-text .ft-contact ul li {
+	line-height: 24px; /* Original: 32px */
+}
+
+.footer-section .footer-text .ft-newslatter h6 {
+	margin-bottom: 10px; /* Original: 20px */
+}
+
+.footer-section .footer-text .ft-newslatter p {
+	margin-bottom: 10px; /* Original: 20px */
+}
+
+.footer-section .footer-text .ft-newslatter .fn-form input {
+	height: 40px; /* Original: 50px */
+}
+
+.footer-section .footer-text .ft-newslatter .fn-form button {
+	height: 40px; /* Original: 50px */
+}
+
+.footer-section .copyright-option {
+	padding: 10px 0; /* Original: 20px 0 */
+}

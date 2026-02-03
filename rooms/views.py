@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View, TemplateView, DetailView
+from django.contrib import messages
 from rooms.models import Room,RoomType
 from accounts.models import Staff, Guest,Designation, Department
 
@@ -11,6 +12,25 @@ class Rooms(View):
         staffs=Staff.objects.all().order_by("serial")
         guests=Guest.objects.all().order_by("-id")
         context={}
+        
+        # Check if there's availability search data in session
+        check_in = request.session.get('check_in')
+        check_out = request.session.get('check_out')
+        guests_count = request.session.get('guests')
+        rooms_count = request.session.get('rooms_count')
+        
+        if check_in and check_out:
+            context['check_in'] = check_in
+            context['check_out'] = check_out
+            context['guests'] = guests_count
+            context['rooms_count'] = rooms_count
+            context['search_active'] = True
+            # Clear session data after using it
+            request.session.pop('check_in', None)
+            request.session.pop('check_out', None)
+            request.session.pop('guests', None)
+            request.session.pop('rooms_count', None)
+        
         context['rooms']=rooms
         context['staffs']=staffs
         context['guests']=guests
@@ -18,13 +38,6 @@ class Rooms(View):
 
     def post(self, request, *args, **kwargs):
         pass
-        # context={}
-        # admission_type=request.POST.get('admission_type')
-        # student_category=StudentCategory.objects.filter(id=admission_type).first()
-        # if student_category.title_en=='HSC':
-        #     return redirect('admission_login')
-        # else:
-        #     return redirect('admission_login_others')
 class RoomTypeRooms(View):
     template_name = 'rooms/rooms.html'
     
@@ -67,13 +80,24 @@ class RoomDetails(View):
         return render(request, self.template_name,context)
 
     def post(self, request, *args, **kwargs):
-        context={}
-        return render(request, self.template_name,context)
-
-        # admission_type=request.POST.get('admission_type')
-        # student_category=StudentCategory.objects.filter(id=admission_type).first()
-        # if student_category.title_en=='HSC':
-        #     return redirect('admission_login')
-        # else:
-        #     return redirect('admission_login_others')
+        from django.shortcuts import redirect
+        # Handle check availability form submission
+        check_in = request.POST.get('check_in')
+        check_out = request.POST.get('check_out')
+        guests_count = request.POST.get('guests')
+        rooms_count = request.POST.get('rooms')
+        
+        if check_in and check_out:
+            # Store in session and redirect to cart
+            request.session['check_in'] = check_in
+            request.session['check_out'] = check_out
+            request.session['guests'] = guests_count
+            request.session['rooms_count'] = rooms_count
+            request.session['selected_room_id'] = kwargs['id']
+            
+            messages.success(request, f'Room available from {check_in} to {check_out}. You can proceed to add to cart.')
+            return redirect('room_details', id=kwargs['id'])
+        else:
+            messages.error(request, 'Please select check-in and check-out dates')
+            return redirect('room_details', id=kwargs['id'])
 

@@ -1,0 +1,354 @@
+/* ========================================
+   GLOBAL PRINT STYLES
+   Hide Header, Footer, Navigation, and Non-Essential Elements
+   ======================================== */
+
+@media print {
+    /* ========================================
+       HIDE ELEMENTS
+       ======================================== */
+    
+    /* Hide all headers, footers, and navigation */
+    header,
+    footer,
+    nav,
+    .header-section,
+    .footer-section,
+    .navbar,
+    .mainmenu,
+    .offcanvas-menu-wrapper,
+    .offcanvas-menu-overlay,
+    .canvas-open,
+    .canvas-close,
+    .breadcrumb-section,
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Hide interactive elements */
+    button,
+    .btn:not(.print-keep),
+    input[type="button"],
+    input[type="submit"],
+    .booking-actions,
+    .booking-help,
+    .search-icon,
+    .language-option,
+    .bk-btn {
+        display: none !important;
+    }
+    
+    /* Hide alerts and messages */
+    .alert,
+    .message,
+    .notification,
+    .close {
+        display: none !important;
+    }
+    
+    /* Hide social media links */
+    .top-social,
+    .social-links,
+    .share-buttons {
+        display: none !important;
+    }
+    
+    /* ========================================
+       PAGE SETUP
+       ======================================== */
+    
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    @page {
+        margin: 1.5cm;
+        size: A4;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+        background: white !important;
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+    
+    /* ========================================
+       LAYOUT ADJUSTMENTS
+       ======================================== */
+    
+    .container,
+    .container-fluid {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .row {
+        margin: 0 !important;
+        page-break-inside: avoid;
+    }
+    
+    .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, 
+    .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, 
+    .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12,
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4,
+    .col-md-5, .col-md-6, .col-md-7, .col-md-8,
+    .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+        padding: 0 10px !important;
+    }
+    
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+    
+    h1, h2, h3, h4, h5, h6 {
+        color: #000 !important;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+    
+    h1 { font-size: 20pt; }
+    h2 { font-size: 18pt; }
+    h3 { font-size: 16pt; }
+    h4 { font-size: 14pt; }
+    h5 { font-size: 12pt; }
+    h6 { font-size: 11pt; }
+    
+    p, div, span, td, th {
+        color: #000 !important;
+        font-size: 11pt;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #000 !important;
+    }
+    
+    /* Show link URLs after link text (optional) */
+    /* a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #666 !important;
+    } */
+    
+    /* ========================================
+       TABLES
+       ======================================== */
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+        border: 1px solid #000;
+    }
+    
+    table th {
+        background-color: #f0f0f0 !important;
+        font-weight: bold;
+        padding: 8px;
+        border: 1px solid #000;
+        text-align: left;
+    }
+    
+    table td {
+        padding: 8px;
+        border: 1px solid #000;
+    }
+    
+    table tr {
+        page-break-inside: avoid;
+    }
+    
+    /* ========================================
+       IMAGES
+       ======================================== */
+    
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+        display: block;
+    }
+    
+    /* ========================================
+       REMOVE DECORATIVE ELEMENTS
+       ======================================== */
+    
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+        border-radius: 0 !important;
+    }
+    
+    /* Reset backgrounds to white */
+    .spad,
+    .room-details-section,
+    section,
+    article,
+    main,
+    .content {
+        background: white !important;
+        background-color: white !important;
+        background-image: none !important;
+    }
+    
+    /* ========================================
+       PAGE BREAKS
+       ======================================== */
+    
+    /* Avoid breaking inside these elements */
+    h1, h2, h3, h4, h5, h6,
+    p, blockquote, pre,
+    ul, ol, li,
+    table, tr, td, th,
+    img, figure,
+    .room-card,
+    .info-row,
+    .payment-info {
+        page-break-inside: avoid;
+    }
+    
+    /* Ensure sections don't break */
+    section {
+        page-break-inside: auto;
+    }
+    
+    /* ========================================
+       BADGES AND LABELS
+       ======================================== */
+    
+    .badge {
+        border: 1px solid #000 !important;
+        padding: 2px 6px !important;
+        background: white !important;
+        color: #000 !important;
+        display: inline-block;
+        font-size: 10pt;
+    }
+    
+    .label {
+        font-weight: bold;
+        color: #000 !important;
+    }
+    
+    /* ========================================
+       FORM ELEMENTS
+       ======================================== */
+    
+    input, select, textarea {
+        border: 1px solid #000 !important;
+        background: white !important;
+        display: none; /* Hide form inputs in print */
+    }
+    
+    /* ========================================
+       UTILITIES
+       ======================================== */
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    .screen-only {
+        display: none !important;
+    }
+    
+    /* Force black text */
+    * {
+        color: #000 !important;
+    }
+    
+    /* Remove transitions and animations */
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    /* ========================================
+       BOOKING DETAILS SPECIFIC
+       ======================================== */
+    
+    .booking-info-grid {
+        margin-top: 15px;
+    }
+    
+    .info-row {
+        border: 1px solid #ddd !important;
+        padding: 8px !important;
+        margin-bottom: 5px;
+        background: white !important;
+        display: flex;
+        page-break-inside: avoid;
+    }
+    
+    .info-label {
+        font-weight: bold;
+        width: 40%;
+        color: #000 !important;
+    }
+    
+    .info-value {
+        width: 60%;
+        color: #000 !important;
+    }
+    
+    .room-card {
+        border: 1px solid #000 !important;
+        padding: 10px !important;
+        margin-bottom: 15px;
+        page-break-inside: avoid;
+        background: white !important;
+    }
+    
+    .room-booking {
+        border: 1px solid #000 !important;
+        padding: 15px !important;
+        margin-top: 20px;
+        background: white !important;
+    }
+    
+    /* ========================================
+       PRINT HEADER/FOOTER (Optional)
+       ======================================== */
+    
+    /* Add custom header for print */
+    body::before {
+        content: "Hotel Red Rock Management System";
+        display: block;
+        text-align: center;
+        font-size: 18pt;
+        font-weight: bold;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #000;
+    }
+    
+    /* Add page numbers */
+    @page {
+        @bottom-right {
+            content: "Page " counter(page) " of " counter(pages);
+            font-size: 9pt;
+        }
+    }
+}
+
+/* ========================================
+   PRINT PREVIEW MODE (for testing)
+   ======================================== */
+
+/* Add a class to test print styles without actually printing */
+.print-preview {
+    /* Apply all print styles */
+}
+
+.print-preview header,
+.print-preview footer,
+.print-preview nav,
+.print-preview .no-print {
+    display: none !important;
+}

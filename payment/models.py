@@ -23,6 +23,13 @@ class Transaction(models.Model):
     tran_id = models.CharField(max_length=15,unique=True)
     guest=models.ForeignKey(Guest,blank=True,null=True,on_delete=models.SET_NULL)
     room=models.ManyToManyField(Room,blank=True,null=True)
+    
+    # Booking data fields (to survive session loss during payment redirect)
+    booking_check_in = models.DateField(null=True, blank=True, help_text="Check-in date for booking")
+    booking_check_out = models.DateField(null=True, blank=True, help_text="Check-out date for booking")
+    booking_guests_count = models.IntegerField(default=1, help_text="Number of guests")
+    booking_dates_json = models.JSONField(null=True, blank=True, help_text="Per-room booking dates as JSON")
+    
     val_id = models.CharField(max_length=75)
     card_type = models.CharField(max_length=150)
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)

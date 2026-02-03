@@ -18,8 +18,9 @@ class PaymentGatewayAdmin(ImportExportMixin,admin.ModelAdmin):
 # Register your models here.
 @admin.register(Transaction)
 class TransactionAdmin(ImportExportMixin,admin.ModelAdmin):
-    list_display = ('name','tracking_no','email','phone', 'card_no', 'amount', 'tran_id','guest','status', 'created_at',)
+    list_display = ('name','tracking_no','email','phone', 'card_no', 'amount', 'tran_id','guest','status', 'booking_check_in', 'booking_check_out', 'created_at',)
     search_fields = ('tracking_no','phone', 'status')
-    list_filter=( 'created_at',("created_at", DateRangeFilterBuilder()),)
+    list_filter=( 'status', 'created_at',("created_at", DateRangeFilterBuilder()),)
     filter_horizontal = ['room']
+    readonly_fields = ('booking_check_in', 'booking_check_out', 'booking_guests_count')
 

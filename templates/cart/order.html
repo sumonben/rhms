@@ -50,7 +50,7 @@
                      <td class="qty">
                         <div class="pro_qty"><a><i class="fa fa-minus" aria-hidden="true"></i></a><input class="form-control input-sm" type="text" value="1"><a><i class="fa fa-plus"></i></a></div>
                      </td>
-                     <td class="price" style="text-align: center; width: 15%;"><span>৳ {{ room.price }}</span></td>
+                     <td class="price room-total-{{ room.id }}" style="text-align: center; width: 15%;" data-room-id="{{ room.id }}" data-price="{{ room.price }}"><span>৳ <span class="room-amount">{{ room.price }}</span></span></td>
                      <td class="action"><a class="icon-remove" style="font-size: 1.5rem; color: red;"><i class="fa fa-remove" aria-hidden="true"></i></a></td>
                   </tr>
                 {% endfor %}
@@ -58,7 +58,7 @@
                <tfoot>
                   <tr>
                      <td colspan="6" class="text-semibold">Total</td>
-                     <td colspan="2" class="text-semibold" style="text-align: center;">৳ <span>{{ total_cart_amount }}</span></td>
+                     <td colspan="2" class="text-semibold" style="text-align: center;">৳ <span id="grand-total">{{ total_cart_amount }}</span></td>
                   </tr>
                </tfoot>
             </table>
@@ -68,7 +68,7 @@
                <tbody>
                   <tr class="Payment_payment__row__v5dNA">
                      <td>Amount (tax incl.)</td>
-                     <td>{{ total_cart_amount }}</td>
+                     <td id="amount-tax-incl">{{ total_cart_amount }}</td>
                      <td>TK</td>
                   </tr>
                   <tr class="Payment_payment__row__v5dNA">
@@ -78,7 +78,7 @@
                   </tr>
                   <tr class="Payment_payment__row__v5dNA">
                      <td>Total Amount</td>
-                     <td>{{ total_cart_amount|add:'120' }}</td>
+                     <td id="final-total">{{ total_cart_amount|add:'120' }}</td>
                      <td>TK</td>
                   </tr>
                </tbody>
@@ -206,5 +206,69 @@
     } 
     </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script>
+    // Dynamic total calculation based on check-in and check-out dates
+    $(document).ready(function() {
+        // Function to calculate nights between two dates
+        function calculateNights(checkIn, checkOut) {
+            if (!checkIn || !checkOut) return 1;
+            
+            const start = new Date(checkIn);
+            const end = new Date(checkOut);
+            const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            
+            return nights > 0 ? nights : 1;
+        }
+        
+        // Function to update room total
+        function updateRoomTotal(roomId) {
+            const checkIn = $('input[name="check_in_' + roomId + '"]').val();
+            const checkOut = $('input[name="check_out_' + roomId + '"]').val();
+            const roomPrice = parseFloat($('.room-total-' + roomId).data('price'));
+            
+            const nights = calculateNights(checkIn, checkOut);
+            const roomTotal = roomPrice * nights;
+            
+            $('.room-total-' + roomId + ' .room-amount').text(roomTotal.toFixed(0));
+            
+            updateGrandTotal();
+        }
+        
+        // Function to update grand total
+        function updateGrandTotal() {
+            let grandTotal = 0;
+            
+            $('[class*="room-total-"]').each(function() {
+                const amount = parseFloat($(this).find('.room-amount').text());
+                if (!isNaN(amount)) {
+                    grandTotal += amount;
+                }
+            });
+            
+            $('#grand-total').text(grandTotal.toFixed(0));
+            $('#amount-tax-incl').text(grandTotal.toFixed(0));
+            $('#final-total').text((grandTotal + 120).toFixed(0));
+        }
+        
+        // Listen for date changes
+        $('input[type="date"]').on('change', function() {
+            const name = $(this).attr('name');
+            const match = name.match(/_(check_in|check_out)_(\d+)/);
+            
+            if (match) {
+                const roomId = match[2];
+                updateRoomTotal(roomId);
+            }
+        });
+        
+        // Initial calculation when dates are set
+        {% for room in cart_rooms %}
+        $('input[name="check_in_{{ room.id }}"], input[name="check_out_{{ room.id }}"]').on('change', function() {
+            updateRoomTotal('{{ room.id }}');
+        });
+        {% endfor %}
+    });
+    </script>
 
 {% endblock content %}

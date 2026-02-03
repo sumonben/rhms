@@ -1,6 +1,6 @@
 from django.conf import settings
 from .models import HotelDetails, ColorRoot
-from rooms.models import Room
+from rooms.models import Room, RoomType
 from cart.cart import Cart
 def site_info(request):
         hotel_details=HotelDetails.objects.last()
@@ -10,6 +10,7 @@ def site_info(request):
         cart_rooms=Room.objects.filter(id__in=cart)
         total_cart_amount=0
         color=ColorRoot.objects.filter(is_active=True).first()
+        room_types=RoomType.objects.all().order_by("serial")
         for cart_room in cart_rooms:
             total_cart_amount = total_cart_amount+int(cart_room.price)
 
@@ -29,6 +30,7 @@ def site_info(request):
             'cart_rooms':cart_rooms,
             'total_cart_amount':total_cart_amount,
             'color':color,
+            'room_types':room_types,
 
 
         }

@@ -1,7 +1,5 @@
 <div class="offcanvas-menu-overlay"></div>
-    <div class="canvas-open">
-        <i class="icon_menu"></i>
-    </div>
+    
     <div class="offcanvas-menu-wrapper">
         <div class="canvas-close">
             <i class="icon_close"></i>
@@ -26,6 +24,7 @@
             <ul>
                 <li class="active"><a href="{% url 'frontpage' %}">Home</a></li>
                 <li><a href="{% url 'rooms_view' %}">Rooms</a></li>
+                <li><a href="{% url 'find_booking' %}">Find Booking</a></li>
                 <li><a href="./about-us.html">About Us</a></li>
                 <li><a href="./pages.html">Pages</a>
                     <ul class="dropdown">
@@ -93,6 +92,9 @@
             </div>
         </div>
         <div class="menu-item" style="background: var(--weather);z-index: 1;">
+            <div class="canvas-open">
+                <i class="icon_menu"></i>
+            </div>
             <div class="container"  >
                 <div class="row">
                     <div class="col-lg-2" style="background: transparent;position: absolute;z-index: 1000;">
@@ -122,6 +124,7 @@
                                             
                                         </ul>
                                     </li>
+                                    <li><a href="{% url 'find_booking' %}">Find Booking</a></li>
                                     <li><a href="./about-us.html">About Us</a></li>
                                     <li><a href="./pages.html">Pages</a>
                                         <ul class="dropdown">

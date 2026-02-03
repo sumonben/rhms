@@ -355,10 +355,20 @@ ul, ol {
 	width: 100%;
 	position: relative;
 	z-index: 9;
+	min-height: 80px;
+	display: flex;
+	align-items: center;
+}
+.menu-item .canvas-open {
+	display: none;
 }
 .menu-item .logo {
 	width: 110px;
 	/* padding: 0px 0; */
+}
+.menu-item .logo img {
+	max-width: 100%;
+	height: auto;
 }
 .menu-item .logo a {
 	display: inline-block;
@@ -1968,8 +1978,47 @@ ul, ol {
 	.top-nav {
 		display: none;
 	}
-	.menu-item .nav-menu ul {
-		display: none;
+	.menu-item {
+		padding: 15px 0;
+		min-height: 70px;
+	}
+	.menu-item .nav-menu {
+		display: none !important;
+	}
+	.menu-item .logo {
+		width: 90px;
+		position: relative;
+		z-index: 1;
+	}
+	.menu-item .canvas-open {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		right: 20px;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 24px;
+		width: 45px;
+		height: 45px;
+		color: #ffffff;
+		border: 2px solid #ffffff;
+		border-radius: 5px;
+		line-height: 1;
+		text-align: center;
+		z-index: 1002;
+		cursor: pointer;
+		background: #dfa974;
+		transition: all 0.3s ease;
+		box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+	}
+	.menu-item .canvas-open:hover {
+		background: #c08d5b;
+		transform: translateY(-50%) scale(1.08);
+		box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+	}
+	.menu-item .canvas-open i {
+		font-size: 24px;
 	}
 	.offcanvas-menu-overlay {
 		position: fixed;
@@ -1986,22 +2035,6 @@ ul, ol {
 	}
 	.offcanvas-menu-overlay.active {
 		visibility: visible;
-	}
-	.canvas-open {
-		position: absolute;
-		right: 40px;
-		top: 25px;
-		font-size: 22px;
-		width: 30px;
-		height: 30px;
-		color: #19191a;
-		border: 1px solid #19191a;
-		border-radius: 2px;
-		line-height: 33px;
-		text-align: center;
-		z-index: 100;
-		display: block;
-		cursor: pointer;
 	}
 	.offcanvas-menu-wrapper {
 		position: fixed;
@@ -2224,8 +2257,19 @@ ul, ol {
 /* Tablet Device: 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+	.menu-item {
+		min-height: 75px;
+	}
+	.menu-item .logo {
+		width: 100px;
+	}
+	.menu-item .canvas-open {
+		right: 25px;
+		width: 48px;
+		height: 48px;
+	}
 	.hero-text {
-	padding-top: 45px;
+		padding-top: 45px;
 	}
 	.offcanvas-menu-wrapper .search-icon {
 		display: none;
@@ -2246,11 +2290,24 @@ ul, ol {
 /* Large Mobile: 480px */
 
 @media only screen and (max-width: 767px) {
+	.menu-item {
+		min-height: 65px;
+		padding: 12px 0;
+	}
 	.menu-item .logo {
-	width: 120px;
+		width: 75px;
+	}
+	.menu-item .canvas-open {
+		right: 15px;
+		width: 42px;
+		height: 42px;
+		font-size: 22px;
+	}
+	.menu-item .canvas-open i {
+		font-size: 22px;
 	}
 	.hero-text {
-	padding-top: 30px;
+		padding-top: 30px;
 	}
 	.offcanvas-menu-wrapper .search-icon {
 		display: none;

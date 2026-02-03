@@ -1,0 +1,578 @@
+/* ========================================
+   RESPONSIVE ENHANCEMENTS FOR ALL DEVICES
+   ======================================== */
+
+/* Base Responsive Fixes */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Container Responsive */
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* ========================================
+   MOBILE FIRST - EXTRA SMALL DEVICES
+   Mobile phones (portrait and landscape)
+   ======================================== */
+@media (max-width: 575.98px) {
+    /* Typography for mobile */
+    h1 {
+        font-size: 32px !important;
+        line-height: 1.2;
+    }
+    
+    h2 {
+        font-size: 24px !important;
+        line-height: 1.3;
+    }
+    
+    h3 {
+        font-size: 20px !important;
+    }
+    
+    h4 {
+        font-size: 18px !important;
+    }
+    
+    p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    /* Hero Section Mobile */
+    .hero-section {
+        min-height: auto;
+        padding: 20px 0;
+    }
+    
+    .hero-text h1 {
+        font-size: 36px !important;
+        text-shadow: 2px 2px #fff !important;
+    }
+    
+    .hero-text h2 {
+        font-size: 18px !important;
+    }
+    
+    .hero-text p {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    /* Booking Form Mobile */
+    .booking-form {
+        margin-top: 30px;
+        padding: 20px 15px;
+        width: 100%;
+    }
+    
+    .booking-form h3 {
+        font-size: 20px !important;
+        margin-bottom: 15px;
+    }
+    
+    .check-date, .select-option {
+        margin-bottom: 15px;
+        min-width: 100% !important;
+        width: 100%;
+    }
+    
+    .check-date input,
+    .select-option select {
+        width: 100%;
+        min-width: 100% !important;
+        max-width: 100%;
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    .booking-form button {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    /* Sections Padding Mobile */
+    .spad {
+        padding-top: 50px !important;
+        padding-bottom: 50px !important;
+    }
+    
+    /* About Section Mobile */
+    .about-text {
+        margin-bottom: 30px;
+    }
+    
+    .about-pic {
+        margin-top: 20px;
+    }
+    
+    .about-pic img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+    
+    /* Services Section Mobile */
+    .services-item {
+        margin-bottom: 30px;
+    }
+    
+    .services-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    /* Room Items Mobile */
+    .room-item {
+        margin-bottom: 30px;
+    }
+    
+    .room-item img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .ri-text h4 {
+        font-size: 18px !important;
+    }
+    
+    .ri-text h3 {
+        font-size: 20px !important;
+    }
+    
+    /* Footer Mobile */
+    .footer-section {
+        padding: 0px 0;
+    }
+    
+    .ft-about, .ft-contact, .ft-newslatter {
+        margin-bottom: 30px;
+    }
+    
+    /* Navigation Mobile */
+    .mainmenu {
+        display: none;
+    }
+    
+    .canvas-open {
+        display: block;
+    }
+    
+    /* Tables Mobile */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    /* Buttons Mobile */
+    .btn, .primary-btn, .site-btn {
+        font-size: 13px;
+        padding: 10px 20px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    /* Cards Mobile */
+    .room-card, .booking-info-grid {
+        padding: 15px;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .info-label {
+        flex: none;
+        width: 100%;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .info-value {
+        width: 100%;
+    }
+    
+    /* Search/Filter Forms Mobile */
+    .contact-form input,
+    .contact-form textarea {
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    /* Breadcrumb Mobile */
+    .breadcrumb-section {
+        padding: 30px 0;
+    }
+    
+    .breadcrumb-text h2 {
+        font-size: 24px !important;
+    }
+    
+    /* Carousel/Slider Mobile */
+    .owl-carousel .owl-item img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* ========================================
+   SMALL DEVICES - Tablets (portrait)
+   576px - 767.98px
+   ======================================== */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    h1 {
+        font-size: 42px !important;
+    }
+    
+    h2 {
+        font-size: 28px !important;
+    }
+    
+    .hero-text h1 {
+        font-size: 48px !important;
+    }
+    
+    .booking-form {
+        padding: 25px 20px;
+    }
+    
+    .spad {
+        padding-top: 60px !important;
+        padding-bottom: 60px !important;
+    }
+    
+    .container {
+        max-width: 540px;
+    }
+}
+
+/* ========================================
+   MEDIUM DEVICES - Tablets (landscape)
+   768px - 991.98px
+   ======================================== */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    h1 {
+        font-size: 52px !important;
+    }
+    
+    h2 {
+        font-size: 32px !important;
+    }
+    
+    .hero-text h1 {
+        font-size: 56px !important;
+    }
+    
+    .booking-form {
+        padding: 30px 25px;
+    }
+    
+    .spad {
+        padding-top: 70px !important;
+        padding-bottom: 70px !important;
+    }
+    
+    .container {
+        max-width: 720px;
+    }
+    
+    /* Two column layout for medium tablets */
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+/* ========================================
+   LARGE DEVICES - Desktops
+   992px - 1199.98px
+   ======================================== */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        max-width: 960px;
+    }
+    
+    .hero-text h1 {
+        font-size: 60px !important;
+    }
+    
+    .spad {
+        padding-top: 80px !important;
+        padding-bottom: 80px !important;
+    }
+}
+
+/* ========================================
+   EXTRA LARGE DEVICES - Large desktops
+   1200px and up
+   ======================================== */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+/* ========================================
+   ORIENTATION SPECIFIC FIXES
+   ======================================== */
+
+/* Landscape mode for mobile devices */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        padding: 10px 0;
+    }
+    
+    .booking-form {
+        padding: 15px;
+    }
+    
+    .spad {
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES FOR RESPONSIVE
+   ======================================== */
+
+/* Hide on specific devices */
+.mobile-only {
+    display: none !important;
+}
+
+@media (max-width: 767.98px) {
+    .mobile-only {
+        display: block !important;
+    }
+    
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .desktop-only {
+        display: block !important;
+    }
+}
+
+/* Responsive spacing */
+.mb-mobile {
+    margin-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+    .mb-mobile {
+        margin-bottom: 20px;
+    }
+}
+
+/* Responsive text alignment */
+@media (max-width: 767.98px) {
+    .text-mobile-center {
+        text-align: center !important;
+    }
+}
+
+/* ========================================
+   FIX COMMON OVERFLOW ISSUES
+   ======================================== */
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col, [class*="col-"] {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+/* Prevent horizontal scroll */
+body, html {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ========================================
+   FORM ELEMENTS RESPONSIVE
+   ======================================== */
+@media (max-width: 767.98px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    textarea,
+    select {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* ========================================
+   NAVIGATION RESPONSIVE ENHANCEMENTS
+   ======================================== */
+@media (max-width: 991.98px) {
+    .offcanvas-menu-wrapper {
+        width: 280px;
+    }
+    
+    .mainmenu.mobile-menu ul li {
+        display: block;
+        margin: 0;
+    }
+    
+    .mainmenu.mobile-menu ul li a {
+        padding: 12px 20px;
+        display: block;
+        font-size: 14px;
+    }
+}
+
+/* ========================================
+   IMAGE AND MEDIA RESPONSIVE
+   ======================================== */
+@media (max-width: 767.98px) {
+    /* Ensure images don't break layout */
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    /* Video responsive */
+    video {
+        width: 100%;
+        height: auto;
+    }
+    
+    /* Iframe responsive (for embedded content) */
+    iframe {
+        max-width: 100%;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ======================================== */
+@media (max-width: 767.98px) {
+    /* Larger touch targets for mobile */
+    a, button, input[type="submit"], input[type="button"] {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Better spacing for readability */
+    p {
+        line-height: 1.8;
+    }
+}
+
+/* ========================================
+   SPECIFIC COMPONENT FIXES
+   ======================================== */
+
+/* Room Details Responsive */
+@media (max-width: 767.98px) {
+    .room-details-item {
+        padding: 20px 0;
+    }
+    
+    .rd-text {
+        padding: 20px;
+    }
+    
+    .room-booking {
+        margin-top: 30px;
+        padding: 20px;
+    }
+}
+
+/* Booking Details Responsive */
+@media (max-width: 767.98px) {
+    .booking-actions {
+        padding: 15px;
+    }
+    
+    .booking-actions button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Payment Info Responsive */
+@media (max-width: 767.98px) {
+    .payment-info {
+        padding: 15px;
+    }
+}
+
+/* Cart Responsive */
+@media (max-width: 767.98px) {
+    .cart-table {
+        font-size: 12px;
+    }
+    
+    .cart-table th,
+    .cart-table td {
+        padding: 8px 5px;
+    }
+}

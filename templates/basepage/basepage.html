@@ -34,8 +34,7 @@
         <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
         <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
         <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
-        <!-- <link rel="stylesheet" href="{% static 'css/application.css' %}" type="text/css"> -->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" type="text/css">    <link rel="stylesheet" href="{% static 'css/mobile-enhancements.css' %}" type="text/css">    <link rel="stylesheet" href="{% static 'css/booking-form-enhanced.css' %}" type="text/css">    <link rel="stylesheet" href="{% static 'css/dropdown-fix.css' %}" type="text/css">    <link rel="stylesheet" href="{% static 'css/footer-compact.css' %}" type="text/css">    <link rel="stylesheet" href="{% static 'css/print-styles.css' %}" type="text/css" media="print">                    <!-- <link rel="stylesheet" href="{% static 'css/application.css' %}" type="text/css"> -->
         <style>
             .cart-box{
                 background-color: brown;
@@ -86,11 +85,9 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="ft-about">
-                                <div class="logo">
                                     <a href="#">
-                                        <img src="{{ LOGO.url }}" alt="">
+                                        <img src="{{ LOGO.url }}" alt="" height="80px" width="auto">
                                     </a>
-                                </div>
                                 <p>{{ SLOGAN_ENG}}<br /> </p>
                                 <div class="fa-social">
                                     <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -161,7 +158,7 @@
         <!-- Search model end -->
         <div id="minicart" onclick="showShopingCart(this.id)" class="cart_box_container cart_info" style="background: var(--weather)"><div class="cart-box"><div class="cart-items text-center text-white" style="background: var(--weather)"><span id="number_of_item_mini" class="cart-count" style="color: white;">{{ cart_rooms.count }}</span><span style="color: white;">&nbsp; {% if cart_rooms.count == 1 %} Room {% else %} Rooms {% endif %}</span></div><div class="cart-bag text-center"><img src="{{ LOGO.url }}" alt="img"></div><div class="cart-amount" style="background: var(--weather)"><span>৳ </span><span class="cart-amount-span" id="mini_cart_total">{{ total_cart_amount }}</span></div></div></div>
 
-        <div id="max_shoppnig_cart" class="cart-box-view"><div class="cart-box-inner-view"><div class="flex justify-between align-center background-secondary p-4"><div class="flex flex-center gap-4"><span><i class="fa fa-home" style="font-size:24px;color:white"></i></span><strong class="car-box-title SearchFont m-0"><span id="number_of_item" class="text-white">{{ cart_rooms.count }}</span><span class="text-white"> {% if cart_rooms.count == 1 %} Room {% else %} Rooms {% endif %}</span></strong></div><div id="shoping_cart_close" onclick="showMiniCart( this.id )" class="text-bold text-white cursor-pointer px-4 py-2 border-radius-4 hover-background-warn">✖</div></div><div class="cart-body text-center"><div class="cart-table-wrap"><span>Happy Staying!! </span>
+        <div id="max_shoppnig_cart" class="cart-box-view"><div class="cart-box-inner-view"><div class="flex justify-between align-center background-secondary p-4" style="background: var(--weather)"><div class="flex flex-center gap-4"><span><i class="fa fa-home" style="font-size:24px;color:white"></i></span><strong class="car-box-title SearchFont m-0"><span id="number_of_item" class="text-white">{{ cart_rooms.count }}</span><span class="text-white"> {% if cart_rooms.count == 1 %} Room {% else %} Rooms {% endif %}</span></strong></div><div id="shoping_cart_close" onclick="showMiniCart( this.id )" class="text-bold text-white cursor-pointer px-4 py-2 border-radius-4 hover-background-warn">✖</div></div><div class="cart-body text-center"><div class="cart-table-wrap"><span>Happy Staying!! </span>
             <table  class="cart-table" style="width: 100%; font-size: 11px;">
                 <tbody  id="cart_body">
                     
@@ -211,7 +208,7 @@
                     <p>Total Ammount</p><span id="total_amount_max_cart">{{ total_cart_amount }}</span>
                 </div>
             </div>
-            <div class="cart-footer">
+            <div class="cart-footer" style="background: var(--weather)">
                 <button class="Button_button__Poz4v false Button_warn__MR8nH flex-1" type="button" onclick="clearCart( this.id )">
                     Clear Cart
                 </button>

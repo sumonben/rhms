@@ -1,4 +1,8 @@
 from django.db import models
+from django.utils import timezone
+from django.urls import reverse
+from django.utils.html import format_html, escape
+from datetime import date
 from region.models import Upazilla, District
 from payment.models import  Transaction
 from rooms.models import  Room
@@ -40,6 +44,13 @@ class HotelDetails(models.Model):
     def __str__(self):
         return self.title+'('+self.title_en+')'
 class Booking(models.Model):
+        CHECK_IN_STATUS_CHOICES = [
+            ('pending', 'Pending'),
+            ('checked_in', 'Checked In'),
+            ('checked_out', 'Checked Out'),
+            ('cancelled', 'Cancelled'),
+        ]
+        
         tracking_no = models.CharField(max_length=150,null=True,blank=True)
         room=models.ManyToManyField(Room, blank=True,null=True)
         guest=models.ForeignKey(Guest, on_delete=models.SET_NULL,null=True,blank=True)
@@ -48,6 +59,13 @@ class Booking(models.Model):
         end_day=models.DateField(auto_now=False, auto_now_add=False)
         transaction=models.ForeignKey(Transaction, on_delete=models.SET_NULL,null=True,blank=True)
         booked_on=models.DateTimeField(auto_now=True, auto_now_add=False)
+        
+        # Check-in/Check-out fields
+        check_in_status = models.CharField(max_length=20, choices=CHECK_IN_STATUS_CHOICES, default='pending')
+        check_in_time = models.DateTimeField(null=True, blank=True)
+        check_out_status = models.BooleanField(default=False)
+        check_out_time = models.DateTimeField(null=True, blank=True)
+        
         def __str__(self):
             return "Booking ID: "+str(self.id)
         @property

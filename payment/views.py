@@ -1,51 +1,139 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.views.generic import View, TemplateView, DetailView
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.contrib import messages
+from django.db.models import Q
+from datetime import datetime
 import os
 import string
 import random
-from django.conf import settings
-from sslcommerz_lib import SSLCOMMERZ
-from .models import PaymentGateway,Transaction
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.http import HttpResponse 
-from django.views.generic import View, TemplateView, DetailView
-from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,HttpResponseNotFound
-from datetime import datetime
-from django.db.models import Q
+
+from .models import PaymentGateway, Transaction
+from rhms.models import Booking
+from accounts.models import Guest
+from rooms.models import Room
+
+
 # Create your views here.
-gateway = PaymentGateway.objects.filter(is_active=True).first()
-cradentials = {'store_id': gateway.store_id,
-            'store_pass': gateway.store_pass, 'issandbox': gateway.is_sandbox}
-  
-sslcommez = SSLCOMMERZ(cradentials)
 
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CheckoutSuccessView(View):
     model = Transaction
-    template_name = 'payment/payment_receipt.html'
+    template_name = 'payment/success.html'
     
     def get(self, request, *args, **kwargs):
-        return HttpResponse('nothing to see')
+        # Support GET requests with transaction ID
+        # SSL Commerz often uses GET for success callback
+        from payment.sslcommerz import process_payment_callback
+        from rhms.models import Booking
+        
+        # Get transaction ID from query parameters
+        tran_id = request.GET.get('tran_id')
+        
+        print(f"GET /payment/success/ - tran_id: {tran_id}")
+        print(f"GET parameters: {dict(request.GET)}")
+        
+        if tran_id:
+            context = {}
+            transaction = Transaction.objects.filter(tran_id=tran_id).first()
+            
+            if transaction:
+                print(f"Found transaction: {transaction.tran_id}, Status: {transaction.status}")
+                
+                # Check if booking already exists
+                booking = Booking.objects.filter(transaction=transaction).first()
+                
+                if not booking and transaction.status == 'VALID':
+                    # Try to create booking from GET callback data
+                    print(f"No booking found, attempting to create from GET data...")
+                    transaction_updated, booking = process_payment_callback(dict(request.GET), request)
+                    if booking:
+                        print(f"✅ Booking created from GET callback: {booking.id}")
+                    else:
+                        print(f"⚠ Could not create booking from GET callback")
+                
+                context['transaction'] = transaction
+                context['guest'] = transaction.guest
+                context['rooms'] = transaction.room.all()
+                context['booking'] = booking
+                
+                # Get individual room booking dates from transaction (more reliable than session)
+                booking_dates = transaction.booking_dates_json if hasattr(transaction, 'booking_dates_json') and transaction.booking_dates_json else {}
+                # Fallback to session if transaction doesn't have it
+                if not booking_dates:
+                    booking_dates = request.session.get('booking_dates', {})
+                context['booking_dates'] = booking_dates
+                print(f"📅 Booking dates passed to template: {booking_dates}")
+                
+                # Calculate duration if booking exists
+                if booking and booking.start_day and booking.end_day:
+                    duration = (booking.end_day - booking.start_day).days
+                    context['nights'] = duration
+                    context['total_nights'] = duration
+                    
+                if booking:
+                    messages.success(request, 'Booking confirmed successfully!')
+                else:
+                    messages.warning(request, 'Payment received but booking needs to be confirmed manually.')
+                
+                return render(request, self.template_name, context)
+        
+        return HttpResponse('No transaction found')
 
     def post(self, request, *args, **kwargs):
+        from rhms.models import Booking
+        from payment.sslcommerz import process_payment_callback
         
-        context={}
+        print(f"POST /payment/success/ received")
+        print(f"POST data keys: {list(request.POST.keys())}")
+        print(f"Session keys: {list(request.session.keys())}")
+        
+        context = {}
         data = self.request.POST
-        #print(data)
-
         
-        #print(tran_purpose.payment_type.id)
-        transaction=Transaction.objects.filter(val_id=data['val_id']).first()
-        #tran_type=PaymentType.objects.filter(id=data['value_d']).first()
+        # Use the new helper function to process payment
+        print(f"Calling process_payment_callback...")
+        transaction, booking = process_payment_callback(data, request)
         
-        return render(request,self.template_name,context)
+        if transaction:
+            print(f"Transaction processed: {transaction.tran_id}, Booking: {'Created' if booking else 'NOT CREATED'}")
+            context['transaction'] = transaction
+            context['guest'] = transaction.guest
+            context['rooms'] = transaction.room.all()
+            context['booking'] = booking
+            
+            # Get individual room booking dates from transaction (more reliable than session)
+            booking_dates = transaction.booking_dates_json if hasattr(transaction, 'booking_dates_json') and transaction.booking_dates_json else {}
+            # Fallback to session if transaction doesn't have it
+            if not booking_dates:
+                booking_dates = request.session.get('booking_dates', {})
+            context['booking_dates'] = booking_dates
+            print(f"📅 Booking dates passed to template: {booking_dates}")
+            
+            # Calculate duration if booking exists
+            if booking and booking.start_day and booking.end_day:
+                duration = (booking.end_day - booking.start_day).days
+                context['nights'] = duration
+                context['total_nights'] = duration
+            
+            if transaction.status == 'VALID':
+                if booking:
+                    messages.success(request, 'Payment completed successfully! Booking confirmed.')
+                else:
+                    messages.warning(request, 'Payment completed but booking creation pending.')
+            else:
+                messages.warning(request, f'Payment status: {transaction.status}')
+        else:
+            print(f"❌ Transaction processing failed!")
+            messages.error(request, 'Failed to process payment')
+            return redirect('frontpage')
+        
+        return render(request, self.template_name, context)
 
 
 
@@ -58,113 +146,25 @@ class CheckoutIPNView(View):
         return HttpResponse('nothing to see')
 
     def post(self, request, *args, **kwargs):
+        from payment.sslcommerz import process_payment_callback
         
-        context={}
         data = self.request.POST
-        post_body={}
-        # print(data)
         
-
-        if data['status'] == 'VALID' and data['store_id'] == gateway.store_id:
-            post_body['val_id'] = data['val_id']
-            response = sslcommez.validationTransactionOrder(post_body['val_id'])
-            transaction=Transaction.objects.create(
-                            class_roll=student.class_roll,
-                            name = student.name,
-                            group=student.group,
-                            session=student.session,
-                            department=student.department,
-                            phone=data['value_c'],
-                            email=data['value_c'],
-                            tran_id=data['tran_id'],
-                            tran_purpose=tran_purpose,
-                            val_id=data['val_id'],
-                            amount=data['amount'],
-                            card_type=data['card_type'],
-                            card_no=data['card_no'],
-                            store_amount=data['store_amount'],
-                            bank_tran_id=data['bank_tran_id'],
-                            status=data['status'],
-                            tran_date=data['tran_date'],
-                            currency=data['currency'],
-                            card_issuer=data['card_issuer'],
-                            card_brand=data['card_brand'],
-                            card_issuer_country=data['card_issuer_country'],
-                            card_issuer_country_code=data['card_issuer_country_code'],
-                            verify_sign=data['verify_sign'],
-                            verify_sign_sha2=data['verify_sign_sha2'],
-                            currency_rate=data['currency_rate'],
-                            risk_title=data['risk_title'],
-                            risk_level=data['risk_level'],
-            
-                        )
-        elif data['store_id'] == gateway.store_id:
-            transaction=Transaction.objects.create(
-                            class_roll=data['value_a'],
-                            name = data['value_b'],
-                            group=student.group,
-                            session=student.session,
-                            department=student.department,
-                            phone=data['value_c'],
-                            email=data['value_c'],
-                            tran_id=data['tran_id'],
-                            tran_purpose=tran_purpose,
-                            val_id="None",
-                            amount=data['amount'],
-                            card_type=data['card_type'],
-                            card_no=data['card_no'],
-                            store_amount=0,
-                            bank_tran_id=data['bank_tran_id'],
-                            status=data['status'],
-                            tran_date=data['tran_date'],
-                            currency=data['currency'],
-                            card_issuer=data['card_issuer'],
-                            card_brand=data['card_brand'],
-                            card_issuer_country=data['card_issuer_country'],
-                            card_issuer_country_code=data['card_issuer_country_code'],
-                            verify_sign=data['verify_sign'],
-                            verify_sign_sha2=data['verify_sign_sha2'],
-                            currency_rate=data['currency_rate'],
-                            risk_title='None',
-                            risk_level='0',
-            
-                        )            # if response['status']== 'VALID' or response['status']== 'VALIDATED' or response['status'] == 'INVALID_TRANSACTION':
+        # Check if transaction already exists
+        existing_transaction = Transaction.objects.filter(tran_id=data.get('tran_id')).first()
+        if existing_transaction:
+            return HttpResponse('Transaction already processed')
         
+        # Use the new helper function to process payment
+        transaction, booking = process_payment_callback(data, request)
+        
+        if transaction:
+            if transaction.status == 'VALID':
+                return HttpResponse('IPN processed successfully - Order confirmed')
+            else:
+                return HttpResponse(f'IPN processed - Status: {transaction.status}')
         else:
-            transaction=Transaction.objects.create(
-                            class_roll=data['value_a'],
-                            name = data['value_b'],
-                            group=student.group,
-                            session=student.session,
-                            department=student.department,
-                            phone=data['value_c'],
-                            email=data['value_c'],
-                            tran_id=data['tran_id'],
-                            tran_purpose=tran_purpose,
-                            val_id="None",
-                            amount=data['amount'],
-                            card_type=data['card_type'],
-                            card_no=data['card_no'],
-                            store_amount=0,
-                            bank_tran_id=data['bank_tran_id'],
-                            status='RISKY TRANSACTION',
-                            tran_date=data['tran_date'],
-                            currency=data['currency'],
-                            card_issuer=data['card_issuer'],
-                            card_brand=data['card_brand'],
-                            card_issuer_country=data['card_issuer_country'],
-                            card_issuer_country_code=data['card_issuer_country_code'],
-                            verify_sign=data['verify_sign'],
-                            verify_sign_sha2=data['verify_sign_sha2'],
-                            currency_rate=data['currency_rate'],
-                            risk_title='None',
-                            risk_level='0',
-            
-                        )
-        messages.success(request,'Something Went Wrong! or attacked by intruders')
-        context['messages']=messages
-        # print('IPN Hit Exeption: ',data)
-        return redirect('/')
+            return HttpResponse('Failed to process IPN')
 
 
 

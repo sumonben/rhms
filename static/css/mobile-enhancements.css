@@ -1,0 +1,426 @@
+/* ========================================
+   MOBILE NAVIGATION ENHANCEMENTS
+   ======================================== */
+
+/* Ensure smooth scrolling on all devices */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Mobile Menu Improvements */
+@media (max-width: 991.98px) {
+    /* Hamburger menu button */
+    .canvas-open {
+        font-size: 28px;
+        color: #19191a;
+        padding: 10px;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        position: relative;
+        z-index: 99;
+    }
+    
+    .canvas-open:hover {
+        color: #dfa974;
+    }
+    
+    /* Off-canvas menu wrapper */
+    .offcanvas-menu-wrapper {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        width: 280px;
+        height: 100%;
+        background: #ffffff;
+        overflow-y: auto;
+        padding: 30px 20px;
+        transition: all 0.5s;
+        z-index: 999;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .offcanvas-menu-wrapper.show-menu {
+        left: 0;
+    }
+    
+    /* Mobile menu overlay */
+    .offcanvas-menu-overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        display: none;
+    }
+    
+    .offcanvas-menu-overlay.active {
+        display: block;
+    }
+    
+    /* Mobile menu items */
+    .offcanvas-menu-wrapper .mainmenu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .offcanvas-menu-wrapper .mainmenu ul li {
+        display: block;
+        margin: 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    
+    .offcanvas-menu-wrapper .mainmenu ul li:last-child {
+        border-bottom: none;
+    }
+    
+    .offcanvas-menu-wrapper .mainmenu ul li a {
+        display: block;
+        padding: 15px 10px;
+        font-size: 16px;
+        color: #19191a;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .offcanvas-menu-wrapper .mainmenu ul li a:hover,
+    .offcanvas-menu-wrapper .mainmenu ul li a.active {
+        color: #dfa974;
+        padding-left: 15px;
+    }
+    
+    /* Mobile submenu */
+    .offcanvas-menu-wrapper .mainmenu ul li.has-dropdown > a::after {
+        content: "\f107";
+        font-family: "FontAwesome";
+        float: right;
+        font-size: 14px;
+    }
+    
+    .offcanvas-menu-wrapper .mainmenu ul li ul {
+        display: none;
+        padding-left: 20px;
+        background: #f8f8f8;
+    }
+    
+    .offcanvas-menu-wrapper .mainmenu ul li ul.show {
+        display: block;
+    }
+    
+    /* Mobile header adjustments */
+    .header-section .container {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+    
+    .logo a {
+        font-size: 24px;
+    }
+    
+    .logo img {
+        width: auto;
+    }
+}
+
+/* ========================================
+   TOUCH-FRIENDLY IMPROVEMENTS
+   ======================================== */
+
+/* Increase touch target sizes */
+@media (max-width: 767.98px) {
+    /* Buttons */
+    .btn,
+    .primary-btn,
+    .site-btn,
+    button[type="submit"],
+    input[type="submit"] {
+        min-height: 48px;
+        padding: 12px 25px;
+        font-size: 15px;
+        touch-action: manipulation;
+    }
+    
+    /* Links */
+    a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    /* Form inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    textarea,
+    select {
+        min-height: 48px;
+        font-size: 16px; /* Prevents iOS zoom */
+        padding: 12px 15px;
+        touch-action: manipulation;
+    }
+    
+    /* Checkboxes and radio buttons */
+    input[type="checkbox"],
+    input[type="radio"] {
+        min-width: 24px;
+        min-height: 24px;
+        margin-right: 10px;
+    }
+    
+    /* Select dropdowns */
+    select {
+        background-position: right 15px center;
+        padding-right: 40px;
+    }
+}
+
+/* ========================================
+   FIXED HEADER ON MOBILE
+   ======================================== */
+@media (max-width: 991.98px) {
+    .header-section {
+        position: sticky;
+        top: 0;
+        z-index: 99;
+        background: #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        padding: 10px 0;
+    }
+    
+    body {
+        padding-top: 0;
+    }
+}
+
+/* ========================================
+   MOBILE FOOTER IMPROVEMENTS
+   ======================================== */
+@media (max-width: 767.98px) {
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-section .col-lg-3,
+    .footer-section .col-lg-4,
+    .footer-section .col-lg-6 {
+        margin-bottom: 30px;
+    }
+    
+    .footer-section .logo {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .footer-section ul {
+        padding: 0;
+    }
+    
+    .footer-section .social-links {
+        justify-content: center;
+        margin-top: 15px;
+    }
+    
+    .copyright-text {
+        text-align: center;
+        padding: 15px 0;
+    }
+}
+
+/* ========================================
+   MOBILE BREADCRUMB
+   ======================================== */
+@media (max-width: 767.98px) {
+    .breadcrumb-section {
+        padding: 30px 0;
+    }
+    
+    .breadcrumb-text h2 {
+        font-size: 28px !important;
+        margin-bottom: 10px;
+    }
+    
+    .bt-option a,
+    .bt-option span {
+        font-size: 13px;
+        margin: 0 5px;
+    }
+    
+    .bt-option a::after {
+        margin: 0 5px;
+    }
+}
+
+/* ========================================
+   MOBILE SEARCH AND FILTERS
+   ======================================== */
+@media (max-width: 767.98px) {
+    .search-form,
+    .filter-controls {
+        margin-bottom: 20px;
+    }
+    
+    .search-form input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .filter-controls .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* ========================================
+   MOBILE IMAGE GALLERY
+   ======================================== */
+@media (max-width: 767.98px) {
+    .gallery-item,
+    .portfolio-item {
+        margin-bottom: 15px;
+    }
+    
+    .gallery-item img,
+    .portfolio-item img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* ========================================
+   MOBILE MODALS AND POPUPS
+   ======================================== */
+@media (max-width: 767.98px) {
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .modal-content {
+        border-radius: 8px;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 15px;
+    }
+    
+    .modal-title {
+        font-size: 18px;
+    }
+}
+
+/* ========================================
+   MOBILE TABS AND ACCORDIONS
+   ======================================== */
+@media (max-width: 767.98px) {
+    .nav-tabs {
+        flex-direction: column;
+    }
+    
+    .nav-tabs .nav-link {
+        width: 100%;
+        text-align: left;
+        border-radius: 0;
+        border-left: 3px solid transparent;
+    }
+    
+    .nav-tabs .nav-link.active {
+        border-left-color: #dfa974;
+    }
+}
+
+/* ========================================
+   MOBILE PAGINATION
+   ======================================== */
+@media (max-width: 767.98px) {
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .pagination .page-item {
+        margin: 2px;
+    }
+    
+    .pagination .page-link {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* ========================================
+   MOBILE ALERTS AND MESSAGES
+   ======================================== */
+@media (max-width: 767.98px) {
+    .alert {
+        font-size: 14px;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+    
+    .alert .close {
+        padding: 12px;
+        font-size: 20px;
+    }
+}
+
+/* ========================================
+   LANDSCAPE MODE OPTIMIZATIONS
+   ======================================== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        min-height: auto;
+        padding: 20px 0;
+    }
+    
+    .breadcrumb-section {
+        padding: 15px 0;
+    }
+    
+    .spad {
+        padding-top: 30px !important;
+        padding-bottom: 30px !important;
+    }
+    
+    .modal-dialog {
+        margin: 5px auto;
+        max-height: calc(100vh - 10px);
+    }
+}
+
+/* ========================================
+   PREVENT TEXT SELECTION ON DOUBLE TAP
+   ======================================== */
+@media (max-width: 767.98px) {
+    .no-select {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}
+
+/* ========================================
+   SAFE AREA INSETS FOR NOTCHED DEVICES
+   ======================================== */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+    
+    .header-section {
+        padding-top: max(10px, env(safe-area-inset-top));
+    }
+    
+    .footer-section {
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+}
