@@ -19,7 +19,7 @@
                 <div class="col-lg-8">
                     <div class="room-details-item" style="background: var(--service);">
                         <img src="{{ room.main_image.url }}" alt="">
-                        <div class="rd-text" style="background: transparent;">
+                        <div class="rd-text" style="background: transparent;padding: 20px;">
                             <div class="rd-title">
                                 <h3>{{ room.name_eng }}</h3>
                                 <div class="rdt-right">
@@ -69,11 +69,6 @@
                         </div>
                     </div>
 <style>
-
-   
-
-
-
 #slider {
   position: relative;
   overflow: hidden;
@@ -85,7 +80,7 @@
   position: relative;
   margin: 0;
   padding: 0;
-  height: 200px;
+  height: 180px;
   list-style: none;
 }
 
@@ -93,14 +88,20 @@
   position: relative;
   display: block;
   float: left;
-  margin-left: 39px;
-  padding: 0;
-  width: 10%;
-  height: 33%;
-  background: #ccc;
+  margin: 0 10px;
+  padding: 15px;
+  width: 150px;
+  height: 160px;
+  background: #f5f5f5;
   text-align: center;
-  line-height: 60px;
-  border-radius: 100px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+#slider ul li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 a.control_prev,
@@ -108,31 +109,34 @@ a.control_next {
   position: absolute;
   z-index: 999;
   display: block;
-  padding: 4% 2%;
+  padding: 15px 10px;
   width: auto;
   height: auto;
-  background: #2a2a2a;
+  background: #dfa974;
   color: #fff;
   text-decoration: none;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
   opacity: 0.8;
   cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px;
 }
 
 a.control_prev:hover,
 a.control_next:hover {
   opacity: 1;
+  background: #c89d6c;
   -webkit-transition: all 0.2s ease;
 }
 
 a.control_prev {
-  border-radius: 0 2px 2px 0;
+  left: -10px;
 }
 
 a.control_next {
-  right: 0;
-  border-radius: 2px 0 0 2px;
+  right: -10px;
 }
 
 .slider_option {
@@ -141,20 +145,46 @@ a.control_next {
   width: 160px;
   font-size: 18px;
 }
+
+.similar-rooms-section {
+  background: #fafafa;
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<div id="slider">
-  <a href="#" class="control_next">>></a>
-  <a href="#" class="control_prev">
-    << </a>
+
+<!-- Debug: same_priced_rooms exists: {{ same_priced_rooms|length }} -->
+{% if same_priced_rooms %}
+<div class="similar-rooms-section" style="margin-top: 30px;">
+    <h4 style="margin-bottom: 20px; color: #dfa974;">Similar Priced Rooms ({{ room.price }}&#x09F3;/night) - {{ same_priced_rooms|length }} found</h4>
+    <div id="slider">
+      <a href="#" class="control_next">>></a>
+      <a href="#" class="control_prev"><</a>
       <ul>
-        <li>SLIDE 1</li>
-        <li style="background: #aaa;">SLIDE 2</li>
-        <li>SLIDE 3</li>
-        <li style="background: #aaa;">SLIDE 4</li>
+        {% for similar_room in same_priced_rooms %}
+        <li style="{% cycle 'background: #f0f0f0;' 'background: #e0e0e0;' %}">
+            <a href="{% url 'room_details' similar_room.id %}" style="text-decoration: none; color: #333; display: block; height: 100%; padding: 10px;">
+                <div style="text-align: center;">
+                    {% if similar_room.main_image %}
+                        <img src="{{ similar_room.main_image.url }}" alt="{{ similar_room.name_eng }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">
+                    {% else %}
+                        <div style="width: 80px; height: 80px; background: #ddd; border-radius: 8px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #999;">No Image</div>
+                    {% endif %}
+                    <div style="font-size: 14px; font-weight: 600;">{{ similar_room.room_no }}</div>
+                    <div style="font-size: 12px; color: #666;">{{ similar_room.name_eng }}</div>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
       </ul>
+    </div>
 </div>
+{% else %}
+<!-- Debug: No similar priced rooms found or variable not set -->
+{% endif %}
 
 
                     
@@ -267,55 +297,72 @@ a.control_next {
     </section>
     <!-- Room Details Section End -->
     <script>
-        // Source - https://stackoverflow.com/a
-// Posted by user14922462, modified by community. See post 'Timeline' for change history
-// Retrieved 2025-11-09, License - CC BY-SA 4.0
-
 jQuery(document).ready(function($) {
+  var slider = $('#slider');
+  
+  if (slider.length && slider.find('ul li').length > 0) {
+    var slideCount = slider.find('ul li').length;
+    var slideWidth = 170; // Fixed width including margin
+    var slideHeight = 180;
+    var visibleSlides = Math.min(4, slideCount); // Show max 4 slides or less if not enough
+    var sliderUlWidth = slideCount * slideWidth;
 
-  var slideCount = $('#slider ul li').length;
-  var slideWidth = $('#slider ul li').width();
-  var slideHeight = $('#slider ul li').height();
-  var sliderUlWidth = slideCount * slideWidth;
-
-  $('#slider').css({
-    width: slideWidth,
-    height: slideHeight
-  });
-
-  $('#slider ul').css({
-    width: sliderUlWidth,
-    marginLeft: -slideWidth
-  });
-
-  $('#slider ul li:last-child').prependTo('#slider ul');
-
-  function moveLeft() {
-    $('#slider ul').animate({
-      left: +slideWidth
-    }, 200, function() {
-      $('#slider ul li:last-child').prependTo('#slider ul');
-      $('#slider ul').css('left', '');
+    slider.css({
+      width: slideWidth * visibleSlides,
+      height: slideHeight
     });
-  };
 
-  function moveRight() {
-    $('#slider ul').animate({
-      left: -slideWidth
-    }, 200, function() {
-      $('#slider ul li:first-child').appendTo('#slider ul');
-      $('#slider ul').css('left', '');
-    });
-  };
+    // Only apply carousel logic if we have more slides than visible
+    if (slideCount > visibleSlides) {
+      slider.find('ul').css({
+        width: sliderUlWidth,
+        marginLeft: -slideWidth,
+        position: 'relative',
+        left: 0
+      });
 
-  $('a.control_prev').click(function() {
-    moveLeft();
-  });
+      slider.find('ul li:last-child').prependTo(slider.find('ul'));
 
-  $('a.control_next').click(function() {
-    moveRight();
-  });
+      function moveLeft() {
+        slider.find('ul').stop(true, false).animate({
+          left: +slideWidth
+        }, 400, function() {
+          slider.find('ul li:last-child').prependTo(slider.find('ul'));
+          slider.find('ul').css('left', 0);
+        });
+      }
 
+      function moveRight() {
+        slider.find('ul').stop(true, false).animate({
+          left: -slideWidth
+        }, 400, function() {
+          slider.find('ul li:first-child').appendTo(slider.find('ul'));
+          slider.find('ul').css('left', 0);
+        });
+      }
+
+      $('a.control_prev').click(function(e) {
+        e.preventDefault();
+        moveLeft();
+      });
+
+      $('a.control_next').click(function(e) {
+        e.preventDefault();
+        moveRight();
+      });
+    } else {
+      // Just display items normally without carousel
+      slider.find('ul').css({
+        width: sliderUlWidth,
+        marginLeft: 0,
+        position: 'relative',
+        left: 0
+      });
+      
+      // Hide controls if not enough slides
+      $('.control_prev, .control_next').hide();
+    }
+  }
 });
     </script>
     {% endblock content %}

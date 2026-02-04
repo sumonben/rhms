@@ -151,9 +151,17 @@
 
     <!-- Home Room Section Begin -->
     <section class="hp-room-section">
-        <div class="container-fluid">
+        <div class="container-fluid" style="padding-left: 60px; padding-right: 60px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Discover</span>
+                        <h2>Our Room Types</h2>
+                    </div>
+                </div>
+            </div>
             <div class="hp-room-items">
-                <div class="row" style="overflow-x: scroll;">
+                <div class="row justify-content-center">
                     
                     {% for room_type in room_types %}
                         <div class="col-lg-3 col-md-6">
@@ -342,17 +350,13 @@
                         </div>
                     </div>
                     
-                    <!-- DEBUG: Total rooms: {{ rooms|length }} -->
-                    
                     <div class="room-slider-wrapper" style="position: relative;">
                         <div class="owl-carousel owl-theme room-slider-{{ room_type.id }}">
-                            <!-- DEBUG: Filtering rooms for Room Type ID {{ room_type.id }} -->
                             {% for room in rooms %}
-                                <!-- DEBUG: Room {{ room.room_no }} - Type ID: {{ room.room_type.id }} -->
                                 {% if room.room_type.id == room_type.id %}
                                 <div class="room-card-item">
                                     <div class="hp-room-item set-bg" data-setbg="{% if room.main_image %}{{ room.main_image.url }}{% endif %}" style="height: 450px; background-size: cover; background-position: center; background-color: #f0f0f0; {% if room.main_image %}background-image: url('{{ room.main_image.url }}');{% endif %}">
-                                        <div class="hr-text">
+                                        <div class="hr-text" style="padding:15px;">
                                             <h3 style="color: brown;">Room {{ room.room_no }}</h3>
                                             <h4 style="color: rgb(10, 92, 85); margin-top: 5px;">{{ room.room_type.name_eng }}</h4>
                                             <h3 style="color: green; margin-top: 10px;">{{ room.room_type.price }}&#x09F3;<span style="font-size: 14px;">/Per night</span></h3>
@@ -386,9 +390,13 @@
                                                 </tbody>
                                             </table>
                                             
+                                            
+                                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                                <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1;" onclick="addToCart( this.id )">Add To Book</button>
+                                                <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
+                                            </div>
                                             <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
                                                 <a href="{% url 'room_details' room.id %}" class="primary-btn" style="flex: 1; text-align: center; min-width: 120px;">View Details</a>
-                                                <button onclick="bookNowSingle({{ room.id }})" class="primary-btn" style="flex: 1; border: none; cursor: pointer; min-width: 120px; background-color: #dfa974;">Book Now</button>
                                             </div>
                                         </div>
                                     </div>
@@ -427,6 +435,7 @@
             overflow-y: hidden !important;
             visibility: visible !important;
             position: relative;
+            justify-content: center !important;
         }
         
         /* Before carousel initializes, display horizontally */
@@ -444,9 +453,34 @@
             display: block !important;
         }
         
+        /* Center room slider stages */
+        .room-slider-wrapper .owl-stage-outer {
+            display: flex !important;
+            justify-content: center !important;
+        }
+        
+        .room-slider-wrapper .owl-stage {
+            display: flex !important;
+            justify-content: center !important;
+        }
+        
         /* Make room cards visible */
         .room-card-item {
             display: block !important;
+            padding: 10px;
+            margin: 0 auto !important;
+            text-align: center;
+        }
+        
+        .room-card-item .hp-room-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin: 0 auto;
+        }
+        
+        .room-card-item .hr-text {
+            margin-top: auto;
         }
         
         /* Hide all scrollbars */
@@ -473,20 +507,20 @@
         .owl-carousel .owl-nav button.owl-prev,
         .owl-carousel .owl-nav button.owl-next {
             position: absolute !important;
-            background: #dfa974 !important;
-            color: white !important;
+            color: #dfa974 !important;
             width: 50px !important;
             height: 50px !important;
             border-radius: 50% !important;
             font-size: 28px !important;
-            line-height: 50px !important;
+            line-height: 46px !important;
             text-align: center !important;
             pointer-events: auto !important;
             transition: all 0.3s !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
             cursor: pointer !important;
             opacity: 1 !important;
             visibility: visible !important;
+            z-index: 1000 !important;
         }
         
         .owl-carousel .owl-nav button.owl-prev {
@@ -499,7 +533,9 @@
         
         .owl-carousel .owl-nav button.owl-prev:hover,
         .owl-carousel .owl-nav button.owl-next:hover {
-            background: #c89d6c !important;
+            background: rgba(223, 169, 116, 0.6) !important;
+            border-color: #c89d6c !important;
+            color: #c89d6c !important;
             transform: scale(1.15) !important;
         }
         
@@ -711,18 +747,18 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span>Hotel News</span>
-                        <h2>Our Blog & Event</h2>
+                        <span>Recreational Place</span>
+                        <h2>Joypurhat and Surroundings</h2>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/blog-1.jpg' %}">
+                    <div class="blog-item set-bg" data-setbg="{% static 'images/shishu.jpg' %}">
                         <div class="bi-text">
-                            <span class="b-tag">Travel Trip</span>
-                            <h4><a href="#">In Joypurhat, Bogura, Nagoan</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 15th April, 2019</div>
+                            <span class="b-tag">Recreate yourself</span>
+                            <h4><a href="#">Shishu Park </a></h4>
+                            <div class="b-time"><i class="icon_clock_alt"></i> Joypurhat, Bangladesh</div>
                         </div>
                     </div>
                 </div>
@@ -802,17 +838,20 @@
                             $slider.removeClass('owl-loaded owl-drag');
                         }
                         
+                        // Only enable loop if there are more than 3 items (to prevent cloning duplicates)
+                        var enableLoop = items.length > 3;
+                        
                         // Initialize carousel
                         $slider.owlCarousel({
-                            loop: true,
+                            loop: enableLoop,
                             margin: 20,
                             nav: true,
                             dots: true,
                             autoplay: false,
                             smartSpeed: 800,
                             navText: [
-                                '<i class="fa fa-angle-left"></i>',
-                                '<i class="fa fa-angle-right"></i>'
+                                '<span style="font-size: 28px; line-height: 50px;">‹</span>',
+                                '<span style="font-size: 28px; line-height: 50px;">›</span>'
                             ],
                             navContainer: false,
                             responsive: {

@@ -71,10 +71,18 @@ class RoomDetails(View):
     
     def get(self, request, *args, **kwargs):
         rooms=Room.objects.filter(id=int(kwargs['id'])).first()
+        
+        # Get rooms with the same price (excluding current room)
+        same_priced_rooms = []
+        if rooms and rooms.price:
+            same_priced_rooms = Room.objects.filter(price=rooms.price).exclude(id=rooms.id).order_by('serial')[:6]
+            print(f"Room {rooms.id} price: {rooms.price}, Similar rooms found: {same_priced_rooms.count()}")
+        
         staffs=Staff.objects.all().order_by("serial")
         guests=Guest.objects.all().order_by("-id")
         context={}
         context['room']=rooms
+        context['same_priced_rooms']=same_priced_rooms
         context['staffs']=staffs
         context['guests']=guests
         return render(request, self.template_name,context)

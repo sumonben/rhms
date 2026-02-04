@@ -18,7 +18,7 @@
                     {{ room_type.name_eng }}
                 {% endif %}
                      </h1>
-            <div class="row">
+            <div class="row justify-content-center">
                 
                 {% for room in rooms %}
                 <div class="col-lg-4 col-md-6">
@@ -59,7 +59,7 @@
                     </div>
                     
                 {% endfor %}
-                <div class="col-lg-4 col-md-6">
+                {% comment %} <div class="col-lg-4 col-md-6">
                     <div class="room-item">
                         <img src="{% static 'img/room/room-2.jpg' %}" alt="">
                         <div class="ri-text" style="background: var(--service);">
@@ -208,7 +208,7 @@
                             <a href="#" class="primary-btn">More Details</a>
                         </div>
                     </div>
-                </div>
+                </div> {% endcomment %}
                 <div class="col-lg-12">
                     <div class="room-pagination">
                         <a href="#">1</a>
