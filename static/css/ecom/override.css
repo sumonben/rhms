@@ -32,3 +32,210 @@
     z-index: 2;
 }
 
+/* ===== Order Page Enhancements ===== */
+
+/* Increase font size for better readability */
+.cart_summary th {
+    font-size: 18px !important;
+    padding: 12px 8px !important;
+}
+
+.cart_summary td {
+    font-size: 16px !important;
+    padding: 10px 8px !important;
+}
+
+.cart_summary .product-name {
+    font-size: 16px !important;
+}
+
+.cart_summary .price span {
+    font-size: 18px !important;
+    font-weight: 600;
+}
+
+.cart_summary tfoot td {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}
+
+/* Payment table font sizes */
+.Payment_payment__cEYmj td {
+    font-size: 18px !important;
+    padding: 8px 12px !important;
+}
+
+/* Input and form control enhancements */
+.Input_form_control__k2Lye label {
+    font-size: 16px !important;
+}
+
+.Input_form_control__k2Lye input {
+    font-size: 16px !important;
+    padding: 8px 12px !important;
+    min-height: 45px !important;
+}
+
+.Input_form_control__label__SOQJo {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.Input_form_control__label__option__YxCA5 {
+    font-size: 14px !important;
+}
+
+/* Select dropdowns */
+.Select_form_control__-W7rB label {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.Select_form_control__label__8gi3V {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.Select_form_control__label__option__zbnTX {
+    font-size: 14px !important;
+}
+
+.loginBox select {
+    font-size: 16px !important;
+    padding: 8px 12px !important;
+    min-height: 45px !important;
+    width: 100% !important;
+}
+
+/* Ensure all Select divs have proper styling */
+.Select_form_control__-W7rB .loginBox {
+    margin-top: 8px;
+}
+
+.Select_form_control__-W7rB .form-control {
+    width: 100% !important;
+    font-size: 16px !important;
+    padding: 8px 12px !important;
+    min-height: 45px !important;
+}
+
+/* Textarea enhancements */
+.Textarea_form_control__oik5R label {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    display: block !important;
+    margin-bottom: 8px !important;
+}
+
+.Textarea_form_control__label__hBHV6 {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.Textarea_form_control__label__option__JTJT7 {
+    font-size: 14px !important;
+}
+
+.Textarea_form_control__oik5R textarea {
+    font-size: 16px !important;
+    padding: 10px 12px !important;
+    min-height: 80px !important;
+}
+
+/* Ensure Django form textarea renders properly */
+.Textarea_form_control__oik5R .form-control {
+    width: 100% !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    padding: 10px 12px !important;
+    min-height: 80px !important;
+}
+
+.Textarea_form_control__oik5R .form-control:focus {
+    border-color: #a5a5a5 !important;
+    outline: none !important;
+}
+
+/* Form inputs general */
+.form-control {
+    font-size: 16px !important;
+    padding: 8px 12px !important;
+}
+
+input[type="date"].form-control {
+    font-size: 16px !important;
+}
+
+/* Button enhancements */
+.Button_button__Poz4v {
+    font-size: 18px !important;
+    padding: 12px 24px !important;
+}
+
+/* Order notices */
+.OrderNotice {
+    font-size: 15px !important;
+}
+
+/* Payment options */
+.PaymentOption_payment-option__6-0db label {
+    font-size: 17px !important;
+}
+
+/* Auto order checkbox */
+.AutoOrder_auto_order__V0y5K label {
+    font-size: 16px !important;
+}
+
+/* Discount coupon */
+.discount-cupon-payment input {
+    font-size: 16px !important;
+    padding: 10px 12px !important;
+}
+
+.discount-cupon-payment button {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+}
+
+/* Mobile responsiveness for order page */
+@media screen and (max-width: 768px) {
+    .cart_summary th {
+        font-size: 14px !important;
+        padding: 8px 4px !important;
+    }
+    
+    .cart_summary td {
+        font-size: 13px !important;
+        padding: 8px 4px !important;
+    }
+    
+    .Payment_payment__cEYmj td {
+        font-size: 15px !important;
+    }
+}
+
+/* Max shopping cart height adjustment */
+.cart-box-view {
+    height: 90vh !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+}
+
+.cart-box-inner-view {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.cart-body {
+    flex: 1 !important;
+    overflow-y: auto !important;
+}
+
+.cart-table-wrap {
+    max-height: 100% !important;
+    overflow-y: auto !important;
+}
+

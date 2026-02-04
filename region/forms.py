@@ -16,7 +16,7 @@ class AddressForm(forms.ModelForm):
 
         
         widgets = {
-            'Others': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder':  'Bogura-5800','onkeypress' : "myFunction(this.id);"}),
+            'others': forms.Textarea(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Enter your detailed address', 'rows': 3}),
             'division': forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);"}),
             'district': forms.Select(attrs={'class': 'form-control form-control-sm','onchange' : "myFunctionTeacher(this.id);"}),            
             'upazilla': forms.Select(attrs={'class': 'form-control form-control-sm',}),

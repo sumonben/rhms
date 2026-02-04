@@ -22,6 +22,7 @@
         <!-- <link rel="stylesheet" href="{% static 'css/ecom/index2.css' %}" type="text/css"> -->
         <link rel="stylesheet" href="{% static 'css/ecom/main.3ffe20f2.css' %}" type="text/css">
         <link rel="stylesheet" href="{% static 'css/ecom/monami.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/ecom/override.css' %}" type="text/css">
 
 
         <!-- Css Styles -->
@@ -405,6 +406,111 @@
       
     }
 
+
+    // Book Now - Clear cart and add only this room
+    function bookNowSingle(id){
+      var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+      const words = id.split("_");
+      const room_id = parseInt(words[1], 10);
+      
+      // First clear the cart
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_clear' %}",
+        data: {"id": 2 },
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
+        success: function (response) {
+            // After clearing, add only this room
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cart_add_room' %}",
+                data: {"id": room_id },
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        // Redirect to order page
+                        window.location.href = "{% url 'order_page' %}";
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Error adding room. Please try again.');
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            // If clear fails, still try to add the room
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'cart_add_room' %}",
+                data: {"id": room_id },
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        window.location.href = "{% url 'order_page' %}";
+                    }
+                }
+            });
+        }
+      });
+    }
+
+
+    // Handle remove individual item from cart
+    $(document).on('click', '.cross_time', function(e) {
+        e.preventDefault();
+        const roomId = $(this).closest('tr').find('.input_cart').val();
+        const csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+        
+        if (confirm('Are you sure you want to remove this room from cart?')) {
+            $.ajax({
+                type: 'POST',
+                url: '/cart/remove/' + roomId + '/',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Remove the row from max-cart
+                        $('input[value="' + roomId + '"]').closest('tr').fadeOut(300, function() {
+                            $(this).remove();
+                            
+                            // Update cart counters
+                            const remainingItems = $('#cart_body tr').length;
+                            $('#number_of_item_mini').text(remainingItems);
+                            $('#number_of_item').text(remainingItems);
+                            $('#total_item_max_cart').text(remainingItems);
+                            
+                            // Recalculate total - you may need to adjust this based on your logic
+                            let newTotal = 0;
+                            $('#cart_body tr').each(function() {
+                                const price = parseFloat($(this).find('.SearchPrice').last().text());
+                                if (!isNaN(price)) {
+                                    newTotal += price;
+                                }
+                            });
+                            
+                            $('#mini_cart_total').text(newTotal.toFixed(0));
+                            $('#total_amount_max_cart').text(newTotal.toFixed(0));
+                            
+                            // Reload if cart is empty
+                            if (remainingItems === 0) {
+                                location.reload();
+                            }
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Error removing item from cart. Please try again.');
+                }
+            });
+        }
+    });
 
     </script>
 

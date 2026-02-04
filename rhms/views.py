@@ -17,6 +17,7 @@ class Frontpage(View):
         carousels=Carousel.objects.all().order_by("serial")[0:4]
         staffs=Staff.objects.all().order_by("serial")
         guests=Guest.objects.all().order_by("-id")
+        print(rooms)
         context={}
         context['rooms']=rooms
         context['room_types']=room_types

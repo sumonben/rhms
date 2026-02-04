@@ -164,8 +164,7 @@
                                 <!-- <h3 style="color:brown">{{ room.room_type.name_eng }}</h3> -->
 
                                 <h3 style="color:green">{{ room_type.price }}&#x09F3;<span>/Pernight</span></h3>
-                                <div class="table-responsive">
-                                <table class="table">
+                                <table >
                                     <tbody>
                                         <!-- <tr>
                                             <td class="r-o">Size:</td>
@@ -190,7 +189,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                </div>
                                 <a href="{% url 'room_type_rooms' room_type.id  %}" class="primary-btn" style="color:brown">Explore Rooms</a>
                             </div>
                         </div>
@@ -320,6 +318,344 @@
     </section>
     <!-- Home Room Section End -->
 
+    <!-- Available Rooms by Category Section Begin -->
+    <section class="rooms-by-category-section spad" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Available Rooms</span>
+                        <h2>Browse Our Rooms by Category</h2>
+                    </div>
+                </div>
+            </div>
+
+            {% for room_type in room_types %}
+                <div class="room-category-block" style="margin-bottom: 60px; padding: 20px 0; clear: both;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div style="background: linear-gradient(135deg, #dfa974 0%, #c89d6c 100%); padding: 15px 25px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+                                <h3 style="color: #fff; margin: 0; font-size: 26px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                                    <i class="fa fa-bed" style="margin-right: 12px;"></i>{{ room_type.name_eng }}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- DEBUG: Total rooms: {{ rooms|length }} -->
+                    
+                    <div class="room-slider-wrapper" style="position: relative;">
+                        <div class="owl-carousel owl-theme room-slider-{{ room_type.id }}">
+                            <!-- DEBUG: Filtering rooms for Room Type ID {{ room_type.id }} -->
+                            {% for room in rooms %}
+                                <!-- DEBUG: Room {{ room.room_no }} - Type ID: {{ room.room_type.id }} -->
+                                {% if room.room_type.id == room_type.id %}
+                                <div class="room-card-item">
+                                    <div class="hp-room-item set-bg" data-setbg="{% if room.main_image %}{{ room.main_image.url }}{% endif %}" style="height: 450px; background-size: cover; background-position: center; background-color: #f0f0f0; {% if room.main_image %}background-image: url('{{ room.main_image.url }}');{% endif %}">
+                                        <div class="hr-text">
+                                            <h3 style="color: brown;">Room {{ room.room_no }}</h3>
+                                            <h4 style="color: rgb(10, 92, 85); margin-top: 5px;">{{ room.room_type.name_eng }}</h4>
+                                            <h3 style="color: green; margin-top: 10px;">{{ room.room_type.price }}&#x09F3;<span style="font-size: 14px;">/Per night</span></h3>
+                                            
+                                            <table style="margin-top: 15px;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="r-o">Capacity:</td>
+                                                        <td>{{ room.room_type.occupancy }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="r-o">Bed Type:</td>
+                                                        <td>
+                                                            {% for bed in room.room_type.bed_type.all %}
+                                                                {{ bed.name_eng }}{% if not forloop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="r-o">Status:</td>
+                                                        <td>
+                                                            {% if room.status == 'available' %}
+                                                                <span style="color: green; font-weight: bold;">Available</span>
+                                                            {% elif room.status == 'booked' %}
+                                                                <span style="color: orange; font-weight: bold;">Booked</span>
+                                                            {% else %}
+                                                                <span style="color: red; font-weight: bold;">Occupied</span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            
+                                            <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                                                <a href="{% url 'room_details' room.id %}" class="primary-btn" style="flex: 1; text-align: center; min-width: 120px;">View Details</a>
+                                                <button onclick="bookNowSingle({{ room.id }})" class="primary-btn" style="flex: 1; border: none; cursor: pointer; min-width: 120px; background-color: #dfa974;">Book Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <style>
+        .room-slider-wrapper {
+            padding: 0 50px;
+            position: relative;
+            min-height: 500px;
+            overflow: hidden;
+        }
+        
+        /* Override owl-carousel display:none to show rooms immediately */
+        .owl-carousel.room-slider-1,
+        .owl-carousel.room-slider-2,
+        .owl-carousel.room-slider-3,
+        .owl-carousel.room-slider-4,
+        .owl-carousel.room-slider-5,
+        .owl-carousel.room-slider-6,
+        .owl-carousel.room-slider-7,
+        .owl-carousel.room-slider-8,
+        .owl-carousel.room-slider-9,
+        .owl-carousel.room-slider-10 {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: hidden !important;
+            overflow-y: hidden !important;
+            visibility: visible !important;
+            position: relative;
+        }
+        
+        /* Before carousel initializes, display horizontally */
+        .owl-carousel:not(.owl-loaded) .room-card-item {
+            display: inline-block !important;
+            width: 350px !important;
+            min-width: 350px !important;
+            margin: 0 10px 20px !important;
+            vertical-align: top;
+            flex-shrink: 0;
+        }
+        
+        /* After carousel initializes */
+        .owl-carousel.owl-loaded .room-card-item {
+            display: block !important;
+        }
+        
+        /* Make room cards visible */
+        .room-card-item {
+            display: block !important;
+        }
+        
+        /* Hide all scrollbars */
+        .owl-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .owl-carousel {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Style built-in Owl Carousel navigation */
+        .owl-carousel .owl-nav {
+            display: block !important;
+            position: absolute;
+            width: 100%;
+            top: 40%;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .owl-carousel .owl-nav button.owl-prev,
+        .owl-carousel .owl-nav button.owl-next {
+            position: absolute !important;
+            background: #dfa974 !important;
+            color: white !important;
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
+            font-size: 28px !important;
+            line-height: 50px !important;
+            text-align: center !important;
+            pointer-events: auto !important;
+            transition: all 0.3s !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+            cursor: pointer !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        .owl-carousel .owl-nav button.owl-prev {
+            left: -20px !important;
+        }
+        
+        .owl-carousel .owl-nav button.owl-next {
+            right: -20px !important;
+        }
+        
+        .owl-carousel .owl-nav button.owl-prev:hover,
+        .owl-carousel .owl-nav button.owl-next:hover {
+            background: #c89d6c !important;
+            transform: scale(1.15) !important;
+        }
+        
+        .owl-carousel .owl-nav button span {
+            font-size: 28px;
+            line-height: 50px;
+        }
+        
+        /* Hide custom navigation arrows since we're using built-in */
+        .slider-prev,
+        .slider-next {
+            display: none !important;
+        }
+        
+        /* Custom navigation arrows - ensure they're visible and clickable */
+        .slider-nav {
+            position: relative;
+        }
+        
+        .slider-nav button {
+            position: absolute;
+            z-index: 100;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        .slider-nav .slider-prev {
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .slider-nav .slider-next {
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .slider-nav button:hover {
+            background: var(--heading) !important;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .room-card-item .hp-room-item {
+            transition: transform 0.3s;
+        }
+        
+        .room-card-item .hp-room-item:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 992px) {
+            .room-slider-wrapper {
+                padding: 0 30px;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-prev {
+                left: -50px !important;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-next {
+                right: -50px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .room-slider-wrapper {
+                padding: 0 15px;
+                min-height: 400px;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-prev,
+            .room-slider-wrapper .owl-nav button.owl-next {
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 20px !important;
+                line-height: 40px !important;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-prev span,
+            .room-slider-wrapper .owl-nav button.owl-next span {
+                font-size: 20px !important;
+                line-height: 40px !important;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-prev {
+                left: -45px !important;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-next {
+                right: -45px !important;
+            }
+            
+            .room-card-item .hp-room-item {
+                height: 400px !important;
+            }
+            
+            .room-category-block {
+                margin-bottom: 40px !important;
+            }
+            
+            .room-category-block h3 {
+                font-size: 20px !important;
+                padding: 12px 20px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .room-slider-wrapper {
+                padding: 0 10px;
+                min-height: 380px;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-prev,
+            .room-slider-wrapper .owl-nav button.owl-next {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 18px !important;
+                line-height: 35px !important;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-prev span,
+            .room-slider-wrapper .owl-nav button.owl-next span {
+                font-size: 18px !important;
+                line-height: 35px !important;
+            }
+            
+            /* On very small screens, show arrows inside with semi-transparent background */
+            .room-slider-wrapper .owl-nav button.owl-prev {
+                left: 5px !important;
+                background: rgba(223, 169, 116, 0.85) !important;
+            }
+            
+            .room-slider-wrapper .owl-nav button.owl-next {
+                right: 5px !important;
+                background: rgba(223, 169, 116, 0.85) !important;
+            }
+            
+            .room-card-item .hp-room-item {
+                height: 380px !important;
+            }
+            
+            .room-category-block h3 {
+                font-size: 18px !important;
+                padding: 10px 15px !important;
+                letter-spacing: 0.5px !important;
+            }
+            
+            .room-category-block h3 i {
+                margin-right: 8px !important;
+            }
+        }
+    </style>
+    </section>
+    <!-- Available Rooms by Category Section End -->
+
     <!-- Testimonial Section Begin -->
     <section class="testimonial-section spad">
         <div class="container">
@@ -414,5 +750,111 @@
         </div>
     </section>
     <!-- Blog Section End -->
+
+    <script>
+    console.log('=== SCRIPT LOADED ===');
+    console.log('jQuery available:', typeof jQuery !== 'undefined');
+    console.log('owlCarousel available:', typeof jQuery !== 'undefined' && typeof jQuery.fn.owlCarousel !== 'undefined');
+    
+    // Wrap everything to prevent main.js errors from blocking execution
+    (function() {
+        'use strict';
+        
+        console.log('=== Inside IIFE ===');
+        
+        // Wait for DOM to be fully ready
+        if (document.readyState === 'loading') {
+            console.log('DOM still loading, adding event listener');
+            document.addEventListener('DOMContentLoaded', initCarousels);
+        } else {
+            console.log('DOM already ready, initializing now');
+            initCarousels();
+        }
+        
+        function initCarousels() {
+            try {
+                console.log('=== Starting carousel initialization ===');
+                
+                {% for room_type in room_types %}
+                try {
+                    var sliderEl = document.querySelector('.room-slider-{{ room_type.id }}');
+                    if (!sliderEl) {
+                        console.error('Slider element not found for {{ room_type.name_eng }}');
+                        return;
+                    }
+                    
+                    var items = sliderEl.querySelectorAll('.room-card-item');
+                    console.log('{{ room_type.name_eng }}: Found ' + items.length + ' room items');
+                    
+                    // Make items visible immediately
+                    items.forEach(function(item) {
+                        item.style.display = 'block';
+                        item.style.visibility = 'visible';
+                        item.style.opacity = '1';
+                    });
+                    
+                    if (items.length > 0 && typeof jQuery !== 'undefined' && jQuery.fn.owlCarousel) {
+                        var $slider = jQuery('.room-slider-{{ room_type.id }}');
+                        
+                        // Destroy any existing carousel first
+                        if ($slider.hasClass('owl-loaded')) {
+                            $slider.trigger('destroy.owl.carousel');
+                            $slider.removeClass('owl-loaded owl-drag');
+                        }
+                        
+                        // Initialize carousel
+                        $slider.owlCarousel({
+                            loop: true,
+                            margin: 20,
+                            nav: true,
+                            dots: true,
+                            autoplay: false,
+                            smartSpeed: 800,
+                            navText: [
+                                '<i class="fa fa-angle-left"></i>',
+                                '<i class="fa fa-angle-right"></i>'
+                            ],
+                            navContainer: false,
+                            responsive: {
+                                0: { items: 1 },
+                                768: { items: 2 },
+                                992: { items: 3 }
+                            },
+                            onInitialized: function(e) {
+                                console.log('✓ {{ room_type.name_eng }} carousel initialized with ' + e.item.count + ' items');
+                                console.log('Nav container:', $slider.find('.owl-nav').length);
+                                
+                                // Force show navigation
+                                var nav = $slider.closest('.room-slider-wrapper').find('.owl-nav');
+                                if (nav.length > 0) {
+                                    nav.css({
+                                        'display': 'block',
+                                        'visibility': 'visible',
+                                        'opacity': '1'
+                                    });
+                                    console.log('Nav buttons visible for {{ room_type.name_eng }}');
+                                } else {
+                                    console.warn('Nav not found for {{ room_type.name_eng }}');
+                                }
+                            }
+                        });
+                    } else if (items.length === 0) {
+                        console.warn('No rooms for {{ room_type.name_eng }}');
+                        if (sliderEl.closest('.room-category-block')) {
+                            sliderEl.closest('.room-category-block').style.display = 'none';
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error initializing {{ room_type.name_eng }}:', err);
+                }
+                {% endfor %}
+                
+                console.log('=== Carousel initialization complete ===');
+            } catch (mainErr) {
+                console.error('Main carousel error:', mainErr);
+            }
+        }
+    })();
+    </script>
     
 {% endblock content %}

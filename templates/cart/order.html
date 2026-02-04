@@ -28,7 +28,6 @@
                      <th class="text-semibold">Check In</th>
                      <th class="text-semibold">Check Out</th>
                      <th class="unit_price text-semibold">Price</th>
-                     <th class="text-semibold">Qty</th>
                      <th class="text-semibold">Amount</th>
                      <th class="action text-semibold">Action</th>
                   </tr>
@@ -47,17 +46,14 @@
                         <input type="date" class="form-control" name="check_out_{{ room.id }}" value="" required>
                      </td>
                      <td class="price" style="text-align: center; width: 12%;"><span>৳ {{ room.price }}</span></td>
-                     <td class="qty">
-                        <div class="pro_qty"><a><i class="fa fa-minus" aria-hidden="true"></i></a><input class="form-control input-sm" type="text" value="1"><a><i class="fa fa-plus"></i></a></div>
-                     </td>
                      <td class="price room-total-{{ room.id }}" style="text-align: center; width: 15%;" data-room-id="{{ room.id }}" data-price="{{ room.price }}"><span>৳ <span class="room-amount">{{ room.price }}</span></span></td>
-                     <td class="action"><a class="icon-remove" style="font-size: 1.5rem; color: red;"><i class="fa fa-remove" aria-hidden="true"></i></a></td>
+                     <td class="action"><a href="javascript:void(0);" class="icon-remove remove-from-cart" data-room-id="{{ room.id }}" style="font-size: 1.5rem; color: red; cursor: pointer;"><i class="fa fa-remove" aria-hidden="true"></i></a></td>
                   </tr>
                 {% endfor %}
                </tbody>
                <tfoot>
                   <tr>
-                     <td colspan="6" class="text-semibold">Total</td>
+                     <td colspan="5" class="text-semibold">Total</td>
                      <td colspan="2" class="text-semibold" style="text-align: center;">৳ <span id="grand-total">{{ total_cart_amount }}</span></td>
                   </tr>
                </tfoot>
@@ -93,8 +89,11 @@
       <div class="flex flex-column gap-16">
          <div class="Card_card__D-XC2 Address_address__yw7QK false">
             <div>
-               <div class="Input_form_control__k2Lye false undefined"><label for="Receiver Name"><span class="Input_form_control__label__SOQJo">Receiver Name <span class="Input_form_control__label__option__YxCA5">(Optional)</span></span><input type="text" id="receiver_name" name="receiver_name"  value=""><small> </small></label></div>
-               <div class="Input_form_control__k2Lye Input_form_control--error__HPRMG undefined"><label for="Receiver Phone"><span class="Input_form_control__label__SOQJo">Receiver Phone <span class="Input_form_control__label__option__YxCA5">(Required)</span></span><input type="text" id="receiver_phone" name="receiver_phone" ><small> </small></label></div>
+               <div class="Input_form_control__k2Lye false undefined"><label for="Receiver Name"><span class="Input_form_control__label__SOQJo">Receiver Name <span class="Input_form_control__label__option__YxCA5">(Required)</span></span><input type="text" id="receiver_name" name="receiver_name"  value="" required><small> </small></label></div>
+               <div class="Input_form_control__k2Lye Input_form_control--error__HPRMG undefined"><label for="Receiver Phone"><span class="Input_form_control__label__SOQJo">Receiver Phone <span class="Input_form_control__label__option__YxCA5">(Required)</span></span><input type="text" id="receiver_phone" name="receiver_phone" required><small> </small></label></div>
+            </div>
+            <div>
+               <div class="Input_form_control__k2Lye false undefined"><label for="Receiver Email"><span class="Input_form_control__label__SOQJo">Email Address <span class="Input_form_control__label__option__YxCA5">(Optional)</span></span><input type="email" id="receiver_email" name="receiver_email"  value="" placeholder="example@email.com"><small> </small></label></div>
             </div>
             <div>
                
@@ -115,14 +114,19 @@
                </div>
                <div class="Select_form_control__-W7rB">
                   <label for="Area"><span class="Select_form_control__label__8gi3V">Area <span class="Select_form_control__label__option__zbnTX">(Optional)</span></span></label>
+                  <div class="loginBox" style="font-size: 20px;">
                       {{ address_form.upazilla }}
-
-                     
+                  </div>
                </div>
             </div>
             <div>
-               <div class="Textarea_form_control__oik5R"><label for="Address"><span class="Textarea_form_control__label__hBHV6">                       {{ address_form.others }}
- <span class="Textarea_form_control__label__option__JTJT7">(Required)</span></span><textarea id="Address"></textarea><small> </small></label></div>
+               <div class="Textarea_form_control__oik5R">
+                  <label for="Address">
+                     <span class="Textarea_form_control__label__hBHV6">Address <span class="Textarea_form_control__label__option__JTJT7">(Required)</span></span>
+                  </label>
+                  {{ address_form.others }}
+                  <small> </small>
+               </div>
             </div>
          </div>
          <div class="Card_card__D-XC2 relative false">
@@ -268,6 +272,54 @@
             updateRoomTotal('{{ room.id }}');
         });
         {% endfor %}
+        
+        // Handle remove from cart
+        $('.remove-from-cart').on('click', function(e) {
+            e.preventDefault();
+            const roomId = $(this).data('room-id');
+            const csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+            
+            if (confirm('Are you sure you want to remove this room from cart?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/cart/remove/' + roomId + '/',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // Remove the row from max-cart display first
+                            $('#cart_body').find('input[value="' + roomId + '"]').closest('tr').remove();
+                            
+                            // Remove the row from the order page table
+                            $('tr').has('[data-room-id="' + roomId + '"]').fadeOut(300, function() {
+                                $(this).remove();
+                                updateGrandTotal();
+                                
+                                // Update cart counters based on cart_body
+                                const remainingItems = $('#cart_body tr').length;
+                                $('#number_of_item_mini').text(remainingItems);
+                                $('#number_of_item').text(remainingItems);
+                                $('#total_item_max_cart').text(remainingItems);
+                                
+                                // Update cart totals
+                                const newTotal = $('#grand-total').text();
+                                $('#mini_cart_total').text(newTotal);
+                                $('#total_amount_max_cart').text(newTotal);
+                                
+                                // Reload if cart is empty
+                                if (remainingItems === 0) {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error removing item from cart. Please try again.');
+                    }
+                });
+            }
+        });
     });
     </script>
 

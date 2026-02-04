@@ -56,6 +56,16 @@ def cartAddRoom(request):
 def cartDetails(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart': cart})
+
+def cartRemove(request, room_id):
+    cart = Cart(request)
+    room = get_object_or_404(Room, id=room_id)
+    cart.remove(room)
+    context = {}
+    context['status'] = 'success'
+    context['message'] = 'Room removed from cart'
+    return JsonResponse(context, safe=False)
+
 def cartClear(request):
     cart = Cart(request)
     cart.clear()

@@ -49,8 +49,11 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather);float: left;" onclick="addToCart( this.id )">Add To Book</button>
-                                <a href="{% url 'room_details' room.id %}" class="primary-btn" style="color:brown;float: right;">More Details</a>
+                                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                    <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1;" onclick="addToCart( this.id )">Add To Book</button>
+                                    <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
+                                </div>
+                                <a href="{% url 'room_details' room.id %}" class="primary-btn" style="color:brown; margin-top: 10px; display: block; text-align: center;">More Details</a>
                             </div>
                         </div>
                     </div>
