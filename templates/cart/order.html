@@ -13,9 +13,316 @@
       .form-control {
          min-height: 33px;
       }
+      
+      /* Base responsive styles */
+      * {
+         box-sizing: border-box;
+      }
+      
+      main.home {
+         max-width: 100vw;
+         overflow-x: hidden;
+         padding: 50px 15px 20px;
+      }
+      
+      .Checkout_checkout__UBWBo {
+         width: 100%;
+         max-width: 100%;
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 20px;
+      }
+      
+      .Card_card__D-XC2 {
+         width: 100%;
+         padding: 15px;
+         overflow-x: auto;
+      }
+      
+      /* Table responsive */
+      .table-responsive {
+         overflow-x: auto;
+         -webkit-overflow-scrolling: touch;
+      }
+      
+      .cart_summary {
+         min-width: 700px;
+      }
+      
+      /* Desktop layout - two columns */
+      @media (min-width: 992px) {
+         main.home {
+            padding: 50px 30px 20px;
+         }
+         
+         .Checkout_checkout__UBWBo {
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+         }
+         
+         .Checkout_checkout__UBWBo > div:first-child {
+            grid-column: 1;
+         }
+         
+         .Checkout_checkout__UBWBo > div:last-child {
+            grid-column: 2;
+         }
+      }
+      
+      /* Tablet landscape */
+      @media (max-width: 991px) {
+         main.home {
+            padding: 40px 20px;
+         }
+         
+         .Checkout_checkout__UBWBo {
+            grid-template-columns: 1fr;
+         }
+         
+         .Card_card__D-XC2 {
+            padding: 15px;
+         }
+      }
+      
+      /* Tablet portrait and mobile */
+      @media (max-width: 767px) {
+         main.home {
+            padding: 30px 10px;
+         }
+         
+         .Checkout_checkout__UBWBo {
+            grid-template-columns: 1fr;
+            gap: 15px;
+         }
+         
+         .Card_card__D-XC2 {
+            padding: 10px;
+         }
+         
+         .cart_summary thead th {
+            font-size: 12px;
+            padding: 8px 4px;
+         }
+         
+         .cart_summary tbody td {
+            font-size: 12px;
+            padding: 8px 4px;
+         }
+         
+         .cart_product img {
+            max-width: 60px;
+         }
+         
+         .discount-cupon-payment {
+            width: 100% !important;
+         }
+         
+         .discount-cupon-payment input {
+            width: 60% !important;
+         }
+         
+         .discount-cupon-payment button {
+            width: 38% !important;
+         }
+         
+         .Input_form_control__k2Lye {
+            margin-bottom: 15px;
+         }
+         
+         .PaymentOptions_payment-options__wPRGy {
+            width: 100%;
+         }
+         
+         .PaymentOption_payment-option__6-0db {
+            padding: 12px;
+            margin-bottom: 10px;
+         }
+         
+         .PaymentOption_payment-option__6-0db label {
+            font-size: 14px;
+         }
+         
+         .PaymentOption_payment-option__6-0db img {
+            height: 25px !important;
+            margin: 0 8px !important;
+         }
+         
+         .Action_action__K65rE button {
+            width: 100% !important;
+            padding: 15px;
+         }
+      }
+      
+      /* Small mobile devices */
+      @media (max-width: 575px) {
+         main.home {
+            padding: 20px 5px;
+         }
+         
+         .Checkout_checkout__UBWBo {
+            gap: 10px;
+         }
+         
+         .Card_card__D-XC2 {
+            padding: 8px;
+         }
+         
+         .cart_summary {
+            font-size: 11px;
+            min-width: 600px;
+         }
+         
+         .cart_product img {
+            max-width: 50px;
+         }
+         
+         .form-control {
+            font-size: 12px;
+            padding: 5px;
+         }
+         
+         .Input_form_control__k2Lye input,
+         .Input_form_control__k2Lye select {
+            font-size: 14px;
+            padding: 10px;
+         }
+         
+         .PaymentOption_payment-option__6-0db {
+            padding: 10px;
+         }
+         
+         .PaymentOption_payment-option__6-0db img {
+            height: 20px !important;
+            margin: 0 5px !important;
+         }
+         
+         .PaymentOption_payment-option__6-0db span {
+            font-size: 13px !important;
+         }
+      }
+      
+      /* Extra small devices */
+      @media (max-width: 480px) {
+         .cart_summary thead th,
+         .cart_summary tbody td {
+            font-size: 10px;
+            padding: 5px 2px;
+         }
+         
+         .cart_summary {
+            min-width: 550px;
+         }
+         
+         h3 {
+            font-size: 16px !important;
+         }
+      }
+      
+      /* Ensure form elements are responsive */
+      input[type="text"],
+      input[type="email"],
+      input[type="date"],
+      select,
+      textarea {
+         width: 100%;
+         max-width: 100%;
+      }
+      
+      /* Flexbox utilities */
+      .flex {
+         display: flex;
+      }
+      
+      .flex-column {
+         flex-direction: column;
+      }
+      
+      .gap-16 {
+         gap: 16px;
+      }
+      
+      @media (max-width: 767px) {
+         .gap-16 {
+            gap: 10px;
+         }
+      }
+      
+      /* Override inline styles for mobile */
+      @media (max-width: 991px) {
+         main.home.option2.homeServicePadding {
+            padding: 40px 15px 20px 15px !important;
+            overflow-x: hidden !important;
+         }
+         
+         .Checkout_checkout__UBWBo {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+         }
+         
+         .Checkout_checkout__UBWBo > div {
+            width: 100% !important;
+            max-width: 100% !important;
+         }
+      }
+      
+      @media (max-width: 767px) {
+         main.home.option2.homeServicePadding {
+            padding: 30px 10px 20px 10px !important;
+         }
+         
+         .Payment_payment__cEYmj {
+            width: 100% !important;
+            overflow-x: auto;
+         }
+         
+         .Payment_payment__cEYmj td {
+            padding: 10px 5px !important;
+            font-size: 13px !important;
+         }
+         
+         .discount-cupon-payment form {
+            display: flex !important;
+            width: 100% !important;
+            gap: 5px;
+         }
+         
+         .discount-cupon-payment input {
+            flex: 1 !important;
+            min-width: 0 !important;
+         }
+         
+         .discount-cupon-payment button {
+            flex-shrink: 0 !important;
+            width: auto !important;
+            padding: 10px 15px !important;
+         }
+      }
+      
+      @media (max-width: 575px) {
+         main.home.option2.homeServicePadding {
+            padding: 20px 5px 20px 5px !important;
+         }
+         
+         .Card_card__D-XC2 {
+            margin-bottom: 10px;
+         }
+         
+         .Address_address__yw7QK > div {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+         }
+         
+         .Policy_order-policy__V+UQp p {
+            font-size: 12px !important;
+            margin: 5px 0 !important;
+         }
+      }
       </style>
-<main class="home option2 homeServicePadding" style="overflow: hidden; padding-top: 50px;">
-   <form action="{% url 'order_cart' %}" method="POST">
+<main class="home option2 homeServicePadding" style="overflow-x: hidden; padding-top: 50px; max-width: 100vw;">
+   <div style="max-width: 100%; overflow-x: hidden;">
+   <form action="{% url 'order_cart' %}" method="POST" style="width: 100%;">
     {% csrf_token %}
    <div class="Checkout_checkout__UBWBo relative" id="checkout">
       <div class="flex flex-column gap-16">
@@ -137,19 +444,20 @@
       </div>
       <div class="Checkout_grid__span__2__wynh- flex flex-column gap-16">
          <div class="PaymentOptions_payment-options__wPRGy">
-            <div class="PaymentOption_payment-option__6-0db PaymentOption_active__3zfwe"><label class=""><input type="radio" name="payment-option" class="PaymentOption_payment-option__6-0db">Cash On Delivery</label></div>
+            {% comment %} <div class="PaymentOption_payment-option__6-0db PaymentOption_active__3zfwe"><label class=""><input type="radio" name="payment-option" class="PaymentOption_payment-option__6-0db">Cash On Delivery</label></div> {% endcomment %}
          </div>
          <div class="Policy_order-policy__V+UQp">
-            <p class="OrderNotice">*** Please pay first for outside Dhaka delivery (ঢাকার বাইরে অর্ডারের ক্ষেত্রে ক্যাশ অন ডেলিভারি প্রযোজ্য নয়)</p>
-            <p class="OrderNotice">*** LP agent will call you for delivery charge and reconfirm your order (আপনার অর্ডার পুনরায় নিশ্চিত করতে লাজ ফার্মা থেকে আপনার সাথে যোগাযোগ করা হবে)</p>
+            <p class="OrderNotice">*** SSL-commerz payment ensure secure payment</p>
+            <p class="OrderNotice">***  We follow the government residential hotel policy</p>
          </div>
          <div class="Action_action__K65rE">
-            <div class="AutoOrder_auto_order__V0y5K"><label for="auto-order"><input type="checkbox" name="autoOrder" id="auto-order">Auto Order After 28 Days</label></div>
+            {% comment %} <div class="AutoOrder_auto_order__V0y5K"><label for="auto-order"><input type="checkbox" name="autoOrder" id="auto-order">Auto Order After 28 Days</label></div> {% endcomment %}
             <button class="Button_button__Poz4v false false " type="submit">Place Order</button>
          </div>
       </div>
    </div>
    </form>
+   </div>
 </main>
 
 <script>

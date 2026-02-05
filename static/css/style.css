@@ -2290,6 +2290,10 @@ ul, ol {
 /* Large Mobile: 480px */
 
 @media only screen and (max-width: 767px) {
+	.booking-form {
+	
+		opacity: 1;
+	}
 	.menu-item {
 		min-height: 65px;
 		padding: 12px 0;
