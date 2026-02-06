@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Payment Gateway</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .gateway-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .gateway-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .gateway-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+        }
+        
+        .gateway-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .gateway-subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .payment-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .amount-value {
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 117, 125, 0.4);
+        }
+        
+        .test-notice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .test-notice-title {
+            color: #856404;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .test-notice-text {
+            color: #856404;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gateway-container">
+        <div class="gateway-header">
+            <div class="gateway-logo">💳</div>
+            <h1 class="gateway-title">Test Payment Gateway</h1>
+            <p class="gateway-subtitle">Development Mode</p>
+        </div>
+        
+        <div class="test-notice">
+            <div class="test-notice-title">⚠️ Testing Mode</div>
+            <div class="test-notice-text">This is a simulated payment gateway for development. No real payment will be processed.</div>
+        </div>
+        
+        <div class="payment-info">
+            <div class="info-row">
+                <span class="info-label">Transaction ID:</span>
+                <span class="info-value">{{ tran_id }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Amount to Pay:</span>
+                <span class="amount-value">৳{{ amount }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Currency:</span>
+                <span class="info-value">BDT</span>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <a href="{{ success_url }}?tran_id={{ tran_id }}&amount={{ amount }}&status=VALID" class="btn btn-success">
+                ✓ Pay Now (Success)
+            </a>
+        </div>
+        
+        <div class="button-group" style="margin-top: 15px;">
+            <a href="{{ fail_url }}?tran_id={{ tran_id }}" class="btn btn-danger">
+                ✗ Simulate Failed
+            </a>
+            <a href="{{ cancel_url }}?tran_id={{ tran_id }}" class="btn btn-secondary">
+                ← Cancel Payment
+            </a>
+        </div>
+    </div>
+</body>
+</html>

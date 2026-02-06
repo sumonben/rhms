@@ -12,12 +12,29 @@ class Frontpage(View):
     template_name = 'frontpage/frontpage.html'
     
     def get(self, request, *args, **kwargs):
-        rooms=Room.objects.all().order_by("serial")
+        rooms=Room.objects.all().prefetch_related('booking_set').order_by("serial")
         # Only show room types that have at least one room
         room_types=RoomType.objects.filter(room__isnull=False).distinct().order_by("serial")
         carousels=Carousel.objects.all().order_by("serial")[0:4]
         staffs=Staff.objects.all().order_by("serial")
         guests=Guest.objects.all().order_by("-id")
+        # Compute display status based on booking state
+        today = timezone.now().date()
+        for room in rooms:
+            active_bookings = [
+                b for b in room.booking_set.all()
+                if b.check_in_status not in ('checked_out', 'cancelled') and not b.check_out_status
+            ]
+            if any(b.check_in_status == 'checked_in' for b in active_bookings):
+                room.display_status = 'occupied'
+                room.booked_until = None
+            elif any(b.check_in_status == 'pending' and b.end_day >= today for b in active_bookings):
+                room.display_status = 'booked'
+                pending_bookings = [b for b in active_bookings if b.check_in_status == 'pending' and b.end_day >= today]
+                room.booked_until = max(b.end_day for b in pending_bookings) if pending_bookings else None
+            else:
+                room.display_status = 'available'
+                room.booked_until = None
         print(rooms)
         context={}
         context['rooms']=rooms
@@ -137,7 +154,7 @@ class CheckInView(View):
         # Update room availability
         for room in booking.room.all():
             room.is_available = False
-            room.status = 'Occupied'
+            room.status = 'occupied'
             room.save()
         
         messages.success(request, f'Successfully checked in! Welcome to your stay.')
@@ -168,7 +185,7 @@ class CheckOutView(View):
         # Update room availability
         for room in booking.room.all():
             room.is_available = True
-            room.status = 'Available'
+            room.status = 'available'
             room.save()
         
         messages.success(request, f'Successfully checked out! Thank you for your stay.')

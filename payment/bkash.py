@@ -508,6 +508,11 @@ def create_booking_from_bkash_transaction(transaction, request):
         for room in transaction.room.all():
             booking.room.add(room)
             room_count += 1
+            # Update room status to booked after successful booking
+            room.is_available = False
+            room.status = 'booked'
+            room.save()
+            print(f"   ✓ Room {room.id} status updated to booked")
         
         print(f"✅ Created booking {booking.id} for bKash transaction {transaction.tran_id} with {room_count} rooms")
         return booking

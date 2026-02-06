@@ -204,6 +204,11 @@ def create_booking_from_transaction(transaction, check_in=None, check_out=None, 
         for room in transaction.room.all():
             booking.room.add(room)
             room_count += 1
+            # Update room status to booked after successful booking
+            room.is_available = False
+            room.status = 'booked'
+            room.save()
+            print(f"   ✓ Room {room.id} status updated to booked")
         
         print(f"Created booking {booking.id} for transaction {transaction.tran_id} with {room_count} rooms")
         return booking
@@ -503,7 +508,11 @@ def process_payment_callback(data, request=None):
                     for room in transaction.room.all():
                         booking.room.add(room)
                         room_count += 1
-                        print(f"   ✓ Added room {room.id}: {room.name_eng}")
+                        # Update room status to booked after successful booking
+                        room.is_available = False
+                        room.status = 'booked'
+                        room.save()
+                        print(f"   ✓ Added room {room.id}: {room.name_eng} - Status: booked")
                     
                     print(f"✅✅✅ SUCCESS: Booking created - ID: {booking.id}, Tracking: {booking.tracking_no}, Rooms: {room_count}")
                     
