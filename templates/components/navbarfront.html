@@ -24,7 +24,7 @@
             </div>
             <ul>
                 <li class="active"><a href="{% url 'frontpage' %}">Home</a></li>
-                <li><a style="color: #000;" href="{% url 'rooms_view' %}">Rooms</a>
+                <li class="dropdown"><a style="color: #000;" href="#" onclick="toggleMobileDropdown(event);">Rooms</a>
                                      <ul class="dropdown">
                                         
                                         {% for room_type  in room_types %}
@@ -78,7 +78,7 @@
                             </div>
                             <a href="#" class="bk-btn">Booking Now</a>
                             <div class="language-option">
-                                <img src="{{ LOGO.url }}" alt="">
+                                <img src="{{ LOGO.url }}" alt="" >
                                 <span>EN <i class="fa fa-angle-down"></i></span>
                                 <div class="flag-dropdown">
                                     <ul>
@@ -103,7 +103,7 @@
                             <a href="{% url 'frontpage' %}">
                                 <table>
                                     <tr>
-                                        <td><img src="{{ LOGO.url }}" alt=""> </td>
+                                        <td><img src="{{ LOGO.url }}" alt="" style="width: 100px; height: auto;"> </td>
                                     </tr>
                                 </table>
 
@@ -115,7 +115,7 @@
                             <nav class="mainmenu" >
                                 <ul >
                                     <li class="active"><a style="color: #fff;" href="{% url 'frontpage' %}">Home</a></li>
-                                    <li><a style="color: #fff;" href="{% url 'rooms_view' %}">Rooms</a>
+                                    <li class="dropdown"><a style="color: #fff;" href="#" onclick="return false;">Rooms</a>
                                      <ul class="dropdown">
                                         
                                         {% for room_type  in room_types %}
@@ -148,3 +148,16 @@
             </div>
         </div>
     </header>
+
+    <script>
+    function toggleMobileDropdown(event) {
+        event.preventDefault();
+        const li = event.target.closest('li.dropdown');
+        if (li) {
+            const submenu = li.querySelector('ul.dropdown');
+            if (submenu) {
+                submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+    }
+    </script>
