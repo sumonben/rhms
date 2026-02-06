@@ -1,6 +1,6 @@
 <div class="offcanvas-menu-overlay"></div>
     
-    <div class="offcanvas-menu-wrapper">
+    <div class="offcanvas-menu-wrapper" >
         <div class="canvas-close">
             <i class="icon_close"></i>
         </div>
@@ -55,25 +55,24 @@
     <!-- Offcanvas Menu Section End -->
 
     <!-- Header Section Begin -->
-    <header class="header-section">
-        <div class="top-nav">
+    <header class="header-section" style="background: var(--card);">
+        <div class="top-nav" style="background: var(--card);">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
                         <ul class="tn-left">
-                            <li><i class="fa fa-phone"></i> 01786272762</li>
-                            <li><i class="fa fa-envelope"></i> hotelredrock3@gmail.com</li>
+                            <li><i class="fa fa-phone"></i> <a href="tel:01786272762" style="color:white;">01786272762</a></li>
+                            <li><i class="fa fa-envelope"></i> <a href="mailto:hotelredrock3@gmail.com" style="color:white;">hotelredrock3@gmail.com</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
                         <div class="tn-right">
-                            <div class="top-social">
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/"><i class="fa fa-facebook"></i></a>
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/"><i class="fa fa-twitter"></i></a>
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/"><i class="fa fa-tripadvisor"></i></a>
-                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/"><i class="fa fa-instagram"></i></a>
-                                <a href="https://www.facebook.com/watch/?v=929621535616302"><i class="fa fa-youtube-play"></i></a>
-
+                            <div class="bk-btn" >
+                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-facebook"></i></a>
+                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-twitter"></i></a>
+                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-tripadvisor"></i></a>
+                                <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-instagram"></i></a>
+                                <a href="https://www.facebook.com/watch/?v=929621535616302" target="_blank"><i class="fa fa-youtube-play"></i></a>
                             </div>
                             <a href="#" class="bk-btn">Booking Now</a>
                             <div class="language-option">
@@ -111,31 +110,31 @@
                     </div>
                     <div class="col-lg-10" style=" background: transparent">
                         <div class="nav-menu">
-                            <nav class="mainmenu">
-                                <ul>
-                                    <li class="active"><a href="{% url 'frontpage' %}">Home</a></li>
-                                    <li><a href="{% url 'rooms_view' %}">Rooms</a>
+                            <nav class="mainmenu" >
+                                <ul >
+                                    <li class="active"><a style="color: #fff;" href="{% url 'frontpage' %}">Home</a></li>
+                                    <li><a style="color: #fff;" href="{% url 'rooms_view' %}">Rooms</a>
                                      <ul class="dropdown">
                                         
                                         {% for room_type  in room_types %}
-                                            <li><a href="{% url 'room_type_rooms' room_type.id  %}">{{ room_type.name_eng }}</a></li> 
+                                            <li><a  href="{% url 'room_type_rooms' room_type.id  %}">{{ room_type.name_eng }}</a></li> 
                                         {% endfor %}
                                             
                                             
                                         </ul>
                                     </li>
-                                    <li><a href="{% url 'find_booking' %}">Find Booking</a></li>
-                                    <li><a href="./about-us.html">About Us</a></li>
-                                    <li><a href="./pages.html">Pages</a>
+                                    <li><a style="color: #fff;" href="{% url 'find_booking' %}">Find Booking</a></li>
+                                    <li><a style="color: #fff;" href="./about-us.html">About Us</a></li>
+                                    <li><a style="color: #fff;" href="./pages.html">Pages</a>
                                         <ul class="dropdown">
-                                            <li><a href="{% url 'room_details' 1 %}">Room Details</a></li>
-                                            <li><a href="./blog-details.html">Blog Details</a></li>
+                                            <li><a  href="{% url 'room_details' 1 %}">Room Details</a></li>
+                                            <li><a  href="./blog-details.html">Blog Details</a></li>
                                             <li><a href="#">Family Room</a></li>
                                             <li><a href="#">Premium Room</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="./blog.html">News</a></li>
-                                    <li><a href="./contact.html">Contact</a></li>
+                                    <li><a style="color: #fff;" href="./blog.html">News</a></li>
+                                    <li><a style="color: #fff;" href="./contact.html">Contact</a></li>
                                 </ul>
                             </nav>
                             <div class="nav-right search-switch">
