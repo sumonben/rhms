@@ -47,31 +47,42 @@
                                             <td class="r-o">Services:</td>
                                             <td>{{ room.services }}</td>
                                         </tr>
+                                        <tr>
+                                                        <td class="r-o">Status:</td>
+                                                        <td>
+                                                            {% with status=room.display_status|default:room.status|default_if_none:"available"|lower %}
+                                                                {% if status == 'available' %}
+                                                                    <span style="color: green; font-weight: bold;">Available</span>
+                                                                {% elif status == 'booked' %}
+                                                                    <span style="color: orange; font-weight: bold;">
+                                                                        Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %}
+                                                                    </span>
+                                                                {% elif status == 'occupied' %}
+                                                                    <span style="color: red; font-weight: bold;">Occupied</span>
+                                                                {% else %}
+                                                                    <span style="color: green; font-weight: bold;">Available</span>
+                                                                {% endif %}
+                                                            {% endwith %}
+                                                        </td>
+                                                    </tr>
                                     </tbody>
                                 </table>
-                                {% with status=room.display_status|default:room.status|default_if_none:"available"|lower %}
-                                <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                    {% if status == 'available' %}
-                                        <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1;" onclick="addToCart( this.id )">Add To Book</button>
-                                        <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
-                                    {% else %}
-                                        <button class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; opacity: 0.6; cursor: not-allowed;" disabled>
-                                            {% if status == 'booked' %}
-                                                Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %} <i class="fa fa-check"></i>
-                                            {% else %}
-                                                Occupied <i class="fa fa-check"></i>
-                                            {% endif %}
-                                        </button>
-                                        <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center; opacity: 0.6; cursor: not-allowed;" disabled>
-                                            {% if status == 'booked' %}
-                                                Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %} <i class="fa fa-check"></i>
-                                            {% else %}
-                                                Occupied <i class="fa fa-check"></i>
-                                            {% endif %}
-                                        </button>
-                                    {% endif %}
-                                </div>
-                                {% endwith %}
+                                 
+                                            {% with status=room.display_status|default:room.status|default_if_none:"available"|lower %}
+                                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                                {% if status == 'available' %}
+                                                    <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1;" onclick="addToCart( this.id )">Add To Book</button>
+                                                    <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
+                                                {% else %}
+                                                    <button class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; opacity: 0.6; cursor: not-allowed;" disabled>
+                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% else %}Occupied <i class="fa fa-check"></i>{% endif %}
+                                                    </button>
+                                                    <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center; opacity: 0.6; cursor: not-allowed;" disabled>
+                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% else %}Occupied <i class="fa fa-check"></i>{% endif %}
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            {% endwith %}
                                 <a href="{% url 'room_details' room.id %}" class="primary-btn" style="color:brown; margin-top: 10px; display: block; text-align: center;">More Details</a>
                             </div>
                         </div>
