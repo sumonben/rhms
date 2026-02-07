@@ -176,6 +176,9 @@
 <div class="success-container">
     <!-- Success Header -->
     <div class="success-header">
+        <a href="{% url 'booking_receipt' booking.id %}" class="btn btn-success" style="background:var(--weather)">
+                <i class="fa fa-download"></i> Download Receipt
+            </a>
         <div class="success-icon">✓</div>
         <h1 class="success-title">Payment Successful!</h1>
         <p class="success-message">Thank you for your booking. Your reservation has been confirmed.</p>

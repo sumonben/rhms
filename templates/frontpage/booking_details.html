@@ -25,9 +25,15 @@
 <div class="container no-print" style="margin-top: 20px; margin-bottom: 20px;">
     <div class="row">
         <div class="col-lg-12 text-right">
+            <a  href="{% url 'booking_receipt' booking.id %}" class="btn btn-success" style="margin-left: 10px; background:var(--weather); color: white;">
+                            <button  class="btn btn-primary" style="background:var(--weather); color: white;">
+                                <i class="fa fa-download"></i> Download Receipt
+                            </button>
+            </a>
             <button onclick="window.print()" class="btn btn-primary">
                 <i class="fa fa-print"></i> Print Booking Details
             </button>
+            
         </div>
     </div>
 </div>
@@ -143,12 +149,18 @@
                             {% endfor %}
                         </div>
 
+                        
+                        
+                        {% if user.is_authenticated %}
+                            
+                            
+                            
                         <!-- Check-in/Check-out Actions -->
                         <div class="booking-actions no-print" style="margin-top: 30px;">
                             {% if can_check_in %}
                                 <form method="post" action="{% url 'check_in' booking.id %}" style="display: inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Are you sure you want to check in?')">
+                                    <button type="submit" class="btn btn-success btn-lg" style="margin-right: 10px;background:var(--weather); color: white;" onclick="return confirm('Are you sure you want to check in?')">
                                         <i class="fa fa-sign-in"></i> Check In Now
                                     </button>
                                 </form>
@@ -157,12 +169,15 @@
                             {% if can_check_out %}
                                 <form method="post" action="{% url 'check_out' booking.id %}" style="display: inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure you want to check out?')">
+                                    <button type="submit" class="btn btn-primary btn-lg" style="margin-right: 10px;background:var(--weather); color: white;" onclick="return confirm('Are you sure you want to check out?')">
                                         <i class="fa fa-sign-out"></i> Check Out Now
                                     </button>
                                 </form>
                             {% endif %}
                         </div>
+                    {% endif %}
+
+
                     </div>
                 </div>
             </div>

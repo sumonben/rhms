@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from django.views.generic import View, TemplateView, DetailView
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
 from rooms.models import Room,RoomType
-from .models import Carousel, Booking
+from .models import Carousel, Booking, HotelDetails
 from accounts.models import Staff, Guest,Designation, Department
 from datetime import datetime
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import mm
+from reportlab.lib.utils import ImageReader
 
 
 def _sort_rooms_by_availability(rooms):
@@ -155,6 +161,161 @@ class BookingDetailsView(View):
         }
         
         return render(request, self.template_name, context)
+
+
+class BookingReceiptView(View):
+    """Downloadable booking receipt for guests"""
+
+    def get(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id)
+        rooms = booking.room.all()
+
+        hotel_details = HotelDetails.objects.last()
+        hotel_name = None
+        logo_path = None
+        watermark_path = None
+
+        if hotel_details:
+            hotel_name = hotel_details.title_en or hotel_details.title
+            if hotel_details.logo and hasattr(hotel_details.logo, 'path'):
+                logo_path = hotel_details.logo.path
+            if hotel_details.logo_opacity and hasattr(hotel_details.logo_opacity, 'path'):
+                watermark_path = hotel_details.logo_opacity.path
+            elif hotel_details.logo and hasattr(hotel_details.logo, 'path'):
+                watermark_path = hotel_details.logo.path
+
+        total_amount = 0
+        for room in rooms:
+            try:
+                total_amount += float(room.price or 0)
+            except (TypeError, ValueError):
+                continue
+
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+
+        def _safe_set_alpha(alpha):
+            if hasattr(pdf, 'setFillAlpha'):
+                pdf.setFillAlpha(alpha)
+
+        # Watermark
+        if watermark_path:
+            try:
+                pdf.saveState()
+                _safe_set_alpha(0.08)
+                watermark = ImageReader(watermark_path)
+                wm_size = 120 * mm
+                pdf.drawImage(
+                    watermark,
+                    (width - wm_size) / 2,
+                    (height - wm_size) / 2,
+                    wm_size,
+                    wm_size,
+                    preserveAspectRatio=True,
+                    mask='auto'
+                )
+                pdf.restoreState()
+            except Exception:
+                pass
+
+        # Header
+        x_left = 25 * mm
+        y_top = height - 25 * mm
+        if logo_path:
+            try:
+                logo = ImageReader(logo_path)
+                pdf.drawImage(logo, x_left, y_top - 18 * mm, 30 * mm, 18 * mm, preserveAspectRatio=True, mask='auto')
+            except Exception:
+                pass
+
+        pdf.setFont("Helvetica-Bold", 16)
+        pdf.drawString(x_left + 35 * mm, y_top - 5 * mm, hotel_name or "Hotel")
+        pdf.setFont("Helvetica", 12)
+        pdf.drawString(x_left + 35 * mm, y_top - 12 * mm, "Booking Receipt")
+
+        pdf.setFont("Helvetica", 10)
+        pdf.drawRightString(width - x_left, y_top - 5 * mm, f"Receipt ID: {booking.id}")
+        pdf.drawRightString(width - x_left, y_top - 12 * mm, f"Issued: {booking.booked_on:%d %b %Y, %I:%M %p}")
+
+        pdf.line(x_left, y_top - 20 * mm, width - x_left, y_top - 20 * mm)
+
+        y = y_top - 30 * mm
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.drawString(x_left, y, "Guest Information")
+        y -= 8 * mm
+        pdf.setFont("Helvetica", 10)
+        pdf.drawString(x_left, y, f"Guest Name: {booking.guest.name_eng if booking.guest else 'N/A'}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Email: {booking.guest.email if booking.guest else 'N/A'}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Phone: {booking.guest.phone if booking.guest else 'N/A'}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Tracking No: {booking.tracking_no or 'N/A'}")
+
+        y -= 10 * mm
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.drawString(x_left, y, "Booking Summary")
+        y -= 8 * mm
+        pdf.setFont("Helvetica", 10)
+        pdf.drawString(x_left, y, f"Check-in Date: {booking.start_day}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Check-out Date: {booking.end_day}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Guests: {booking.number_of_person or 'N/A'}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Status: {booking.check_in_status or 'N/A'}")
+
+        y -= 12 * mm
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.drawString(x_left, y, "Booked Rooms")
+        y -= 8 * mm
+        pdf.setFont("Helvetica-Bold", 10)
+        pdf.drawString(x_left, y, "Room")
+        pdf.drawString(x_left + 70 * mm, y, "Room No")
+        pdf.drawString(x_left + 100 * mm, y, "Type")
+        pdf.drawRightString(width - x_left, y, "Price (৳)")
+        y -= 4 * mm
+        pdf.line(x_left, y, width - x_left, y)
+        y -= 6 * mm
+
+        pdf.setFont("Helvetica", 10)
+        for room in rooms:
+            if y < 25 * mm:
+                pdf.showPage()
+                y = height - 25 * mm
+                pdf.setFont("Helvetica", 10)
+            pdf.drawString(x_left, y, room.name_eng or '')
+            pdf.drawString(x_left + 70 * mm, y, room.room_no or '')
+            pdf.drawString(x_left + 100 * mm, y, room.room_type.name_eng if room.room_type else '')
+            pdf.drawRightString(width - x_left, y, f"{room.price or '0'}")
+            y -= 6 * mm
+
+        y -= 4 * mm
+        pdf.setFont("Helvetica-Bold", 11)
+        pdf.drawRightString(width - x_left, y, f"Total: ৳{total_amount:.2f}")
+
+        y -= 10 * mm
+        pdf.setFont("Helvetica-Bold", 12)
+        pdf.drawString(x_left, y, "Payment Information")
+        y -= 8 * mm
+        pdf.setFont("Helvetica", 10)
+        payment_status = "Paid" if booking.transaction else "Unpaid"
+        transaction_id = booking.transaction.tracking_no if booking.transaction else "N/A"
+        amount = booking.transaction.amount if booking.transaction else "0"
+        pdf.drawString(x_left, y, f"Payment Status: {payment_status}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Transaction ID: {transaction_id}")
+        y -= 6 * mm
+        pdf.drawString(x_left, y, f"Amount: ৳{amount}")
+
+        pdf.showPage()
+        pdf.save()
+        buffer.seek(0)
+
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="booking-receipt-{booking.id}.pdf"'
+        return response
 
 
 class CheckInView(View):

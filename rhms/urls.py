@@ -25,6 +25,7 @@ urlpatterns = [
     path('', views.Frontpage.as_view(),name="frontpage"),
     path('find-booking/', views.FindBookingView.as_view(), name='find_booking'),
     path('booking/<int:booking_id>/', views.BookingDetailsView.as_view(), name='booking_details'),
+    path('booking/<int:booking_id>/receipt/', views.BookingReceiptView.as_view(), name='booking_receipt'),
     path('booking/<int:booking_id>/check-in/', views.CheckInView.as_view(), name='check_in'),
     path('booking/<int:booking_id>/check-out/', views.CheckOutView.as_view(), name='check_out'),
     path('rooms/', include('rooms.urls')),
