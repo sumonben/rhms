@@ -17,10 +17,17 @@ try:
 except ImportError:
     SSLCOMMERZ_AVAILABLE = False
 
-
+gateway = PaymentGateway.objects.filter(is_active=True).first()
+cradentials = {'store_id': gateway.store_id,
+            'store_pass': gateway.store_pass, 'issandbox': gateway.is_sandbox}
+  
 def generator_transaction_id(size=10, chars=string.ascii_uppercase + string.digits):
-    """Generate a unique transaction ID"""
     return "".join(random.choice(chars) for _ in range(size))
+
+
+# Backward-compatibility for legacy typo usages
+def generator_trangection_id(size=10, chars=string.ascii_uppercase + string.digits):
+    return generator_transaction_id(size=size, chars=chars)
 
 
 def get_payment_credentials():
@@ -88,38 +95,49 @@ def create_pending_transaction(request, guest, rooms, amount):
         
         print(f"📅 Storing booking_dates in transaction: {booking_dates_json}")
         
-        # Create pending transaction WITH booking data stored
-        transaction = Transaction.objects.create(
-            tran_id=tran_id,
-            tracking_no=tran_id,
-            name=guest.name if hasattr(guest, 'name') else str(guest),
-            phone=guest.phone if hasattr(guest, 'phone') else '',
-            email=guest.email if hasattr(guest, 'email') else '',
-            guest=guest if isinstance(guest, Guest) else None,
-            amount=amount,
-            # STORE BOOKING DATA IN TRANSACTION (key fix!)
-            booking_check_in=check_in_date,
-            booking_check_out=check_out_date,
-            booking_guests_count=int(guests_count) if guests_count else 1,
-            booking_dates_json=booking_dates_json,  # Store per-room dates
-            val_id='',
-            card_type='',
-            store_amount=0,
-            card_no='',
-            bank_tran_id='',
-            status='PENDING',
-            tran_date=timezone.now(),
-            currency='BDT',
-            card_issuer='',
-            card_brand='',
-            card_issuer_country='',
-            card_issuer_country_code='',
-            currency_rate=1.0,
-            verify_sign='',
-            verify_sign_sha2='',
-            risk_level='0',
-            risk_title='',
-        )
+        transaction_data = {
+            'tran_id': tran_id,
+            'tracking_no': tran_id,
+            'name': guest.name if hasattr(guest, 'name') else str(guest),
+            'phone': guest.phone if hasattr(guest, 'phone') else '',
+            'email': guest.email if hasattr(guest, 'email') else '',
+            'guest': guest if isinstance(guest, Guest) else None,
+            'amount': amount,
+            # STORE BOOKING DATA IN TRANSACTION
+            'booking_check_in': check_in_date,
+            'booking_check_out': check_out_date,
+            'booking_guests_count': int(guests_count) if guests_count else 1,
+            'booking_dates_json': booking_dates_json,
+            'val_id': '',
+            'card_type': '',
+            'store_amount': 0,
+            'card_no': '',
+            'bank_tran_id': '',
+            'status': 'PENDING',
+            'tran_date': timezone.now(),
+            'currency': 'BDT',
+            'card_issuer': '',
+            'card_brand': '',
+            'card_issuer_country': '',
+            'card_issuer_country_code': '',
+            'currency_rate': 1.0,
+            'verify_sign': '',
+            'verify_sign_sha2': '',
+            'risk_level': '0',
+            'risk_title': '',
+        }
+
+        try:
+            transaction = Transaction.objects.create(**transaction_data)
+        except Exception as e:
+            error_text = str(e).lower()
+            if 'no such column' in error_text or 'unknown column' in error_text:
+                # Fallback for databases missing booking_* fields
+                for key in ['booking_check_in', 'booking_check_out', 'booking_guests_count', 'booking_dates_json']:
+                    transaction_data.pop(key, None)
+                transaction = Transaction.objects.create(**transaction_data)
+            else:
+                raise
         
         # Add rooms to transaction
         if hasattr(rooms, '__iter__') and not isinstance(rooms, str):
@@ -204,11 +222,6 @@ def create_booking_from_transaction(transaction, check_in=None, check_out=None, 
         for room in transaction.room.all():
             booking.room.add(room)
             room_count += 1
-            # Update room status to booked after successful booking
-            room.is_available = False
-            room.status = 'booked'
-            room.save()
-            print(f"   ✓ Room {room.id} status updated to booked")
         
         print(f"Created booking {booking.id} for transaction {transaction.tran_id} with {room_count} rooms")
         return booking
@@ -508,11 +521,7 @@ def process_payment_callback(data, request=None):
                     for room in transaction.room.all():
                         booking.room.add(room)
                         room_count += 1
-                        # Update room status to booked after successful booking
-                        room.is_available = False
-                        room.status = 'booked'
-                        room.save()
-                        print(f"   ✓ Added room {room.id}: {room.name_eng} - Status: booked")
+                        print(f"   ✓ Added room {room.id}: {room.name_eng}")
                     
                     print(f"✅✅✅ SUCCESS: Booking created - ID: {booking.id}, Tracking: {booking.tracking_no}, Rooms: {room_count}")
                     

@@ -73,6 +73,19 @@
         </div> -->
     {% include 'components/navbarfront.html' %}
 
+        {% if messages %}
+            <div class="container" style="margin-top: 15px;">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
     {% block content %}
         
     {% endblock content %}
@@ -87,7 +100,7 @@
                         <div class="col-lg-4">
                             <div class="ft-about">
                                     <a href="#">
-                                        <img src="{{ LOGO.url }}" alt="" height="80px" width="80px">
+                                        <img src="{{ LOGO.url }}" alt="" height="80px" width="auto">
                                     </a>
                                 <p>{{ SLOGAN_ENG}}<br /> </p>
                                 <div class="fa-social">
@@ -105,14 +118,9 @@
                                 <ul>
                                     <li>01786272762</li>
                                     <li>hotelredrock3@gmail.com</li>
+                                    <li></li>
                                 </ul>
-                                
                             </div>
-                            <ul>
-                                <li><a href="#">Terms and Conditions</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Our Policy</a></li>
-                            </ul>
                         </div>
                         <div class="col-lg-3 offset-lg-1">
                             <div class="ft-newslatter">
@@ -123,17 +131,29 @@
                                     <button type="submit"><i class="fa fa-send"></i></button>
                                 </form>
                             </div>
-                             <div class="co-text"><p><!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. -->
-    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved {{ SITE_NAME_ENG }} <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://ictparkbd.com" target="_blank">ictparkbangladesh,</a>
-    <!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. --><i class="fa fa-heart" aria-hidden="true"></i></p></div>
                         </div>
-                        </div>
-                    </div>
-                    
                     </div>
                 </div>
             </div>
-           
+            <div class="copyright-option" style="background: var(--service)">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <ul>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">Terms and Conditions</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                                <li><a href="#">Our Policy</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="co-text"><p><!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. -->
+    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved {{ SITE_NAME_ENG }} <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://ictparkbd.com" target="_blank">ictparkbangladesh,</a>
+    <!-- Link back to ictparkbangladesh can't be removed.  is licensed under CC BY 3.0. --><i class="fa fa-heart" aria-hidden="true"></i></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </footer>
         <!-- Footer Section End -->
 
@@ -173,6 +193,8 @@
                                 <td class="cart-inc-dsc" style="font-size: 13px; vertical-align: middle; padding: 8px 0px;">
                                     <div class="attributes input-group bootstrap-touchspin">
                                         <div class="qty-holder" style="width: 90px;">
+                                            <a class="qty-dec-btn" title="Dec" style="width: 22px;">-</a><input type="text" name="product_qty" id="product_qty" class="qty-input" value="1">
+                                            <a class="qty-inc-btn" title="Inc" style="width: 22px;">+</a>
                                         </div>
                                     </div>
                                 </td>
@@ -268,7 +290,7 @@
                 for(var i=0; i<response.rooms.length;i++){
                     
                 const targetElement = document.getElementById('cart_body'); // Select the target container
-                const newHtml = '<tr><td><input class="input_cart" name="input_'+response.rooms[i].id+'" value="'+response.rooms[i].id+'" hidden><img src="/media/'+ response.rooms[i].main_image +'" alt="img"></td><td class="card-title-product"><a href="/Product/Details/dormicum-75-mg-tab-382a1db1ff51-59a9-5114-9cca-fe7cd0b6"><span class="SearchProductName SearchFont">'+ response.rooms[i].name_eng +', '+ response.rooms[i].room_no+'</span></a><br><strong class="SearchPrice" style="font-size: 15px;">৳  '+response.rooms[i].price+' </strong></td><td class="cart-inc-dsc" style="font-size: 13px; vertical-align: middle; padding: 8px 0px;"><div class="attributes input-group bootstrap-touchspin"></div></td><td style="vertical-align: middle;"><span class="SearchFont SearchPrice"> '+response.rooms[i].price+' </span></td><td><a class="cross_time"><i class="fa fa-times text-danger"></i></a></td></tr>';
+                const newHtml = '<tr><td><input class="input_cart" name="input_'+response.rooms[i].id+'" value="'+response.rooms[i].id+'" hidden><img src="/media/'+ response.rooms[i].main_image +'" alt="img"></td><td class="card-title-product"><a href="/Product/Details/dormicum-75-mg-tab-382a1db1ff51-59a9-5114-9cca-fe7cd0b6"><span class="SearchProductName SearchFont">'+ response.rooms[i].name_eng +', '+ response.rooms[i].room_no+'</span></a><br><strong class="SearchPrice" style="font-size: 15px;">৳  '+response.rooms[i].price+' </strong></td><td class="cart-inc-dsc" style="font-size: 13px; vertical-align: middle; padding: 8px 0px;"><div class="attributes input-group bootstrap-touchspin"><div class="qty-holder" style="width: 90px;"><a class="qty-dec-btn" title="Dec" style="width: 22px;">-</a><input type="text" name="product_qty" id="product_qty" class="qty-input" value="1"><a class="qty-inc-btn" title="Inc" style="width: 22px;">+</a></div></div></td><td style="vertical-align: middle;"><span class="SearchFont SearchPrice">22.00</span></td><td><a class="cross_time"><i class="fa fa-times text-danger"></i></a></td></tr>';
               //"/static/images/hsc-2024-25/"+response.student[0].class_roll+".jpg";
 
                 // "beforeend" inserts the new HTML just before the closing tag of the target element

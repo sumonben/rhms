@@ -119,7 +119,7 @@ class RoomAdmin(ImportExportMixin, InlineEditableAdmin):
 
 @admin.register(RoomReview)
 class RoomReviewAdmin(admin.ModelAdmin):
-    list_display = ['room', 'name', 'email', 'rating', 'created_at', 'is_approved']
+    list_display = ['room', 'name', 'email', 'phone', 'rating', 'created_at', 'is_approved']
     list_filter = ['rating', 'is_approved', 'created_at']
     search_fields = ['name', 'email', 'comment', 'room__name_eng']
     
