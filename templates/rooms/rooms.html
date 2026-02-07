@@ -25,7 +25,9 @@
                         <div class="room-item" >
                            <img src="{% if room.main_image %}{{ room.main_image.url}} {% endif %}"  alt="">
                             <div class="ri-text" style="background: var(--service);">
+
                                 <h2 style="color:brown">{{ room.name_eng }}</h2>
+                                <h2 style="color:green"> Room No: #{{ room.room_no }}</h2>
                                 <h3 style="color:brown">{{ room.room_type.name_eng }}</h3>
 
                                 <h3 style="color:green">{{ room.price }}&#x09F3;<span>/Pernight</span></h3>

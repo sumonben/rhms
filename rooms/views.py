@@ -24,6 +24,21 @@ def _set_display_status_for_rooms(rooms):
             room.display_status = 'available'
             room.booked_until = None
 
+
+def _sort_rooms_by_availability(rooms):
+    def _sort_key(room):
+        status = getattr(room, 'display_status', None) or getattr(room, 'status', None) or 'available'
+        if isinstance(status, str):
+            status = status.lower()
+        else:
+            status = 'available'
+        serial = getattr(room, 'serial', None)
+        if serial is None:
+            serial = getattr(room, 'id', 0)
+        return (status != 'available', serial)
+
+    return sorted(list(rooms), key=_sort_key)
+
 class Rooms(View):
     template_name = 'rooms/rooms.html'
     
@@ -52,6 +67,7 @@ class Rooms(View):
             request.session.pop('rooms_count', None)
         
         _set_display_status_for_rooms(rooms)
+        rooms = _sort_rooms_by_availability(rooms)
         context['rooms']=rooms
         context['staffs']=staffs
         context['guests']=guests
@@ -69,6 +85,7 @@ class RoomTypeRooms(View):
         guests=Guest.objects.all().order_by("-id")
         context={}
         _set_display_status_for_rooms(rooms)
+        rooms = _sort_rooms_by_availability(rooms)
         context['room_type']=room_type
         context['rooms']=rooms
         context['staffs']=staffs
@@ -82,6 +99,7 @@ class RoomTypeRooms(View):
         guests=Guest.objects.all().order_by("-id")
         context={}
         _set_display_status_for_rooms(rooms)
+        rooms = _sort_rooms_by_availability(rooms)
         context['room_type']=room_type
         context['rooms']=rooms
         context['staffs']=staffs

@@ -67,8 +67,8 @@ img, video, iframe {
     }
     
     .hero-text h1 {
-        font-size: 36px !important;
-        text-shadow: 2px 2px #fff !important;
+        font-size: 50px !important;
+        text-shadow: 2px 2px #ee0c0c !important;
     }
     
     .hero-text h2 {

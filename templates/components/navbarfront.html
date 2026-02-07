@@ -16,7 +16,7 @@
                     </ul> -->
                 </div>
             </div>
-            <a href="#" class="bk-btn">Booking Now</a>
+            <a href="{% url 'rooms_view' %}" class="bk-btn">Booking Now</a>
         </div>
         <nav class="mainmenu mobile-menu">
             <div class="canvas-close">
@@ -50,8 +50,9 @@
 
                     </div>
         <ul class="top-widget">
-            <li><i class="fa fa-phone"></i> 01786272762</li>
-            <li><i class="fa fa-envelope"></i> hotelredrock3@gmail.com</li>
+            <li> <a href="tel:01786272762" style="color:#000;"><i class="fa fa-phone"></i>01786272762</a></li>
+            <li> <a href="mailto:hotelredrock3@gmail.com" style="color:#000;"><i class="fa fa-envelope"></i>hotelredrock3@gmail.com</a></li>
+                   
         </ul>
     </div>
     <!-- Offcanvas Menu Section End -->
@@ -76,7 +77,7 @@
                                 <a href="https://www.facebook.com/p/Hotel-Red-Rock-Joypurhat-61554155192749/" target="_blank"><i class="fa fa-instagram"></i></a>
                                 <a href="https://www.facebook.com/watch/?v=929621535616302" target="_blank"><i class="fa fa-youtube-play"></i></a>
                             </div>
-                            <a href="#" class="bk-btn">Booking Now</a>
+                            <a href="{% url 'rooms_view' %}" class="bk-btn">Booking Now</a>
                             <div class="language-option">
                                 <img src="{{ LOGO.url }}" alt="" >
                                 <span>EN <i class="fa fa-angle-down"></i></span>
