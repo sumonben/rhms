@@ -35,9 +35,9 @@
                                         </ul>
                 </li>                
                 <li><a href="{% url 'find_booking' %}">Find Booking</a></li>
-                <li><a href="./about-us.html">About Us</a></li>
+                <li><a href="{% url 'about' %}">About Us</a></li>
                 {% comment %} <li><a href="./blog.html">News</a></li> {% endcomment %}
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -127,7 +127,7 @@
                                         </ul>
                                     </li>
                                     <li><a style="color: #fff;" href="{% url 'find_booking' %}">Find Booking</a></li>
-                                    <li><a style="color: #fff;" href="./about-us.html">About Us</a></li>
+                                    <li><a style="color: #fff;" href="{% url 'about' %}">About Us</a></li>
                                     {% comment %} <li><a style="color: #fff;" href="./pages.html">Pages</a>
                                         <ul class="dropdown">
                                             <li><a  href="{% url 'room_details' 1 %}">Room Details</a></li>
@@ -137,7 +137,7 @@
                                         </ul>
                                     </li> 
                                     <li><a style="color: #fff;" href="./blog.html">News</a></li>{% endcomment %}
-                                    <li><a style="color: #fff;" href="./contact.html">Contact</a></li>
+                                    <li><a style="color: #fff;" href="{% url 'contact' %}">Contact</a></li>
                                 </ul>
                             </nav>
                             <div class="nav-right search-switch">

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ExportActionMixin,ImportExportMixin
-from .models import RoomType, Room,BedType
+from .models import RoomType, Room, BedType, RoomReview
 from django.utils.html import format_html
 from django.urls import path, reverse
 from django.http import JsonResponse
@@ -115,5 +115,12 @@ class RoomAdmin(ImportExportMixin, InlineEditableAdmin):
     def get_inline_editable_fields(self):
         # ONLY these fields will be editable
         return ['name','name_eng','room_no']
+
+
+@admin.register(RoomReview)
+class RoomReviewAdmin(admin.ModelAdmin):
+    list_display = ['room', 'name', 'email', 'rating', 'created_at', 'is_approved']
+    list_filter = ['rating', 'is_approved', 'created_at']
+    search_fields = ['name', 'email', 'comment', 'room__name_eng']
     
 

@@ -187,3 +187,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# reCAPTCHA (v2 Checkbox)
+RECAPTCHA_SITE_KEY = os.environ.get('RECAPTCHA_SITE_KEY', '6LfKnGMsAAAAADMTciEbrIVNlVAB3fa2LpDoPfEa')
+RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET_KEY', '6LfKnGMsAAAAAEy1rYVHlPqqTBntxp18gAhPaGr1')

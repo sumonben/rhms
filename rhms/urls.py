@@ -23,6 +23,8 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.Frontpage.as_view(),name="frontpage"),
+    path('about/', views.AboutView.as_view(), name='about'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
     path('find-booking/', views.FindBookingView.as_view(), name='find_booking'),
     path('booking/<int:booking_id>/', views.BookingDetailsView.as_view(), name='booking_details'),
     path('booking/<int:booking_id>/receipt/', views.BookingReceiptView.as_view(), name='booking_receipt'),

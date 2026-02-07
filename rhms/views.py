@@ -97,6 +97,14 @@ class Frontpage(View):
             return redirect('frontpage')
 
 
+class AboutView(TemplateView):
+    template_name = 'frontpage/about_us.html'
+
+
+class ContactView(TemplateView):
+    template_name = 'frontpage/contact_us.html'
+
+
 class FindBookingView(View):
     """View to search for a booking by tracking number, email, or phone"""
     template_name = 'frontpage/find_booking.html'

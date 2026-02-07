@@ -46,4 +46,20 @@ class Room(models.Model):
         ordering = ['serial']
     def __str__(self):
         return self.name+'('+self.name_eng+')'
+
+
+class RoomReview(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='reviews')
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=150)
+    rating = models.PositiveSmallIntegerField(default=5)
+    comment = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.room.name_eng} - {self.rating}★ by {self.name}"
     

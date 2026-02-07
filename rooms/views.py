@@ -2,8 +2,12 @@ from django.shortcuts import render
 from django.views.generic import View, TemplateView, DetailView
 from django.contrib import messages
 from django.utils import timezone
-from rooms.models import Room,RoomType
+from django.conf import settings
+from rooms.models import Room, RoomType, RoomReview
 from accounts.models import Staff, Guest,Designation, Department
+from urllib.parse import urlencode
+from urllib.request import urlopen, Request
+import json
 
 
 def _set_display_status_for_rooms(rooms):
@@ -131,6 +135,15 @@ class RoomDetails(View):
         
         staffs=Staff.objects.all().order_by("serial")
         guests=Guest.objects.all().order_by("-id")
+        room_reviews = []
+        average_rating = None
+        average_rating_int = None
+        if rooms:
+            room_reviews = RoomReview.objects.filter(room=rooms, is_approved=True).order_by('-created_at')
+            if room_reviews:
+                average_value = sum(r.rating for r in room_reviews) / len(room_reviews)
+                average_rating = round(average_value, 1)
+                average_rating_int = int(round(average_value, 0))
         context={}
         if rooms:
             _set_display_status_for_rooms([rooms])
@@ -138,6 +151,10 @@ class RoomDetails(View):
         context['same_priced_rooms']=same_priced_rooms
         context['staffs']=staffs
         context['guests']=guests
+        context['room_reviews'] = room_reviews
+        context['average_rating'] = average_rating
+        context['average_rating_int'] = average_rating_int
+        context['recaptcha_site_key'] = getattr(settings, 'RECAPTCHA_SITE_KEY', '')
         return render(request, self.template_name,context)
 
     def post(self, request, *args, **kwargs):
@@ -161,4 +178,73 @@ class RoomDetails(View):
         else:
             messages.error(request, 'Please select check-in and check-out dates')
             return redirect('room_details', id=kwargs['id'])
+
+
+class RoomReviewSubmitView(View):
+    def post(self, request, id, *args, **kwargs):
+        from django.shortcuts import redirect
+
+        room = Room.objects.filter(id=id).first()
+        if not room:
+            messages.error(request, 'Room not found.')
+            return redirect('rooms_view')
+
+        name = (request.POST.get('name') or '').strip()
+        email = (request.POST.get('email') or '').strip()
+        rating = request.POST.get('rating')
+        comment = (request.POST.get('comment') or '').strip()
+        recaptcha_token = request.POST.get('g-recaptcha-response')
+
+        if not name or not email or not rating or not comment:
+            messages.error(request, 'Please fill in all review fields.')
+            return redirect('room_details', id=id)
+
+        try:
+            rating = int(rating)
+        except (TypeError, ValueError):
+            messages.error(request, 'Invalid rating.')
+            return redirect('room_details', id=id)
+
+        if rating < 1 or rating > 5:
+            messages.error(request, 'Rating must be between 1 and 5.')
+            return redirect('room_details', id=id)
+
+        secret = getattr(settings, 'RECAPTCHA_SECRET_KEY', '')
+        site_key = getattr(settings, 'RECAPTCHA_SITE_KEY', '')
+        if not secret or not site_key:
+            messages.error(request, 'reCAPTCHA is not configured. Please contact support.')
+            return redirect('room_details', id=id)
+
+        if not recaptcha_token:
+            messages.error(request, 'Please complete the reCAPTCHA.')
+            return redirect('room_details', id=id)
+
+        data = urlencode({
+            'secret': secret,
+            'response': recaptcha_token,
+            'remoteip': request.META.get('REMOTE_ADDR', '')
+        }).encode('utf-8')
+
+        try:
+            req = Request('https://www.google.com/recaptcha/api/siteverify', data=data)
+            with urlopen(req, timeout=10) as response:
+                result = json.loads(response.read().decode('utf-8'))
+        except Exception:
+            messages.error(request, 'reCAPTCHA verification failed. Please try again.')
+            return redirect('room_details', id=id)
+
+        if not result.get('success'):
+            messages.error(request, 'reCAPTCHA verification failed. Please try again.')
+            return redirect('room_details', id=id)
+
+        RoomReview.objects.create(
+            room=room,
+            name=name,
+            email=email,
+            rating=rating,
+            comment=comment,
+        )
+
+        messages.success(request, 'Thank you! Your review has been submitted.')
+        return redirect('room_details', id=id)
 
