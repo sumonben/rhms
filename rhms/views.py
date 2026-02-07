@@ -36,10 +36,20 @@ class Frontpage(View):
         # Compute display status based on booking state
         today = timezone.now().date()
         for room in rooms:
+            manual_status = (room.status or '').lower()
             active_bookings = [
                 b for b in room.booking_set.all()
                 if b.check_in_status not in ('checked_out', 'cancelled') and not b.check_out_status
             ]
+            if manual_status in ('unavailable', 'maintenance'):
+                room.display_status = 'unavailable'
+                room.booked_until = None
+                continue
+            if manual_status == 'booked':
+                room.display_status = 'booked'
+                pending_bookings = [b for b in active_bookings if b.check_in_status == 'pending' and b.end_day >= today]
+                room.booked_until = max(b.end_day for b in pending_bookings) if pending_bookings else None
+                continue
             if any(b.check_in_status == 'checked_in' for b in active_bookings):
                 room.display_status = 'occupied'
                 room.booked_until = None

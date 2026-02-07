@@ -108,10 +108,10 @@ class RoomTypeAdmin(ImportExportMixin,admin.ModelAdmin):
 
 @admin.register(Room)
 class RoomAdmin(ImportExportMixin, InlineEditableAdmin):
-    list_display=[ 'serial','name','name_eng','room_no','room_type','bed_type']
+    list_display=[ 'serial','name','name_eng','room_no','room_type','bed_type','status']
     list_filter=['room_type','bed_type']
     search_fields = ['name','name_eng','room_no']
-    list_editable =['name','name_eng']
+    list_editable =['name','name_eng','status']
     def get_inline_editable_fields(self):
         # ONLY these fields will be editable
         return ['name','name_eng','room_no']

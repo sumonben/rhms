@@ -382,6 +382,8 @@
                                                             {% with status=room.display_status|default:room.status|default_if_none:"available"|lower %}
                                                                 {% if status == 'available' %}
                                                                     <span style="color: green; font-weight: bold;">Available</span>
+                                                                {% elif status == 'unavailable' %}
+                                                                    <span style="color: gray; font-weight: bold;">Unavailable</span>
                                                                 {% elif status == 'booked' %}
                                                                     <span style="color: orange; font-weight: bold;">
                                                                         Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %}
@@ -405,10 +407,10 @@
                                                     <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
                                                 {% else %}
                                                     <button class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; opacity: 0.6; cursor: not-allowed;" disabled>
-                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% else %}Occupied <i class="fa fa-check"></i>{% endif %}
+                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% elif status == 'unavailable' %}Unavailable {% else %}Occupied <i class="fa fa-check"></i>{% endif %}
                                                     </button>
                                                     <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center; opacity: 0.6; cursor: not-allowed;" disabled>
-                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% else %}Occupied <i class="fa fa-check"></i>{% endif %}
+                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% elif status == 'unavailable' %}Unavailable {% else %}Occupied <i class="fa fa-check"></i>{% endif %}
                                                     </button>
                                                 {% endif %}
                                             </div>

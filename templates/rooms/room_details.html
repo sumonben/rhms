@@ -12,7 +12,7 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Room Details Section Begin -->
-     <br></br>
+     <br>
     <section class="room-details-section spad">
         <div class="container">
             <div class="row">
@@ -21,8 +21,7 @@
                         <img src="{{ room.main_image.url }}" alt="">
                         <div class="rd-text" style="background: transparent;padding: 20px;">
                             <div class="rd-title">
-                                <h3>{{ room.name_eng }} #{{ room.room_no }}</h3>
-                                <h3>{{ room.bed_type.name_engname_eng }} </h3>
+                                <h3>{{ room.name_eng }} #{{ room.room_no }}</h3><br>
                                 <div class="rdt-right">
                                     <div class="rating">
                                         <i class="icon_star"></i>
@@ -40,6 +39,8 @@
                                         <button class="btn btn-primary" style="padding: 12px 24px; font-size: 16px; font-weight: 600; opacity: 0.6; cursor: not-allowed;" disabled>
                                           {% if status == 'booked' %}
                                             Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %} <i class="fa fa-check"></i>
+                                          {% elif status == 'unavailable' %}
+                                            Unavailable <i class="fa fa-ban"></i>
                                           {% else %}
                                             Occupied <i class="fa fa-check"></i>
                                           {% endif %}
@@ -47,6 +48,8 @@
                                         <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; text-align: center; opacity: 0.6; cursor: not-allowed;" disabled>
                                           {% if status == 'booked' %}
                                             Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %} <i class="fa fa-check"></i>
+                                          {% elif status == 'unavailable' %}
+                                            Unavailable <i class="fa fa-ban"></i>
                                           {% else %}
                                             Occupied <i class="fa fa-check"></i>
                                           {% endif %}
@@ -56,6 +59,7 @@
                                     {% endwith %}
                                 </div>
                             </div>
+                            <h3>{{ room.room_type.name_eng }} </h3>
                             <h2>{{ room.price }}&#x09F3;<span>/Pernight</span></h2>
                             <table>
                                 <tbody>
