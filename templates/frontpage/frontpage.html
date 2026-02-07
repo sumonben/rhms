@@ -357,6 +357,7 @@
                                 <div class="room-card-item">
                                     <div class="hp-room-item set-bg" data-setbg="{% if room.main_image %}{{ room.main_image.url }}{% endif %}" style="height: 450px; background-size: cover; background-position: center; background-color: #f0f0f0; {% if room.main_image %}background-image: url('{{ room.main_image.url }}');{% endif %}">
                                         <div class="hr-text" style="padding:15px;">
+                                            <h3 style="color: green;">{{ room.name_eng }}</h3>
                                             <h3 style="color: brown;">Room #{{ room.room_no }}</h3>
                                             <h4 style="color: rgb(10, 92, 85); margin-top: 5px;">{{ room.room_type.name_eng }}</h4>
                                             <h3 style="color: green; margin-top: 10px;">{{ room.room_type.price }}&#x09F3;<span style="font-size: 14px;">/Per night</span></h3>
