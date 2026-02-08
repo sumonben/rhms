@@ -398,6 +398,9 @@
                <div class="Input_form_control__k2Lye false undefined"><label for="Receiver Email"><span class="Input_form_control__label__SOQJo">Email Address <span class="Input_form_control__label__option__YxCA5">(Optional)</span></span><input type="email" id="receiver_email" name="receiver_email"  value="" placeholder="example@email.com"><small> </small></label></div>
             </div>
             <div>
+               <div class="Input_form_control__k2Lye false undefined"><label for="Number of Guests"><span class="Input_form_control__label__SOQJo">Number of Guests <span class="Input_form_control__label__option__YxCA5">(Required)</span></span><input type="number" id="number_of_guests" name="number_of_guests" value="1" min="1" required><small> </small></label></div>
+            </div>
+            <div>
                
 
                <div class="Select_form_control__-W7rB" >
@@ -433,7 +436,7 @@
          </div>
          <div class="Card_card__D-XC2 relative false">
             <div class="prescription_order_section">
-               <div class="file_uploader" style="max-width: 33.33%;"><input class="display-none--important" type="file" name="" id=""><button class="Button_button__Poz4v false false " type="button">Upload NID (optional)</button></div>
+               <div class="file_uploader" style="max-width: 33.33%;"><input class="display-none--important" type="file" name="" id=""><button class="Button_button__Poz4v false false " type="button">Select Prescription (optional)</button></div>
             </div>
          </div>
       </div>
@@ -555,7 +558,7 @@
             
             $('#grand-total').text(grandTotal.toFixed(0));
             $('#amount-tax-incl').text(grandTotal.toFixed(0));
-            $('#final-total').text((grandTotal + 120).toFixed(0));
+            $('#final-total').text(grandTotal.toFixed(0));
         }
         
         // Listen for date changes

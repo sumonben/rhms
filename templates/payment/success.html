@@ -174,11 +174,13 @@
 </style>
 
 <div class="success-container">
+    {% if booking %}
+        <a href="{% url 'booking_receipt' booking.id %}" class="btn-custom btn-home" style="margin-left: 40%;background: var(--weather);color: white;">
+            ⬇️ Download Receipt (PDF)
+        </a>
+        {% endif %}
     <!-- Success Header -->
     <div class="success-header">
-        <a href="{% url 'booking_receipt' booking.id %}" class="btn btn-success" style="background:var(--weather)">
-                <i class="fa fa-download"></i> Download Receipt
-            </a>
         <div class="success-icon">✓</div>
         <h1 class="success-title">Payment Successful!</h1>
         <p class="success-message">Thank you for your booking. Your reservation has been confirmed.</p>
@@ -371,7 +373,7 @@
 
         <!-- Total Amount -->
         <div class="total-amount">
-            Total Amount Paid: ৳{{ transaction.amount }}
+            Total Amount (Room Fare × Nights): ৳<span id="total-room-amount">{{ transaction.amount }}</span>
         </div>
         
         <!-- Booking Summary -->
@@ -456,6 +458,7 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
+        
         <button onclick="window.print()" class="btn-custom btn-print">
             🖨️ Print Receipt
         </button>
@@ -484,6 +487,7 @@
         
         // Calculate room totals
         const roomTotals = document.querySelectorAll('.room-total');
+        let grandTotal = 0;
         roomTotals.forEach(function(elem) {
             const price = parseFloat(elem.getAttribute('data-price'));
             const startDate = elem.getAttribute('data-start');
@@ -493,11 +497,20 @@
                 const start = new Date(startDate);
                 const end = new Date(endDate);
                 const diffTime = Math.abs(end - start);
-                const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                let nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (nights <= 0) {
+                    nights = 1;
+                }
                 const total = price * nights;
+                grandTotal += total;
                 elem.textContent = '৳' + total.toFixed(0) + ' (' + nights + ' night' + (nights !== 1 ? 's' : '') + ')';
             }
         });
+
+        const totalAmountEl = document.getElementById('total-room-amount');
+        if (totalAmountEl && grandTotal > 0) {
+            totalAmountEl.textContent = grandTotal.toFixed(0);
+        }
     });
     
     // Auto-print option (optional, uncomment if needed)
