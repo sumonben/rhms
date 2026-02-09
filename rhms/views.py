@@ -13,6 +13,10 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
+from reportlab.graphics.barcode import qr
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics import renderPDF
+from textwrap import wrap
 
 
 def _sort_rooms_by_availability(rooms):
@@ -228,6 +232,27 @@ class BookingReceiptView(View):
                             pass
             return stay_nights
 
+        def _format_guest_address(guest):
+            if not guest or not getattr(guest, 'address', None):
+                return 'N/A'
+            address = guest.address
+            parts = []
+            if address.ward:
+                parts.append(f"Ward {address.ward}")
+            if address.village_or_street:
+                parts.append(str(address.village_or_street))
+            if address.post_office:
+                parts.append(f"PO: {address.post_office}")
+            if address.upazilla:
+                parts.append(getattr(address.upazilla, 'name_en', None) or str(address.upazilla))
+            if address.district:
+                parts.append(getattr(address.district, 'name_en', None) or str(address.district))
+            if address.division:
+                parts.append(getattr(address.division, 'name_en', None) or str(address.division))
+            if address.others:
+                parts.append(address.others)
+            return ", ".join([part for part in parts if part]) or 'N/A'
+
         total_amount = 0
         for room in rooms:
             room_price = _get_room_price(room)
@@ -293,6 +318,17 @@ class BookingReceiptView(View):
         y -= 6 * mm
         pdf.drawString(x_left, y, f"Phone: {booking.guest.phone if booking.guest else 'N/A'}")
         y -= 6 * mm
+        address_text = _format_guest_address(booking.guest)
+        address_lines = wrap(address_text, width=80) if address_text else ["N/A"]
+        pdf.drawString(x_left, y, f"Address: {address_lines[0] if address_lines else 'N/A'}")
+        y -= 6 * mm
+        for line in address_lines[1:]:
+            if y < 25 * mm:
+                pdf.showPage()
+                y = height - 25 * mm
+                pdf.setFont("Helvetica", 10)
+            pdf.drawString(x_left + 12 * mm, y, line)
+            y -= 6 * mm
         pdf.drawString(x_left, y, f"Tracking No: {booking.tracking_no or 'N/A'}")
 
         y -= 10 * mm
@@ -300,10 +336,6 @@ class BookingReceiptView(View):
         pdf.drawString(x_left, y, "Booking Summary")
         y -= 8 * mm
         pdf.setFont("Helvetica", 10)
-        pdf.drawString(x_left, y, f"Check-in Date: {booking.start_day}")
-        y -= 6 * mm
-        pdf.drawString(x_left, y, f"Check-out Date: {booking.end_day}")
-        y -= 6 * mm
         pdf.drawString(x_left, y, f"Nights: {stay_nights}")
         y -= 6 * mm
         pdf.drawString(x_left, y, f"Guests: {booking.number_of_person or 'N/A'}")
@@ -413,6 +445,7 @@ class BookingReceiptView(View):
         y -= 10 * mm
         pdf.setFont("Helvetica-Bold", 12)
         pdf.drawString(x_left, y, "Payment Information")
+        payment_block_top = y
         y -= 8 * mm
         pdf.setFont("Helvetica", 10)
         payment_status = "Paid" if booking.transaction else "Unpaid"
@@ -423,6 +456,33 @@ class BookingReceiptView(View):
         pdf.drawString(x_left, y, f"Transaction ID: {transaction_id}")
         y -= 6 * mm
         pdf.drawString(x_left, y, f"Amount: ৳{amount}")
+
+        qr_payload = {
+            "Receipt ID": booking.id,
+            "Tracking No": booking.tracking_no or "",
+            "Transaction ID": transaction_id if transaction_id != "N/A" else "",
+            "Guest": booking.guest.name_eng if booking.guest else "",
+            "Check-in": booking.start_day,
+            "Check-out": booking.end_day,
+            "Amount": amount,
+        }
+        qr_data = "\n".join(f"{key}: {value}" for key, value in qr_payload.items() if value)
+
+        try:
+            qr_code = qr.QrCodeWidget(qr_data or f"Receipt ID: {booking.id}")
+            bounds = qr_code.getBounds()
+            qr_width = bounds[2] - bounds[0]
+            qr_height = bounds[3] - bounds[1]
+            qr_size = 30 * mm
+            qr_x = width - x_left - qr_size
+            qr_bottom = payment_block_top - qr_size
+            drawing = Drawing(qr_size, qr_size, transform=[qr_size / qr_width, 0, 0, qr_size / qr_height, 0, 0])
+            drawing.add(qr_code)
+            renderPDF.draw(drawing, pdf, qr_x, qr_bottom)
+            pdf.setFont("Helvetica", 8)
+            pdf.drawRightString(width - x_left, qr_bottom - 2 * mm, "Scan for receipt")
+        except Exception:
+            pass
 
         pdf.showPage()
         pdf.save()
