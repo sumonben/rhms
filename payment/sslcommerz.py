@@ -10,6 +10,7 @@ from .models import PaymentGateway, Transaction
 from accounts.models import Guest
 from rooms.models import Room
 from rhms.models import Booking
+from .emails import send_booking_receipt_email
 
 try:
     from sslcommerz_lib import SSLCOMMERZ
@@ -224,6 +225,7 @@ def create_booking_from_transaction(transaction, check_in=None, check_out=None, 
             room_count += 1
         
         print(f"Created booking {booking.id} for transaction {transaction.tran_id} with {room_count} rooms")
+        send_booking_receipt_email(booking)
         return booking
         
     except Exception as e:
@@ -524,6 +526,7 @@ def process_payment_callback(data, request=None):
                         print(f"   ✓ Added room {room.id}: {room.name_eng}")
                     
                     print(f"✅✅✅ SUCCESS: Booking created - ID: {booking.id}, Tracking: {booking.tracking_no}, Rooms: {room_count}")
+                    send_booking_receipt_email(booking)
                     
                 except Exception as e:
                     print(f"❌❌❌ ERROR creating booking: {str(e)}")
