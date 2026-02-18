@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
+from django.urls import reverse
+import json
+import ollama
 from django.views.generic import View, TemplateView, DetailView
 from django.contrib import messages
 from django.utils import timezone
@@ -237,4 +242,120 @@ class CheckOutView(View):
         
         messages.success(request, f'Successfully checked out! Thank you for your stay.')
         return redirect('booking_details', booking_id=booking_id)
+
+
+@require_POST
+def chatbot_api(request):
+    """Simple AI chatbot proxy using a local Ollama server."""
+    try:
+        payload = json.loads(request.body.decode('utf-8'))
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON payload.'}, status=400)
+
+    message = (payload.get('message') or '').strip()
+    if not message:
+        return JsonResponse({'error': 'Message is required.'}, status=400)
+
+    system_prompt = (
+        "You are a helpful hotel assistant for Hotel Red Rock. "
+        "Answer concisely and politely. If asked to do something you cannot, "
+        "say so and offer alternatives."
+    )
+
+    history = request.session.get('chatbot_history', [])
+    if not isinstance(history, list):
+        history = []
+
+    messages = [{'role': 'system', 'content': system_prompt}]
+    messages.extend(history)
+    messages.append({'role': 'user', 'content': message})
+
+    try:
+        client = ollama.Client(host='http://localhost:11434')
+        response_data = client.chat(
+            model='llama3.1:8b',
+            messages=messages,
+            stream=False,
+        )
+    except Exception:
+        fallback_reply = (
+            "I'm here to help with bookings, check-in/out, and room details. "
+            "The AI service is currently offline. Please try again later or contact us at 01786272762."
+        )
+        return JsonResponse({'reply': fallback_reply})
+
+    reply = ((response_data.get('message') or {}).get('content') or '').strip()
+    if not reply:
+        reply = 'Sorry, I could not generate a response. Please try again.'
+
+    history.append({'role': 'user', 'content': message})
+    history.append({'role': 'assistant', 'content': reply})
+    request.session['chatbot_history'] = history[-10:]
+    request.session.modified = True
+
+    return JsonResponse({'reply': reply})
+
+
+def sitemap(request):
+    """Generate XML sitemap for search engines."""
+    from django.template.loader import render_to_string
+    from django.http import HttpResponse
+    
+    urls = []
+    
+    urls.append({
+        'location': request.build_absolute_uri(reverse('frontpage')),
+        'lastmod': timezone.now().date(),
+        'changefreq': 'weekly',
+        'priority': '1.0'
+    })
+    
+    urls.append({
+        'location': request.build_absolute_uri(reverse('about')),
+        'lastmod': timezone.now().date(),
+        'changefreq': 'monthly',
+        'priority': '0.8'
+    })
+    
+    urls.append({
+        'location': request.build_absolute_uri(reverse('contact')),
+        'lastmod': timezone.now().date(),
+        'changefreq': 'monthly',
+        'priority': '0.8'
+    })
+    
+    urls.append({
+        'location': request.build_absolute_uri(reverse('rooms_view')),
+        'lastmod': timezone.now().date(),
+        'changefreq': 'daily',
+        'priority': '0.9'
+    })
+    
+    urls.append({
+        'location': request.build_absolute_uri(reverse('find_booking')),
+        'lastmod': timezone.now().date(),
+        'changefreq': 'monthly',
+        'priority': '0.7'
+    })
+    
+    for room in Room.objects.all():
+        urls.append({
+            'location': request.build_absolute_uri(reverse('room_details', args=[room.id])),
+            'lastmod': room.updated_at if hasattr(room, 'updated_at') else timezone.now().date(),
+            'changefreq': 'weekly',
+            'priority': '0.8'
+        })
+    
+    sitemap_xml = render_to_string('sitemap.xml', {'urls': urls})
+    return HttpResponse(sitemap_xml, content_type='application/xml')
+
+
+def robots_txt(request):
+    """Serve robots.txt file."""
+    content = """User-agent: *
+Allow: /
+
+Sitemap: https://hotelredrock.com/sitemap.xml
+"""
+    return HttpResponse(content, content_type='text/plain')
 

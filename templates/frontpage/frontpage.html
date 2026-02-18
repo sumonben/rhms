@@ -17,9 +17,9 @@
                 <div class="col-lg-6">
                     <div class="hero-text">
                         <h1 style="color: brown;font-size: 70px;font-weight: bolder;text-shadow: 3px 3px #fff;">Hotel Red Rock</h1>
-                        <h2 style="color: #000;font-weight: 500;font-size: 40px;text-shadow: 3px 3px #fff;">A Luxury Hotel in Joypurhat  Bangladesh</h2>
+                        <h2 style="color: whitesmoke;">A Luxury Hotel in Joypurhat  Bangladesh</h2>
                         <p>Ensure safty, Relaxation and low-priced hotel rooms.</p>
-                        <a href="{% url 'rooms_view' %}" class="primary-btn">Discover More</a>
+                        <a href="#" class="primary-btn">Discover More</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
@@ -87,7 +87,7 @@
                         </div>
                         <p class="f-para">Hotel Red Rock is one of the best Residential Hotel In Joypurhat, Bangladesh</p>
                         <p class="s-para">The relaxation, Destination.</p>
-                        <a href="{% url 'about' %}" class="primary-btn about-btn">Read More</a>
+                        <a href="#" class="primary-btn about-btn">Read More</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -95,10 +95,10 @@
                         <div class="row">
     
                             <div class="col-sm-6">
-                                <img src="{{ MONOGRAM.url }}" alt=""  style="height: 350px;">
+                                <img src="{{ MONOGRAM.url }}" alt="" width="300px" height="500px">
                             </div>
                             <div class="col-sm-6">
-                                <img src="{{ MONOGRAM_ENG.url }}" alt=""  style="height: 350px;">
+                                <img src="{{ MONOGRAM_ENG.url }}" alt="" width="300px" height="500px">
                             </div>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
 
     <!-- Home Room Section Begin -->
     <section class="hp-room-section">
-        <div class="container-fluid" >
+        <div class="container-fluid" style="padding-left: 60px; padding-right: 60px;">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
@@ -332,7 +332,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <span style="background: var(--weather);">Available Rooms</span>
+                        <span>Available Rooms</span>
                         <h2>Browse Our Rooms by Category</h2>
                     </div>
                 </div>
@@ -357,8 +357,7 @@
                                 <div class="room-card-item">
                                     <div class="hp-room-item set-bg" data-setbg="{% if room.main_image %}{{ room.main_image.url }}{% endif %}" style="height: 450px; background-size: cover; background-position: center; background-color: #f0f0f0; {% if room.main_image %}background-image: url('{{ room.main_image.url }}');{% endif %}">
                                         <div class="hr-text" style="padding:15px;">
-                                            <h3 style="color: green;">{{ room.name_eng }}</h3>
-                                            <h3 style="color: brown;">Room #{{ room.room_no }}</h3>
+                                            <h3 style="color: brown;">Room {{ room.room_no }}</h3>
                                             <h4 style="color: rgb(10, 92, 85); margin-top: 5px;">{{ room.room_type.name_eng }}</h4>
                                             <h3 style="color: green; margin-top: 10px;">{{ room.room_type.price }}&#x09F3;<span style="font-size: 14px;">/Per night</span></h3>
                                             
@@ -379,42 +378,23 @@
                                                     <tr>
                                                         <td class="r-o">Status:</td>
                                                         <td>
-                                                            {% with status=room.display_status|default:room.status|default_if_none:"available"|lower %}
-                                                                {% if status == 'available' %}
-                                                                    <span style="color: green; font-weight: bold;">Available</span>
-                                                                {% elif status == 'unavailable' %}
-                                                                    <span style="color: gray; font-weight: bold;">Unavailable</span>
-                                                                {% elif status == 'booked' %}
-                                                                    <span style="color: orange; font-weight: bold;">
-                                                                        Booked{% if room.booked_until %} till {{ room.booked_until }}{% endif %}
-                                                                    </span>
-                                                                {% elif status == 'occupied' %}
-                                                                    <span style="color: red; font-weight: bold;">Occupied</span>
-                                                                {% else %}
-                                                                    <span style="color: green; font-weight: bold;">Available</span>
-                                                                {% endif %}
-                                                            {% endwith %}
+                                                            {% if room.status == 'available' %}
+                                                                <span style="color: green; font-weight: bold;">Available</span>
+                                                            {% elif room.status == 'booked' %}
+                                                                <span style="color: orange; font-weight: bold;">Booked</span>
+                                                            {% else %}
+                                                                <span style="color: red; font-weight: bold;">Occupied</span>
+                                                            {% endif %}
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             
                                             
-                                            {% with status=room.display_status|default:room.status|default_if_none:"available"|lower %}
                                             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                                                {% if status == 'available' %}
-                                                    <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1;" onclick="addToCart( this.id )">Add To Book</button>
-                                                    <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
-                                                {% else %}
-                                                    <button class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; opacity: 0.6; cursor: not-allowed;" disabled>
-                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% elif status == 'unavailable' %}Unavailable {% else %}Occupied <i class="fa fa-check"></i>{% endif %}
-                                                    </button>
-                                                    <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center; opacity: 0.6; cursor: not-allowed;" disabled>
-                                                        {% if status == 'booked' %}Booked <i class="fa fa-check"></i>{% elif status == 'unavailable' %}Unavailable {% else %}Occupied <i class="fa fa-check"></i>{% endif %}
-                                                    </button>
-                                                {% endif %}
+                                                <button id="room_{{ room.id }}" class="btn btn-primary" style="background: var(--weather); padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1;" onclick="addToCart( this.id )">Add To Book</button>
+                                                <button class="btn btn-success" style="padding: 12px 24px; font-size: 16px; font-weight: 600; flex: 1; text-align: center;" onclick="bookNowSingle('room_{{ room.id }}')">Book Now</button>
                                             </div>
-                                            {% endwith %}
                                             <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
                                                 <a href="{% url 'room_details' room.id %}" class="primary-btn" style="flex: 1; text-align: center; min-width: 120px;">View Details</a>
                                             </div>
@@ -781,6 +761,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-4">
+                    <div class="blog-item set-bg" data-setbg="{% static 'images/sompur.jpg' %}">
+                        <div class="bi-text">
+                            <span class="b-tag">Visit Heritage</span>
+                            <h4><a href="#">Somapura Mahavihara  </a></h4>
+                            <div class="b-time"><i class="icon_clock_alt"></i> Paharpur, Naogoan</div>
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="col-lg-4">
                     <div class="blog-item set-bg" data-setbg="{% static 'img/blog/blog-2.jpg' %}">
                         <div class="bi-text">
@@ -791,18 +780,9 @@
                     </div>
                 </div> -->
                 <div class="col-lg-4">
-                    <div class="blog-item set-bg" data-setbg="{% static 'images/sompur.jpg' %}">
+                    <div class="blog-item set-bg" data-setbg="{% static 'images/momoinn.jpg' %}">
                         <div class="bi-text">
-                            <span class="b-tag">Visit Heritage</span>
-                            <h4><a href="#">Somapura Mahavihara  </a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> Paharpur, Naogoan</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog-item set-bg" data-setbg="{% static 'img/blog/blog-3.jpg' %}">
-                        <div class="bi-text">
-                            <span class="b-tag">Park Resort</span>
+                            <span class="b-tag">Event</span>
                             <h4><a href="#">Momo Inn</a></h4>
                             <div class="b-time"><i class="icon_clock_alt"></i> Bogura, Bangladesh</div>
                         </div>
